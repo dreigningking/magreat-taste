@@ -8,6 +8,7 @@ use App\Livewire\DashboardArea\Contactus;
 use App\Livewire\DashboardArea\Dashboard;
 use App\Livewire\DashboardArea\Categories;
 use App\Http\Controllers\PaymentController;
+use App\Livewire\LandingArea\PaymentStatus;
 use App\Livewire\LandingArea\Blog\BlogIndex;
 use App\Livewire\DashboardArea\Blog\EditPost;
 use App\Livewire\LandingArea\Blog\BlogSingle;
@@ -34,6 +35,7 @@ use App\Livewire\LandingArea\Policies\PaymentDisputeChargebacks;
 Route::get('/', Welcome::class)->name('index');
 Route::get('blog', BlogIndex::class)->name('blog');
 Route::get('blog/post/{post}', BlogSingle::class)->name('blog.show');
+
 Route::group(['as'=> 'legal.'],function(){
     Route::get('disclaimer', Disclaimer::class)->name('disclaimer');
     Route::get('privacy-policy', PrivacyPolicy::class)->name('privacy-policy');
@@ -79,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('notifications', ListNotifications::class)->name('notifications');
         Route::get('contact', Contactus::class)->name('contact');
         Route::get('payment/callback',[PaymentController::class,'paymentcallback'])->name('payment.callback');
-        
+        Route::get('payment/status/{payment}',PaymentStatus::class)->name('payment.status');
         
     });
 });

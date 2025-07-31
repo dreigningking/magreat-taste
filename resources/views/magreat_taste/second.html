@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma'Great Taste | Personal Chef & Catering</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4a76a;
+            --primary-dark: #b8864c;
+            --secondary: #8c6d46;
+            --dark: #2c2c2c;
+            --light: #f8f4ee;
+            --accent: #c44536;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            padding-top: 80px;
+        }
+        
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        .navbar-brand span {
+            color: var(--accent);
+        }
+        
+        .nav-link {
+            font-weight: 400;
+            margin: 0 10px;
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 60vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('hero.jpeg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            margin-bottom: 50px;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        
+        .filter-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--dark);
+            padding: 8px 20px;
+            margin: 5px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Menu Section */
+        .menu-section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--dark);
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+        }
+        
+        .menu-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            height: 100%;
+            background: white;
+        }
+        
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .menu-card-img {
+            height: 220px;
+            width: 100%;
+            object-fit: cover;
+            position: relative;
+        }
+        
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .menu-card:hover .video-overlay {
+            opacity: 1;
+        }
+        
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .menu-card-body {
+            padding: 20px;
+        }
+        
+        .menu-card-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .price-badge {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        /* Pricing Tiers */
+        .pricing-tiers {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .pricing-tier {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .pricing-tier:hover, .pricing-tier.active {
+            border-color: var(--primary);
+            background: rgba(212, 167, 106, 0.1);
+        }
+        
+        .tier-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 10px;
+        }
+        
+        .tier-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .tier-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        /* Cart Button */
+        .cart-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1045;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .cart-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            border-bottom: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Offcanvas Cart */
+        .offcanvas-header {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .cart-item {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .remove-item {
+            color: #dc3545;
+            cursor: pointer;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .social-icon {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: white;
+            transition: color 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Chef Profile */
+        .chef-profile {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 60px;
+        }
+        
+        .chef-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .chef-info {
+            padding: 30px;
+        }
+        
+        .chef-name {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        /* Video Modal */
+        .video-modal .modal-content {
+            background: transparent;
+            border: none;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .pricing-tiers {
+                flex-direction: column;
+            }
+            
+            .pricing-tier {
+                margin: 5px 0;
+            }
+        }
+        
+        /* Testimonials Section */
+        .testimonials-section {
+            background: linear-gradient(135deg, var(--light) 0%, #fff 100%);
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(212, 167, 106, 0.1);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .testimonial-img img {
+            border: 4px solid var(--primary);
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .testimonial-card:hover .testimonial-img img {
+            transform: scale(1.05);
+        }
+        
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--dark);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-name {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .testimonial-title {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .testimonial-rating {
+            margin-top: 10px;
+        }
+        
+        .testimonial-rating i {
+            font-size: 1.1rem;
+            margin: 0 1px;
+        }
+        
+        /* Responsive adjustments for testimonials */
+        @media (max-width: 768px) {
+            .testimonial-card {
+                padding: 25px 20px;
+            }
+            
+            .testimonial-text {
+                font-size: 0.95rem;
+            }
+        }
+        
+        /* Contact Section */
+        .contact-section {
+            background: white;
+        }
+        
+        .contact-form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+        
+        .contact-form-card .form-control,
+        .contact-form-card .form-select {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s;
+        }
+        
+        .contact-form-card .form-control:focus,
+        .contact-form-card .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(212, 167, 106, 0.25);
+        }
+        
+        .contact-form-card .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .contact-form-card .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 167, 106, 0.4);
+        }
+        
+        /* Dynamic form fields */
+        .dynamic-field {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Testimonial Carousel Styles */
+        .testimonial-carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .testimonial-carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .testimonial-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .testimonial-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .testimonial-slide .row {
+            margin-left: -15px; /* Adjust for card padding */
+            margin-right: -15px; /* Adjust for card padding */
+        }
+
+        .testimonial-slide .col-lg-4,
+        .testimonial-slide .col-md-6 {
+            padding-left: 15px; /* Adjust for card padding */
+            padding-right: 15px; /* Adjust for card padding */
+        }
+
+        .testimonial-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: background 0.3s;
+        }
+
+        .testimonial-nav-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .testimonial-nav-btn.prev-btn {
+            left: -25px;
+        }
+
+        .testimonial-nav-btn.next-btn {
+            right: -25px;
+        }
+
+        .testimonial-indicators {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .testimonial-indicators .indicator {
+            width: 10px;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .testimonial-indicators .indicator.active {
+            background-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Ma<span>'</span>Great Taste</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About Chef</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#menu">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#testimonials">Testimonials</a></li>
+                    <li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Artisanal Catering by Chef Margaret</h1>
+            <p>Custom gourmet meals crafted with passion and precision</p>
+            <button class="btn btn-warning btn-lg">Order Your Meal</button>
+        </div>
+    </section>
+
+    <!-- About Chef -->
+    <section class="container" id="about">
+        <div class="chef-profile">
+            <div class="row">
+                <div class="col-md-5 p-0">
+                    <img src="https://images.unsplash.com/photo-1556911220-ef412aea183d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Chef Margaret" class="chef-img">
+                </div>
+                <div class="col-md-7">
+                    <div class="chef-info">
+                        <h2 class="chef-name">Meet Chef Margaret</h2>
+                        <p>With over 15 years of culinary experience, Chef Margaret brings passion and creativity to every dish. Trained in Paris and having worked in Michelin-starred restaurants, she now focuses on creating bespoke dining experiences for clients.</p>
+                        <p>Specializing in farm-to-table cuisine, Chef Margaret sources only the freshest local ingredients to create memorable meals tailored to your preferences.</p>
+                        <div class="mt-4">
+                            <h5>Signature Styles:</h5>
+                            <div class="d-flex flex-wrap mt-3">
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">French Cuisine</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Mediterranean</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Plant-Based</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Artisan Baking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="container">
+            <h2 class="section-title">Signature Creations</h2>
+            
+            <!-- Filter Buttons -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">All Dishes</button>
+                <button class="filter-btn" data-filter="entrees">Entrées</button>
+                <button class="filter-btn" data-filter="mains">Main Courses</button>
+                <button class="filter-btn" data-filter="desserts">Desserts</button>
+                <button class="filter-btn" data-filter="baked">Baked Goods</button>
+            </div>
+            
+            <div class="row">
+                <!-- Meal Cards -->
+                <div class="col-lg-4 col-md-6" data-category="entrees">
+                    <div class="menu-card" data-bs-toggle="modal" data-bs-target="#mealModal" data-id="1">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Truffle Arancini" class="menu-card-img">
+                            <div class="video-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="price-badge">From $28</div>
+                        </div>
+                        <div class="menu-card-body">
+                            <h5 class="menu-card-title">Truffle Arancini</h5>
+                            <p>Crispy risotto balls with black truffle and melted mozzarella</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-category="mains">
+                    <div class="menu-card" data-bs-toggle="modal" data-bs-target="#mealModal" data-id="2">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Seafood Paella" class="menu-card-img">
+                            <div class="video-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="price-badge">From $42</div>
+                        </div>
+                        <div class="menu-card-body">
+                            <h5 class="menu-card-title">Seafood Paella</h5>
+                            <p>Authentic saffron rice with fresh seafood and chorizo</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-category="desserts">
+                    <div class="menu-card" data-bs-toggle="modal" data-bs-target="#mealModal" data-id="3">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Chocolate Soufflé" class="menu-card-img">
+                            <div class="video-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="price-badge">From $24</div>
+                        </div>
+                        <div class="menu-card-body">
+                            <h5 class="menu-card-title">Chocolate Soufflé</h5>
+                            <p>Warm chocolate soufflé with vanilla bean ice cream</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-category="baked">
+                    <div class="menu-card" data-bs-toggle="modal" data-bs-target="#mealModal" data-id="4">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1594041680534-e8c8cdebd659?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Artisan Bread Basket" class="menu-card-img">
+                            <div class="video-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="price-badge">From $18</div>
+                        </div>
+                        <div class="menu-card-body">
+                            <h5 class="menu-card-title">Artisan Bread Basket</h5>
+                            <p>Assortment of freshly baked breads with infused oils</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-category="mains">
+                    <div class="menu-card" data-bs-toggle="modal" data-bs-target="#mealModal" data-id="5">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Vegetable Risotto" class="menu-card-img">
+                            <div class="video-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="price-badge">From $32</div>
+                        </div>
+                        <div class="menu-card-body">
+                            <h5 class="menu-card-title">Wild Mushroom Risotto</h5>
+                            <p>Creamy arborio rice with seasonal wild mushrooms</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6" data-category="entrees">
+                    <div class="menu-card" data-bs-toggle="modal" data-bs-target="#mealModal" data-id="6">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Beef Carpaccio" class="menu-card-img">
+                            <div class="video-overlay">
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            <div class="price-badge">From $36</div>
+                        </div>
+                        <div class="menu-card-body">
+                            <h5 class="menu-card-title">Beef Carpaccio</h5>
+                            <p>Thinly sliced beef with arugula, capers, and truffle oil</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section py-5" id="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Clients Say</h2>
+            <div class="testimonial-carousel-container">
+                <div class="testimonial-carousel" id="testimonialCarousel">
+                    <!-- Slide 1 -->
+                    <div class="testimonial-slide active">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="testimonial-card text-center">
+                                    <div class="testimonial-img mb-4">
+                                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Sarah Johnson" class="rounded-circle" width="80" height="80">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">"Chef Margaret's catering for our wedding was absolutely phenomenal! The truffle arancini was the talk of the evening. Every dish was perfectly executed and the presentation was stunning."</p>
+                                        <h5 class="testimonial-name">Sarah Johnson</h5>
+                                        <p class="testimonial-title text-muted">Wedding Client</p>
+                                        <div class="testimonial-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="testimonial-card text-center">
+                                    <div class="testimonial-img mb-4">
+                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Michael Chen" class="rounded-circle" width="80" height="80">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">"The corporate event catering exceeded all expectations. Chef Margaret's attention to detail and ability to accommodate dietary restrictions made our event a huge success."</p>
+                                        <h5 class="testimonial-name">Michael Chen</h5>
+                                        <p class="testimonial-title text-muted">Corporate Event Planner</p>
+                                        <div class="testimonial-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="testimonial-card text-center">
+                                    <div class="testimonial-img mb-4">
+                                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Emily Rodriguez" class="rounded-circle" width="80" height="80">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">"I've been ordering Chef Margaret's artisan bread basket for my family gatherings. The quality and taste are consistently outstanding. Highly recommend!"</p>
+                                        <h5 class="testimonial-name">Emily Rodriguez</h5>
+                                        <p class="testimonial-title text-muted">Regular Client</p>
+                                        <div class="testimonial-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Slide 2 -->
+                    <div class="testimonial-slide">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="testimonial-card text-center">
+                                    <div class="testimonial-img mb-4">
+                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="David Thompson" class="rounded-circle" width="80" height="80">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">"Chef Margaret's seafood paella is absolutely divine! She catered our anniversary party and everyone was raving about the authentic flavors and perfect execution."</p>
+                                        <h5 class="testimonial-name">David Thompson</h5>
+                                        <p class="testimonial-title text-muted">Anniversary Celebration</p>
+                                        <div class="testimonial-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="testimonial-card text-center">
+                                    <div class="testimonial-img mb-4">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Lisa Martinez" class="rounded-circle" width="80" height="80">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">"The chocolate soufflé was the perfect ending to our dinner party. Chef Margaret's attention to detail and presentation skills are unmatched in the industry."</p>
+                                        <h5 class="testimonial-name">Lisa Martinez</h5>
+                                        <p class="testimonial-title text-muted">Dinner Party Host</p>
+                                        <div class="testimonial-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="testimonial-card text-center">
+                                    <div class="testimonial-img mb-4">
+                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Robert Wilson" class="rounded-circle" width="80" height="80">
+                                    </div>
+                                    <div class="testimonial-content">
+                                        <p class="testimonial-text mb-4">"Chef Margaret's wild mushroom risotto is simply incredible. The depth of flavor and creamy texture made it the highlight of our corporate luncheon."</p>
+                                        <h5 class="testimonial-name">Robert Wilson</h5>
+                                        <p class="testimonial-title text-muted">Corporate Client</p>
+                                        <div class="testimonial-rating">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <button class="testimonial-nav-btn prev-btn" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="testimonial-nav-btn next-btn" id="nextBtn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <!-- Indicators -->
+                <div class="testimonial-indicators">
+                    <span class="indicator active" data-slide="0"></span>
+                    <span class="indicator" data-slide="1"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section py-5" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="contact-form-card">
+                        <div class="mb-4">
+                            <label for="contactCategory" class="form-label fw-bold">What can we help you with?</label>
+                            <select class="form-select" id="contactCategory">
+                                <option value="inquiry">General Inquiry</option>
+                                <option value="booking">Booking Request</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="review">Review</option>
+                            </select>
+                        </div>
+                        
+                        <form id="contactForm">
+                            <!-- Common fields that appear for all categories -->
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="contactName" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="contactName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="contactEmail" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="contactEmail" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="contactPhone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="contactPhone">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="contactDate" class="form-label">Preferred Date</label>
+                                    <input type="date" class="form-control" id="contactDate">
+                                </div>
+                            </div>
+                            
+                            <!-- Dynamic fields based on category -->
+                            <div id="dynamicFields">
+                                <!-- Fields will be populated by JavaScript -->
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="contactMessage" class="form-label">Message *</label>
+                                <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Button -->
+    <a href="#" class="cart-btn" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
+        <i class="fas fa-shopping-cart fa-lg"></i>
+        <span class="cart-badge">0</span>
+    </a>
+
+    <!-- Meal Modal -->
+    <div class="modal fade" id="mealModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Truffle Arancini</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Truffle Arancini" class="img-fluid rounded mb-3">
+                            
+                            <div class="video-thumbnail position-relative mt-3" data-bs-toggle="modal" data-bs-target="#videoModal">
+                                <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Video Thumbnail" class="img-fluid rounded">
+                                <div class="play-btn position-absolute top-50 start-50 translate-middle">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <div class="position-absolute bottom-0 start-0 bg-dark bg-opacity-75 text-white p-2 w-100">
+                                    Watch Preparation Video
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Truffle Arancini</h4>
+                            <p class="text-muted">Crispy risotto balls with black truffle and melted mozzarella</p>
+                            <p>Our signature arancini features creamy saffron risotto blended with black truffle and fresh mozzarella, coated in panko breadcrumbs and fried to golden perfection. Served with a truffle aioli dipping sauce.</p>
+                            <p><strong>Ingredients:</strong> Arborio rice, black truffle, mozzarella, parmesan, saffron, panko breadcrumbs, truffle oil, garlic aioli.</p>
+                            
+                            <div class="mt-4">
+                                <h5>Select Size</h5>
+                                <div class="pricing-tiers">
+                                    <div class="pricing-tier" data-size="small" data-price="28">
+                                        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Small" class="tier-image">
+                                        <div class="tier-title">Small Tray</div>
+                                        <div class="tier-desc">Serves 4-6</div>
+                                        <div class="tier-price">$28</div>
+                                    </div>
+                                    <div class="pricing-tier active" data-size="medium" data-price="45">
+                                        <img src="https://images.unsplash.com/photo-1626082927389-6cd097cee6a6?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Medium" class="tier-image">
+                                        <div class="tier-title">Medium Tray</div>
+                                        <div class="tier-desc">Serves 8-10</div>
+                                        <div class="tier-price">$45</div>
+                                    </div>
+                                    <div class="pricing-tier" data-size="large" data-price="65">
+                                        <img src="https://images.unsplash.com/photo-1556911220-ef412aea183d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" alt="Large" class="tier-image">
+                                        <div class="tier-title">Large Tray</div>
+                                        <div class="tier-desc">Serves 15-20</div>
+                                        <div class="tier-price">$65</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center mt-4">
+                                <h4 class="text-primary">$45</h4>
+                                <div class="input-group w-50">
+                                    <button class="btn btn-outline-secondary" type="button" id="decrement">-</button>
+                                    <input type="number" class="form-control text-center" value="1" min="1" id="quantity">
+                                    <button class="btn btn-outline-secondary" type="button" id="increment">+</button>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary w-100 mt-3 py-3" data-bs-dismiss="modal" id="addToCartBtn">
+                                <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal fade video-modal" id="videoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Truffle Arancini Preparation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Offcanvas -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Your Order</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="cart-items">
+                <!-- Cart items will be added here dynamically -->
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Your cart is empty</p>
+                </div>
+            </div>
+            <div class="cart-summary mt-auto pt-3 border-top">
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax (8%):</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3 fw-bold">
+                    <span>Total:</span>
+                    <span>$0.00</span>
+                </div>
+                <button class="btn btn-primary w-100 py-3" data-bs-toggle="modal" data-bs-target="#checkoutModal" data-bs-dismiss="offcanvas">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Complete Your Order</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Customer Information -->
+                        <div class="col-md-6">
+                            <h5 class="mb-4">Customer Information</h5>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Delivery Address</label>
+                                    <textarea class="form-control" id="address" rows="3" required></textarea>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="date" class="form-label">Delivery Date</label>
+                                        <input type="date" class="form-control" id="date" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="time" class="form-label">Delivery Time</label>
+                                        <input type="time" class="form-control" id="time" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="instructions" class="form-label">Special Instructions</label>
+                                    <textarea class="form-control" id="instructions" rows="2"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Order Summary -->
+                        <div class="col-md-6">
+                            <h5 class="mb-4">Order Summary</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="order-items mb-3">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Truffle Arancini (Medium, x1)</span>
+                                            <span>$45.00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Seafood Paella (Large, x1)</span>
+                                            <span>$65.00</span>
+                                        </div>
+                                    </div>
+                                    <div class="order-summary">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Subtotal:</span>
+                                            <span>$110.00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span>Tax (8%):</span>
+                                            <span>$8.80</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-3 fw-bold">
+                                            <span>Grand Total:</span>
+                                            <span>$118.80</span>
+                                        </div>
+                                    </div>
+                                    <div class="payment-options">
+                                        <h6 class="mb-3">Payment Method</h6>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" checked>
+                                            <label class="form-check-label" for="creditCard">
+                                                Credit/Debit Card
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="paymentMethod" id="paypal">
+                                            <label class="form-check-label" for="paypal">
+                                                PayPal
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="paymentMethod" id="cash">
+                                            <label class="form-check-label" for="cash">
+                                                Cash on Delivery
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary w-100 mt-4 py-3">Complete Payment</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h4>Ma'Great Taste</h4>
+                    <p>Custom gourmet meals crafted with passion and precision by Chef Margaret. Available for private events, catering, and personal orders.</p>
+                    <div class="mt-3">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Service Areas</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Greater Metropolitan Area</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Surrounding Counties</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Special Events Nationwide</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Chef Margaret</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone me-2"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope me-2"></i> margaret@chefsdelight.com</li>
+                        <li><i class="fas fa-calendar me-2"></i> Bookings: 3+ weeks in advance</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright text-center">
+                <p>&copy; 2023 Ma'Great Taste Catering. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple cart functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const addToCartBtn = document.getElementById('addToCartBtn');
+            const cartBadge = document.querySelector('.cart-badge');
+            const cartItems = document.querySelector('.cart-items');
+            const cartSummary = document.querySelector('.cart-summary');
+            const incrementBtn = document.getElementById('increment');
+            const decrementBtn = document.getElementById('decrement');
+            const quantityInput = document.getElementById('quantity');
+            let cartCount = 0;
+            let cartTotal = 0;
+            let cartItemsData = []; // Store cart items data
+            let checkoutModalInitialized = false; // Flag to prevent multiple initializations
+            
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const mealCards = document.querySelectorAll('.menu-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    
+                    mealCards.forEach(card => {
+                        const category = card.parentElement.getAttribute('data-category');
+                        if (filter === 'all' || filter === category) {
+                            card.parentElement.style.display = 'block';
+                        } else {
+                            card.parentElement.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Quantity controls
+            if (incrementBtn && decrementBtn) {
+                incrementBtn.addEventListener('click', function() {
+                    quantityInput.value = parseInt(quantityInput.value) + 1;
+                });
+                
+                decrementBtn.addEventListener('click', function() {
+                    if (parseInt(quantityInput.value) > 1) {
+                        quantityInput.value = parseInt(quantityInput.value) - 1;
+                    }
+                });
+            }
+            
+            // Add to cart button event
+            if(addToCartBtn) {
+                addToCartBtn.addEventListener('click', function() {
+                    cartCount++;
+                    cartBadge.textContent = cartCount;
+                    
+                    // Get meal details
+                    const mealName = document.querySelector('#mealModal .modal-title').textContent;
+                    const mealPrice = parseFloat(document.querySelector('.pricing-tier.active .tier-price').textContent.replace('$', ''));
+                    const mealSize = document.querySelector('.pricing-tier.active .tier-title').textContent;
+                    const quantity = parseInt(quantityInput.value);
+                    const totalPrice = mealPrice * quantity;
+                    
+                    // Add item to cart data array
+                    const cartItem = {
+                        name: mealName,
+                        size: mealSize,
+                        price: mealPrice,
+                        quantity: quantity,
+                        totalPrice: totalPrice
+                    };
+                    cartItemsData.push(cartItem);
+                    
+                    // Update cart total
+                    cartTotal += totalPrice;
+                    
+                    // Add item to cart display
+                    if (cartItems.querySelector('.text-center')) {
+                        cartItems.innerHTML = '';
+                    }
+                    
+                    cartItems.innerHTML += `
+                        <div class="cart-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6>${mealName}</h6>
+                                    <p class="text-muted mb-0">${mealSize} × ${quantity}</p>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">$${totalPrice.toFixed(2)}</span>
+                                    <span class="remove-item ms-3" data-index="${cartItemsData.length - 1}"><i class="fas fa-trash"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Update cart summary
+                    updateCartSummary();
+                    
+                    // Add event listeners to remove buttons
+                    document.querySelectorAll('.remove-item').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const index = parseInt(this.getAttribute('data-index'));
+                            const item = this.closest('.cart-item');
+                            const itemPrice = cartItemsData[index].totalPrice;
+                            
+                            // Remove from data array
+                            cartItemsData.splice(index, 1);
+                            
+                            // Update cart count and total
+                            cartTotal -= itemPrice;
+                            cartCount--;
+                            cartBadge.textContent = cartCount;
+                            
+                            // Remove from display
+                            item.remove();
+                            
+                            // Update remove button indices
+                            document.querySelectorAll('.remove-item').forEach((btn, i) => {
+                                btn.setAttribute('data-index', i);
+                            });
+                            
+                            if (cartItems.children.length === 0) {
+                                cartItems.innerHTML = `
+                                    <div class="text-center py-5">
+                                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                        <p class="text-muted">Your cart is empty</p>
+                                    </div>
+                                `;
+                                updateCartSummary();
+                            } else {
+                                updateCartSummary();
+                            }
+                        });
+                    });
+                });
+            }
+            
+            // Function to update cart summary
+            function updateCartSummary() {
+                const tax = cartTotal * 0.08;
+                const grandTotal = cartTotal + tax;
+                
+                cartSummary.innerHTML = `
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>$${cartTotal.toFixed(2)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax (8%):</span>
+                        <span>$${tax.toFixed(2)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 fw-bold">
+                        <span>Total:</span>
+                        <span>$${grandTotal.toFixed(2)}</span>
+                    </div>
+                    <button class="btn btn-primary w-100 py-3" data-bs-toggle="modal" data-bs-target="#checkoutModal" data-bs-dismiss="offcanvas">Checkout</button>
+                `;
+            }
+            
+            // Function to update checkout modal with cart data
+            function updateCheckoutModal() {
+                const orderItemsContainer = document.querySelector('#checkoutModal .order-items');
+                const orderSummaryContainer = document.querySelector('#checkoutModal .order-summary');
+                
+                if (cartItemsData.length === 0) {
+                    orderItemsContainer.innerHTML = '<p class="text-muted">No items in cart</p>';
+                    orderSummaryContainer.innerHTML = `
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tax (8%):</span>
+                            <span>$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 fw-bold">
+                            <span>Grand Total:</span>
+                            <span>$0.00</span>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Update order items
+                let orderItemsHTML = '';
+                cartItemsData.forEach(item => {
+                    orderItemsHTML += `
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>${item.name} (${item.size}, x${item.quantity})</span>
+                            <span>$${item.totalPrice.toFixed(2)}</span>
+                        </div>
+                    `;
+                });
+                orderItemsContainer.innerHTML = orderItemsHTML;
+                
+                // Update order summary
+                const tax = cartTotal * 0.08;
+                const grandTotal = cartTotal + tax;
+                
+                orderSummaryContainer.innerHTML = `
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>$${cartTotal.toFixed(2)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax (8%):</span>
+                        <span>$${tax.toFixed(2)}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 fw-bold">
+                        <span>Grand Total:</span>
+                        <span>$${grandTotal.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+            
+            // Update checkout modal when it's opened
+            const checkoutModal = document.querySelector('#checkoutModal');
+            if (checkoutModal && !checkoutModalInitialized) {
+                checkoutModal.addEventListener('show.bs.modal', function() {
+                    updateCheckoutModal();
+                });
+                checkoutModalInitialized = true;
+            }
+            
+            // Pricing tier selection
+            document.querySelectorAll('.pricing-tier').forEach(tier => {
+                tier.addEventListener('click', function() {
+                    document.querySelectorAll('.pricing-tier').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const price = this.getAttribute('data-price');
+                    document.querySelector('.text-primary').textContent = `$${price}`;
+                });
+            });
+            
+            // Meal card click events
+            mealCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const mealId = this.getAttribute('data-id');
+                    // In a real app, you would fetch meal data based on ID
+                    // For demo, we'll just set the modal content for the first meal
+                    const modalTitle = document.querySelector('#mealModal .modal-title');
+                    const modalImg = document.querySelector('#mealModal img');
+                    const modalContent = document.querySelector('#mealModal .col-md-6 h4');
+                    
+                    if(mealId === '1') {
+                        modalTitle.textContent = 'Truffle Arancini';
+                        modalImg.src = 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                        modalContent.textContent = 'Truffle Arancini';
+                    } else if(mealId === '2') {
+                        modalTitle.textContent = 'Seafood Paella';
+                        modalImg.src = 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                        modalContent.textContent = 'Seafood Paella';
+                    } else if(mealId === '3') {
+                        modalTitle.textContent = 'Chocolate Soufflé';
+                        modalImg.src = 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                        modalContent.textContent = 'Chocolate Soufflé';
+                    } else if(mealId === '4') {
+                        modalTitle.textContent = 'Artisan Bread Basket';
+                        modalImg.src = 'https://images.unsplash.com/photo-1594041680534-e8c8cdebd659?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                        modalContent.textContent = 'Artisan Bread Basket';
+                    } else if(mealId === '5') {
+                        modalTitle.textContent = 'Wild Mushroom Risotto';
+                        modalImg.src = 'https://images.unsplash.com/photo-1606755962773-d324e0a13086?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                        modalContent.textContent = 'Wild Mushroom Risotto';
+                    } else if(mealId === '6') {
+                        modalTitle.textContent = 'Beef Carpaccio';
+                        modalImg.src = 'https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80';
+                        modalContent.textContent = 'Beef Carpaccio';
+                    }
+                });
+            });
+        });
+        
+        // Testimonial Carousel Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.getElementById('testimonialCarousel');
+            const slides = document.querySelectorAll('.testimonial-slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+            
+            // Function to show slide
+            function showSlide(slideIndex) {
+                // Hide all slides
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+                
+                // Show current slide
+                slides[slideIndex].classList.add('active');
+                
+                // Update indicators
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === slideIndex);
+                });
+                
+                currentSlide = slideIndex;
+            }
+            
+            // Next slide
+            function nextSlide() {
+                const nextIndex = (currentSlide + 1) % totalSlides;
+                showSlide(nextIndex);
+            }
+            
+            // Previous slide
+            function prevSlide() {
+                const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+                showSlide(prevIndex);
+            }
+            
+            // Event listeners
+            if (nextBtn) {
+                nextBtn.addEventListener('click', nextSlide);
+            }
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', prevSlide);
+            }
+            
+            // Indicator clicks
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+        });
+        
+        // Contact form dynamic functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactCategory = document.getElementById('contactCategory');
+            const dynamicFields = document.getElementById('dynamicFields');
+            const contactForm = document.getElementById('contactForm');
+            
+            // Define field configurations for each category
+            const categoryFields = {
+                inquiry: [
+                    { type: 'text', id: 'inquirySubject', label: 'Subject', required: true },
+                    { type: 'select', id: 'inquiryType', label: 'Inquiry Type', options: ['General Question', 'Pricing', 'Menu', 'Other'], required: true }
+                ],
+                booking: [
+                    { type: 'text', id: 'eventType', label: 'Event Type', required: true },
+                    { type: 'number', id: 'guestCount', label: 'Number of Guests', required: true },
+                    { type: 'text', id: 'eventLocation', label: 'Event Location', required: true },
+                    { type: 'select', id: 'serviceType', label: 'Service Type', options: ['Full Catering', 'Drop-off', 'Personal Chef', 'Custom Menu'], required: true }
+                ],
+                feedback: [
+                    { type: 'select', id: 'feedbackType', label: 'Feedback Type', options: ['Suggestion', 'Complaint', 'Compliment', 'Improvement'], required: true },
+                    { type: 'select', id: 'rating', label: 'Overall Rating', options: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'], required: true }
+                ],
+                review: [
+                    { type: 'text', id: 'dishName', label: 'Dish/Service Reviewed', required: true },
+                    { type: 'select', id: 'reviewRating', label: 'Rating', options: ['5 Stars', '4 Stars', '3 Stars', '2 Stars', '1 Star'], required: true },
+                    { type: 'checkbox', id: 'publishReview', label: 'Allow us to publish this review', required: false }
+                ]
+            };
+            
+            // Function to update dynamic fields
+            function updateDynamicFields() {
+                const selectedCategory = contactCategory.value;
+                const fields = categoryFields[selectedCategory] || [];
+                
+                let fieldsHTML = '';
+                fields.forEach(field => {
+                    if (field.type === 'select') {
+                        let optionsHTML = '';
+                        field.options.forEach(option => {
+                            optionsHTML += `<option value="${option}">${option}</option>`;
+                        });
+                        fieldsHTML += `
+                            <div class="col-md-6 mb-3 dynamic-field">
+                                <label for="${field.id}" class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+                                <select class="form-select" id="${field.id}"${field.required ? ' required' : ''}>
+                                    <option value="">Select ${field.label}</option>
+                                    ${optionsHTML}
+                                </select>
+                            </div>
+                        `;
+                    } else if (field.type === 'checkbox') {
+                        fieldsHTML += `
+                            <div class="col-12 mb-3 dynamic-field">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="${field.id}">
+                                    <label class="form-check-label" for="${field.id}">
+                                        ${field.label}
+                                    </label>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        fieldsHTML += `
+                            <div class="col-md-6 mb-3 dynamic-field">
+                                <label for="${field.id}" class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+                                <input type="${field.type}" class="form-control" id="${field.id}"${field.required ? ' required' : ''}>
+                            </div>
+                        `;
+                    }
+                });
+                
+                dynamicFields.innerHTML = fieldsHTML;
+            }
+            
+            // Update fields when category changes
+            contactCategory.addEventListener('change', updateDynamicFields);
+            
+            // Initialize fields on page load
+            updateDynamicFields();
+            
+            // Handle form submission
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect form data
+                const formData = new FormData(contactForm);
+                const data = {
+                    category: contactCategory.value,
+                    name: document.getElementById('contactName').value,
+                    email: document.getElementById('contactEmail').value,
+                    phone: document.getElementById('contactPhone').value,
+                    date: document.getElementById('contactDate').value,
+                    message: document.getElementById('contactMessage').value
+                };
+                
+                // Add dynamic fields data
+                const selectedCategory = contactCategory.value;
+                const fields = categoryFields[selectedCategory] || [];
+                fields.forEach(field => {
+                    const element = document.getElementById(field.id);
+                    if (element) {
+                        if (field.type === 'checkbox') {
+                            data[field.id] = element.checked;
+                        } else {
+                            data[field.id] = element.value;
+                        }
+                    }
+                });
+                
+                // Show success message (in a real app, you'd send this to a server)
+                alert('Thank you for your message! We will get back to you soon.');
+                contactForm.reset();
+                updateDynamicFields();
+            });
+        });
+    </script>
+</body>
+</html>

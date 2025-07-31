@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const checkoutModal = document.querySelector('#checkoutModal');
     if (checkoutModal && !checkoutModalInitialized) {
         checkoutModal.addEventListener('show.bs.modal', function () {
-            updateCheckoutModal();
+            // updateCheckoutModal();
         });
         checkoutModalInitialized = true;
     }

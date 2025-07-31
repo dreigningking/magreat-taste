@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class FoodSize extends Model
@@ -28,5 +29,10 @@ class FoodSize extends Model
     public function getFormattedPriceAttribute()
     {
         return '₦' . number_format($this->price, 2);
+    }
+
+    public function getImageUrlAttribute()
+    {
+        return Storage::url($this->image);
     }
 }

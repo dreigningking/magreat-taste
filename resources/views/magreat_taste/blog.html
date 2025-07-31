@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Ma'Great Taste | Culinary Stories & Recipes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4a76a;
+            --primary-dark: #b8864c;
+            --secondary: #8c6d46;
+            --dark: #2c2c2c;
+            --light: #f8f4ee;
+            --accent: #c44536;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            padding-top: 80px;
+        }
+        
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        .navbar-brand span {
+            color: var(--accent);
+        }
+        
+        .nav-link {
+            font-weight: 400;
+            margin: 0 10px;
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .blog-hero {
+            height: 40vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            margin-bottom: 50px;
+        }
+        
+        .blog-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .blog-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .blog-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Blog Categories */
+        .blog-categories {
+            margin-bottom: 50px;
+        }
+        
+        .category-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--dark);
+            padding: 8px 20px;
+            margin: 5px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Blog Cards */
+        .blog-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            background: white;
+            height: 100%;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .blog-card-img {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+            position: relative;
+        }
+        
+        .blog-card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            color: white;
+        }
+        
+        .blog-card-body {
+            padding: 25px;
+        }
+        
+        .blog-card-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            line-height: 1.4;
+        }
+        
+        .blog-card-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .blog-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .blog-meta-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .blog-meta-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .blog-tags {
+            margin-bottom: 15px;
+        }
+        
+        .blog-tag {
+            background: var(--light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        
+        .read-more-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .read-more-btn:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .sidebar-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .popular-post {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .popular-post:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .popular-post-img {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        
+        .popular-post-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 5px;
+        }
+        
+        .popular-post-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag-cloud .blog-tag {
+            margin: 0;
+        }
+        
+        /* Newsletter */
+        .newsletter-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 50px 0;
+            margin: 50px 0;
+        }
+        
+        .newsletter-content {
+            text-align: center;
+        }
+        
+        .newsletter-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .newsletter-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+        
+        .newsletter-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .newsletter-btn:hover {
+            background: #a03a2e;
+            transform: translateY(-2px);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .social-icon {
+            font-size: 1.5rem;
+            margin: 0 10px;
+            color: white;
+            transition: color 0.3s;
+        }
+        
+        .social-icon:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .blog-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .blog-hero p {
+                font-size: 1.1rem;
+            }
+            
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="second.html">Ma<span>'</span>Great Taste</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="second.html#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="second.html#about">About Chef</a></li>
+                    <li class="nav-item"><a class="nav-link" href="second.html#menu">Menu</a></li>
+                    <li class="nav-item"><a class="nav-link" href="second.html#testimonials">Testimonials</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="blog.html">Blog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="second.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Blog Hero Section -->
+    <section class="blog-hero">
+        <div class="blog-hero-content">
+            <h1>Culinary Stories & Recipes</h1>
+            <p>Discover the art of cooking, behind-the-scenes stories, and exclusive recipes from Chef Margaret</p>
+        </div>
+    </section>
+
+    <!-- Blog Categories -->
+    <section class="blog-categories">
+        <div class="container">
+            <div class="text-center">
+                <button class="category-btn active" data-category="all">All Posts</button>
+                <button class="category-btn" data-category="recipes">Recipes</button>
+                <button class="category-btn" data-category="tips">Cooking Tips</button>
+                <button class="category-btn" data-category="stories">Chef Stories</button>
+                <button class="category-btn" data-category="events">Events</button>
+                <button class="category-btn" data-category="ingredients">Ingredients</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Content -->
+    <section class="blog-content py-5">
+        <div class="container">
+            <div class="row">
+                <!-- Main Blog Posts -->
+                <div class="col-lg-8">
+                    <div class="row">
+                        <!-- Blog Post 1 -->
+                        <div class="col-md-6 mb-4" data-category="recipes">
+                            <div class="blog-card">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Truffle Arancini Recipe" class="blog-card-img">
+                                    <div class="blog-card-overlay">
+                                        <div>
+                                            <span class="badge bg-primary">Featured</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <span><i class="fas fa-calendar me-1"></i>Dec 15, 2023</span>
+                                            <span><i class="fas fa-user me-1"></i>Chef Margaret</span>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span><i class="fas fa-eye me-1"></i>1.2k</span>
+                                            <span><i class="fas fa-comment me-1"></i>8</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="blog-card-title">The Perfect Truffle Arancini: A Step-by-Step Guide</h3>
+                                    <p class="blog-card-excerpt">Discover the secrets behind creating the most delicious truffle arancini. From selecting the right rice to achieving the perfect golden crust, this comprehensive guide will elevate your cooking skills.</p>
+                                    <div class="blog-tags">
+                                        <span class="blog-tag">Italian</span>
+                                        <span class="blog-tag">Truffle</span>
+                                        <span class="blog-tag">Appetizer</span>
+                                    </div>
+                                    <a href="blog-single.html" class="read-more-btn">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 2 -->
+                        <div class="col-md-6 mb-4" data-category="tips">
+                            <div class="blog-card">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cooking Tips" class="blog-card-img">
+                                    <div class="blog-card-overlay">
+                                        <div>
+                                            <span class="badge bg-success">Tips</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <span><i class="fas fa-calendar me-1"></i>Dec 12, 2023</span>
+                                            <span><i class="fas fa-user me-1"></i>Chef Margaret</span>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span><i class="fas fa-eye me-1"></i>856</span>
+                                            <span><i class="fas fa-comment me-1"></i>5</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="blog-card-title">5 Essential Knife Skills Every Home Cook Should Master</h3>
+                                    <p class="blog-card-excerpt">Mastering basic knife skills is the foundation of great cooking. Learn the proper techniques for chopping, dicing, and slicing that will make your prep work faster and more efficient.</p>
+                                    <div class="blog-tags">
+                                        <span class="blog-tag">Technique</span>
+                                        <span class="blog-tag">Knife Skills</span>
+                                        <span class="blog-tag">Basics</span>
+                                    </div>
+                                    <a href="blog-single.html" class="read-more-btn">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 3 -->
+                        <div class="col-md-6 mb-4" data-category="stories">
+                            <div class="blog-card">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1556911220-ef412aea183d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Chef Story" class="blog-card-img">
+                                    <div class="blog-card-overlay">
+                                        <div>
+                                            <span class="badge bg-info">Story</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <span><i class="fas fa-calendar me-1"></i>Dec 10, 2023</span>
+                                            <span><i class="fas fa-user me-1"></i>Chef Margaret</span>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span><i class="fas fa-eye me-1"></i>1.5k</span>
+                                            <span><i class="fas fa-comment me-1"></i>12</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="blog-card-title">From Paris to Your Plate: My Culinary Journey</h3>
+                                    <p class="blog-card-excerpt">Join me as I share the story of my culinary journey from training in Paris to creating memorable dining experiences. Discover the lessons learned and the passion that drives my cooking.</p>
+                                    <div class="blog-tags">
+                                        <span class="blog-tag">Journey</span>
+                                        <span class="blog-tag">Paris</span>
+                                        <span class="blog-tag">Inspiration</span>
+                                    </div>
+                                    <a href="blog-single.html" class="read-more-btn">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 4 -->
+                        <div class="col-md-6 mb-4" data-category="ingredients">
+                            <div class="blog-card">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ingredients Guide" class="blog-card-img">
+                                    <div class="blog-card-overlay">
+                                        <div>
+                                            <span class="badge bg-warning">Guide</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <span><i class="fas fa-calendar me-1"></i>Dec 8, 2023</span>
+                                            <span><i class="fas fa-user me-1"></i>Chef Margaret</span>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span><i class="fas fa-eye me-1"></i>723</span>
+                                            <span><i class="fas fa-comment me-1"></i>6</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="blog-card-title">The Ultimate Guide to Selecting Fresh Seafood</h3>
+                                    <p class="blog-card-excerpt">Learn how to identify the freshest seafood at your local market. From checking the eyes and gills to understanding seasonal availability, this guide will help you make the best choices.</p>
+                                    <div class="blog-tags">
+                                        <span class="blog-tag">Seafood</span>
+                                        <span class="blog-tag">Fresh</span>
+                                        <span class="blog-tag">Selection</span>
+                                    </div>
+                                    <a href="blog-single.html" class="read-more-btn">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 5 -->
+                        <div class="col-md-6 mb-4" data-category="events">
+                            <div class="blog-card">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cooking Class" class="blog-card-img">
+                                    <div class="blog-card-overlay">
+                                        <div>
+                                            <span class="badge bg-danger">Event</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <span><i class="fas fa-calendar me-1"></i>Dec 5, 2023</span>
+                                            <span><i class="fas fa-user me-1"></i>Chef Margaret</span>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span><i class="fas fa-eye me-1"></i>945</span>
+                                            <span><i class="fas fa-comment me-1"></i>9</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="blog-card-title">Upcoming Cooking Classes: Master the Art of French Pastry</h3>
+                                    <p class="blog-card-excerpt">Join me for an exclusive series of French pastry classes. From croissants to éclairs, learn the techniques that make French pastries so special. Limited spots available!</p>
+                                    <div class="blog-tags">
+                                        <span class="blog-tag">Classes</span>
+                                        <span class="blog-tag">French</span>
+                                        <span class="blog-tag">Pastry</span>
+                                    </div>
+                                    <a href="blog-single.html" class="read-more-btn">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Blog Post 6 -->
+                        <div class="col-md-6 mb-4" data-category="recipes">
+                            <div class="blog-card">
+                                <div class="position-relative">
+                                    <img src="https://images.unsplash.com/photo-1594041680534-e8c8cdebd659?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Bread Recipe" class="blog-card-img">
+                                    <div class="blog-card-overlay">
+                                        <div>
+                                            <span class="badge bg-primary">Recipe</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="blog-card-body">
+                                    <div class="blog-meta">
+                                        <div class="blog-meta-left">
+                                            <span><i class="fas fa-calendar me-1"></i>Dec 3, 2023</span>
+                                            <span><i class="fas fa-user me-1"></i>Chef Margaret</span>
+                                        </div>
+                                        <div class="blog-meta-right">
+                                            <span><i class="fas fa-eye me-1"></i>678</span>
+                                            <span><i class="fas fa-comment me-1"></i>4</span>
+                                        </div>
+                                    </div>
+                                    <h3 class="blog-card-title">Artisan Sourdough Bread: A Complete Beginner's Guide</h3>
+                                    <p class="blog-card-excerpt">Master the art of sourdough bread making with this comprehensive guide. From creating your own starter to achieving the perfect crust, every step is explained in detail.</p>
+                                    <div class="blog-tags">
+                                        <span class="blog-tag">Bread</span>
+                                        <span class="blog-tag">Sourdough</span>
+                                        <span class="blog-tag">Baking</span>
+                                    </div>
+                                    <a href="blog-single.html" class="read-more-btn">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <!-- Search -->
+                    <div class="sidebar">
+                        <h4 class="sidebar-title">Search</h4>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search articles...">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Popular Posts -->
+                    <div class="sidebar">
+                        <h4 class="sidebar-title">Popular Posts</h4>
+                        <div class="popular-post">
+                            <img src="https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Popular Post" class="popular-post-img">
+                            <div>
+                                <h6 class="popular-post-title">The Perfect Truffle Arancini</h6>
+                                <p class="popular-post-date">Dec 15, 2023</p>
+                            </div>
+                        </div>
+                        <div class="popular-post">
+                            <img src="https://images.unsplash.com/photo-1556911220-ef412aea183d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Popular Post" class="popular-post-img">
+                            <div>
+                                <h6 class="popular-post-title">From Paris to Your Plate</h6>
+                                <p class="popular-post-date">Dec 10, 2023</p>
+                            </div>
+                        </div>
+                        <div class="popular-post">
+                            <img src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Popular Post" class="popular-post-img">
+                            <div>
+                                <h6 class="popular-post-title">5 Essential Knife Skills</h6>
+                                <p class="popular-post-date">Dec 12, 2023</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="sidebar">
+                        <h4 class="sidebar-title">Categories</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Recipes (15)</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Cooking Tips (12)</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Chef Stories (8)</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Events (6)</a></li>
+                            <li class="mb-2"><a href="#" class="text-decoration-none text-dark">Ingredients (10)</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="sidebar">
+                        <h4 class="sidebar-title">Tags</h4>
+                        <div class="tag-cloud">
+                            <span class="blog-tag">Italian</span>
+                            <span class="blog-tag">French</span>
+                            <span class="blog-tag">Seafood</span>
+                            <span class="blog-tag">Bread</span>
+                            <span class="blog-tag">Dessert</span>
+                            <span class="blog-tag">Technique</span>
+                            <span class="blog-tag">Tips</span>
+                            <span class="blog-tag">Events</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h3 class="mb-3">Subscribe to Our Newsletter</h3>
+                <p class="mb-4">Get the latest recipes, cooking tips, and exclusive content delivered to your inbox.</p>
+                <form class="newsletter-form">
+                    <input type="email" class="form-control newsletter-input" placeholder="Enter your email address">
+                    <button type="submit" class="btn newsletter-btn">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h4>Ma'Great Taste</h4>
+                    <p>Custom gourmet meals crafted with passion and precision by Chef Margaret. Available for private events, catering, and personal orders.</p>
+                    <div class="mt-3">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5>Service Areas</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Greater Metropolitan Area</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Surrounding Counties</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Special Events Nationwide</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Chef Margaret</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-phone me-2"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope me-2"></i> margaret@chefsdelight.com</li>
+                        <li><i class="fas fa-calendar me-2"></i> Bookings: 3+ weeks in advance</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright text-center">
+                <p>&copy; 2023 Ma'Great Taste Catering. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Blog category filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            const blogPosts = document.querySelectorAll('[data-category]');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const selectedCategory = this.getAttribute('data-category');
+                    
+                    blogPosts.forEach(post => {
+                        const postCategory = post.getAttribute('data-category');
+                        if (selectedCategory === 'all' || selectedCategory === postCategory) {
+                            post.style.display = 'block';
+                        } else {
+                            post.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

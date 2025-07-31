@@ -11,6 +11,14 @@ class Payment extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
+    public function getRouteKeyName(){
+        return 'reference';
+    }
+
     public function order(){
         return $this->belongsTo(Order::class);
     }

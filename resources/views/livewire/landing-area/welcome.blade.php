@@ -4,7 +4,7 @@
         <div class="hero-content">
             <h1>Unforgettable Culinary Experiences</h1>
             <p>Gourmet meals - perfect for every occasion.</p>
-            <button class="btn btn-warning btn-lg">Order Your Meal</button>
+            <a href="#menu" class="btn btn-warning btn-lg">Order Your Meal</a>
         </div>
     </section>
 
