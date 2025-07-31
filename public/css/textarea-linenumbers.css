@@ -1,0 +1,36 @@
+/* Layout for line-numbered textarea */
+.linenumbered-textarea {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.linenumbered-textarea .line-numbers {
+    min-width: 2.5rem;
+    padding: 0.75rem 0.25rem;
+    font-size: 14px;
+    text-align: right;
+    user-select: none;
+    background-color:#1e3a8a;
+    color:#fff;
+}
+.linenumbered-textarea .line-numbers p {
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+}
+.linenumbered-textarea textarea {
+    width: 100%;
+    /* border: none; */
+    outline: none;
+    resize: none;
+    padding: 0.75rem;
+    font-family: inherit;
+    line-height: 30px;
+    /* background: transparent; */
+    /* No background or color set */
+}
+.linenumbered-textarea textarea:focus {
+    outline: none;
+}

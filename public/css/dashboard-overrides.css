@@ -1,0 +1,338 @@
+/* Dashboard Design System Overrides */
+/* This file overrides the default dashboard styles to use our unified design system */
+
+/* ===== SIDEBAR OVERRIDES ===== */
+
+.sidebar {
+  background: var(--dark-purple) !important;
+  font-family: var(--font-primary) !important;
+  font-weight: var(--font-medium) !important;
+}
+
+.sidebar .nav.sub-menu .nav-item::before{
+  display: none !important;  
+}
+
+.sidebar .nav .nav-item .nav-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-sm) var(--spacing-md) !important;
+  border-radius: var(--radius-md) !important;
+  transition: var(--transition-normal) !important;
+}
+
+.sidebar .nav .nav-item .nav-link:hover {
+  color: var(--text-white) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.sidebar .nav .nav-item .nav-link i.menu-icon {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: var(--text-base) !important;
+  margin-right: var(--spacing-md) !important;
+}
+
+.sidebar .nav .nav-item .nav-link .menu-title {
+  color: inherit !important;
+  font-size: var(--text-sm) !important;
+  font-weight: var(--font-medium) !important;
+}
+
+.sidebar .nav .nav-item.active > .nav-link {
+  background-color: var(--primary-purple) !important;
+  color: var(--text-white) !important;
+}
+
+.sidebar .nav .nav-item.active > .nav-link i,
+.sidebar .nav .nav-item.active > .nav-link .menu-title {
+  color: var(--text-white) !important;
+}
+
+.sidebar .nav.sub-menu {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-radius: var(--radius-md) !important;
+  margin: var(--spacing-xs) var(--spacing-md) !important;
+  padding-left: 0px !important;
+  border: 0px !important;
+}
+
+.sidebar .nav.sub-menu .nav-item .nav-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  padding: var(--spacing-xs) var(--spacing-md) !important;
+  font-size: var(--text-sm) !important;
+  line-height: 2;
+}
+
+.sidebar .nav.sub-menu .nav-item .nav-link:hover {
+  color: var(--text-white) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.sidebar .nav.sub-menu .nav-item .nav-link.active {
+  color: var(--text-white) !important;
+  background-color: var(--primary-purple) !important;
+}
+
+/* ===== NAVBAR OVERRIDES ===== */
+
+.navbar {
+  background-color: var(--bg-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-bottom: 1px solid var(--border-gray) !important;
+}
+
+.navbar-brand-wrapper {
+  background-color: var(--bg-primary) !important;
+}
+
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: var(--font-medium) !important;
+}
+
+.navbar .navbar-menu-wrapper .navbar-nav .nav-item .nav-link:hover {
+  color: var(--primary-purple) !important;
+}
+
+/* ===== MAIN CONTENT OVERRIDES ===== */
+
+.main-panel {
+  background-color: var(--bg-secondary) !important;
+}
+
+.content-wrapper {
+  background-color: var(--bg-primary) !important;
+  border-radius: var(--radius-lg) !important;
+  margin: var(--spacing-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* ===== CARD OVERRIDES ===== */
+
+.card {
+  background-color: var(--bg-primary) !important;
+  border: 1px solid var(--border-gray) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.card-header {
+  background-color: var(--bg-primary) !important;
+  border-bottom: 1px solid var(--border-gray) !important;
+  padding: var(--spacing-lg) !important;
+}
+
+.card-title {
+  color: var(--text-primary) !important;
+  font-weight: var(--font-semibold) !important;
+  font-size: var(--text-lg) !important;
+}
+
+.card-body {
+  padding: var(--spacing-lg) !important;
+}
+
+/* ===== BUTTON OVERRIDES ===== */
+
+.btn-primary {
+  background-color: var(--primary-purple) !important;
+  border-color: var(--primary-purple) !important;
+  color: var(--text-white) !important;
+  font-weight: var(--font-medium) !important;
+  padding: var(--spacing-sm) var(--spacing-lg) !important;
+  border-radius: var(--radius-md) !important;
+  transition: var(--transition-normal) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--dark-purple) !important;
+  border-color: var(--dark-purple) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.btn-outline-primary {
+  border-color: var(--primary-purple) !important;
+  color: var(--primary-purple) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-purple) !important;
+  border-color: var(--primary-purple) !important;
+  color: var(--text-white) !important;
+}
+
+.btn-success {
+  background-color: var(--success-green) !important;
+  border-color: var(--success-green) !important;
+}
+
+.btn-warning {
+  background-color: var(--warning-orange) !important;
+  border-color: var(--warning-orange) !important;
+}
+
+.btn-danger {
+  background-color: var(--danger-red) !important;
+  border-color: var(--danger-red) !important;
+}
+
+/* ===== FORM OVERRIDES ===== */
+
+.form-control {
+  border: 1px solid var(--border-gray) !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  font-size: var(--text-base) !important;
+  color: var(--text-primary) !important;
+  background-color: var(--bg-primary) !important;
+}
+
+.form-control:focus {
+  border-color: var(--primary-purple) !important;
+  box-shadow: 0 0 0 0.2rem rgba(95, 75, 139, 0.25) !important;
+}
+
+.form-label {
+  color: var(--text-primary) !important;
+  font-weight: var(--font-medium) !important;
+  margin-bottom: var(--spacing-sm) !important;
+}
+
+/* ===== TABLE OVERRIDES ===== */
+
+.table {
+  color: var(--text-primary) !important;
+}
+
+.table thead th {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 2px solid var(--border-gray) !important;
+  color: var(--text-primary) !important;
+  font-weight: var(--font-semibold) !important;
+}
+
+.table tbody tr:hover {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* ===== BADGE OVERRIDES ===== */
+
+.badge {
+  font-weight: var(--font-medium) !important;
+  border-radius: var(--radius-full) !important;
+  padding: var(--spacing-xs) var(--spacing-sm) !important;
+}
+
+.badge-primary {
+  background-color: var(--primary-purple) !important;
+  color: var(--text-white) !important;
+}
+
+.badge-success {
+  background-color: var(--success-green) !important;
+  color: var(--text-white) !important;
+}
+
+.badge-warning {
+  background-color: var(--warning-orange) !important;
+  color: var(--text-white) !important;
+}
+
+.badge-danger {
+  background-color: var(--danger-red) !important;
+  color: var(--text-white) !important;
+}
+
+/* ===== ALERT OVERRIDES ===== */
+
+.alert {
+  border-radius: var(--radius-md) !important;
+  padding: var(--spacing-md) var(--spacing-lg) !important;
+  border: 1px solid transparent !important;
+}
+
+.alert-success {
+  background-color: rgba(40, 167, 69, 0.1) !important;
+  border-color: var(--success-green) !important;
+  color: var(--success-green) !important;
+}
+
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+  border-color: var(--warning-orange) !important;
+  color: var(--warning-orange) !important;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  border-color: var(--danger-red) !important;
+  color: var(--danger-red) !important;
+}
+
+.alert-info {
+  background-color: rgba(23, 162, 184, 0.1) !important;
+  border-color: var(--info-blue) !important;
+  color: var(--info-blue) !important;
+}
+
+/* ===== FOOTER OVERRIDES ===== */
+
+.footer {
+  background-color: var(--bg-primary) !important;
+  border-top: 1px solid var(--border-gray) !important;
+  color: var(--text-secondary) !important;
+  padding: var(--spacing-lg) 0 !important;
+}
+
+/* ===== TYPOGRAPHY OVERRIDES ===== */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary) !important;
+  font-family: var(--font-primary) !important;
+}
+
+.text-primary {
+  color: var(--primary-purple) !important;
+}
+
+.text-success {
+  color: var(--success-green) !important;
+}
+
+.text-warning {
+  color: var(--warning-orange) !important;
+}
+
+.text-danger {
+  color: var(--danger-red) !important;
+}
+
+/* ===== UTILITY OVERRIDES ===== */
+
+.bg-primary {
+  background-color: var(--primary-purple) !important;
+}
+
+.bg-success {
+  background-color: var(--success-green) !important;
+}
+
+.bg-warning {
+  background-color: var(--warning-orange) !important;
+}
+
+.bg-danger {
+  background-color: var(--danger-red) !important;
+}
+
+/* ===== RESPONSIVE OVERRIDES ===== */
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100% !important;
+  }
+  
+  .content-wrapper {
+    margin: var(--spacing-sm) !important;
+  }
+} 
