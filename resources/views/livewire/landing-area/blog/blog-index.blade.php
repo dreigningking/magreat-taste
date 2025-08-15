@@ -53,8 +53,8 @@
                                                 <span><i class="fas fa-calendar me-1"></i>{{ $post->published_at->format('M d, Y') }}</span>
                                             </div>
                                             <div class="blog-meta-right">
-                                                <span><i class="fas fa-eye me-1"></i>{{ number_format($post->views_count ?? 0) }}</span>
-                                                <span><i class="fas fa-comment me-1"></i>{{ $post->comments_count ?? 0 }}</span>
+                                                <span><i class="fas fa-eye me-1"></i>{{ number_format($post->views->count() ?? 0) }}</span>
+                                                <span><i class="fas fa-comment me-1"></i>{{ $post->comments->count() ?? 0 }}</span>
                                             </div>
                                         </div>
                                         <h3 class="blog-card-title">{{ $post->title }}</h3>
