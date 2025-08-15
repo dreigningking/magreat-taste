@@ -42,7 +42,7 @@ return new class extends Migration
             // Social sharing
             $table->boolean('allow_comments')->default(true);
             $table->boolean('featured')->default(false);
-            
+            $table->timestamp('broadcasted_at')->nullable();
             // Timestamps
             $table->timestamps();
             
@@ -50,7 +50,6 @@ return new class extends Migration
             $table->index(['status', 'published_at']);
             $table->index(['user_id', 'published_at']);
             $table->index(['featured', 'published_at']);
-            $table->index('views_count');
             $table->index('created_at');
         });
     }

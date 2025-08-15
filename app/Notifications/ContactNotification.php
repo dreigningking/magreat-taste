@@ -27,13 +27,13 @@ class ContactNotification extends Notification
         return (new MailMessage)
             ->subject('New Contact Form Submission: ' . $this->data['subject'])
             ->greeting('Hello Admin,')
-            ->line('You have received a new contact form submission on Wonegig:')
+            ->line('You have received a new contact form submission on MaGreat Taste:')
             ->line('**Name:** ' . $this->data['name'])
             ->line('**Email:** ' . $this->data['email'])
             ->line('**Subject:** ' . $this->data['subject'])
             ->line('**Message:**')
             ->line($this->data['message'])
             ->line('---')
-            ->line('This message was sent via the Wonegig contact form.');
+            ->line('This message was sent via the MaGreat Taste contact form.');
     }
 } 

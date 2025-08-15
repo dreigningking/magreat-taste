@@ -38,7 +38,7 @@
                 <div class="card-header">
                     <h6 class="card-title mb-0">Settings Menu</h6>
                 </div>
-                <div class="card-body p-0">
+                <div class="">
                     <div class="list-group list-group-flush">
                         <button wire:click="setActiveSection('basic')" 
                                 class="list-group-item list-group-item-action d-flex align-items-center {{ $activeSection === 'basic' ? 'active' : '' }}">
@@ -218,14 +218,14 @@
                                                 class="btn btn-sm {{ $user->is_active ? 'btn-warning' : 'btn-success' }}"
                                                 wire:click="toggleUserStatus({{ $user->id }})"
                                                 title="{{ $user->is_active ? 'Disable' : 'Enable' }} User">
-                                                <i class="ri-{{ $user->is_active ? 'user-unfollow' : 'user-follow' }}-line"></i>
+                                                <i class="mdi {{ $user->is_active ? 'mdi-account-off-outline' : 'mdi-account-plus-outline' }}"></i>
                                             </button>
                                             <button type="button"
                                                 class="btn btn-sm btn-danger"
                                                 wire:click="deleteUser({{ $user->id }})"
                                                 onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')"
                                                 title="Delete User">
-                                                <i class="ri-delete-bin-line"></i>
+                                                <i class="fa fa-trash"></i>
                                             </button>
                                             @else
                                             <span class="text-muted">No actions</span>
@@ -256,7 +256,7 @@
                     <h5 class="modal-title">
                         <i class="ri-user-add-line me-2"></i>Add New User
                         </h5>
-                    <button type="button" class="btn-close" wire:click="hideAddUserModal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form wire:submit.prevent="addNewUser">
                     <div class="modal-body">
@@ -284,7 +284,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" wire:click="hideAddUserModal">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">
                             Cancel
                         </button>
                         <button type="submit" class="btn btn-primary">

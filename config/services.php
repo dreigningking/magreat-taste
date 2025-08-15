@@ -43,7 +43,6 @@ return [
         'public'=> env('PAYSTACK_PUBLIC'),
     ],
     'countrystatecity' => env('COUNTRYSTATECITY'),
-    'ipdata' => env('IPDATA_API_KEY'),
     'settings'=> [
         'vat_rate' => env('VAT_RATE'),
         'shipment_quantity_cap' => env('SHIPMENT_QTY_CAP', 10),

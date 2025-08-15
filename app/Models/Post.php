@@ -24,12 +24,11 @@ class Post extends Model
         'status',
         'published_at',
         'meta_keywords',
-        'views_count',
-        'likes_count',
         'tags',
         'reading_time',
         'allow_comments',
         'featured',
+        'broadcasted_at',
     ];
 
     protected $casts = [
@@ -38,7 +37,7 @@ class Post extends Model
         'allow_comments' => 'boolean',
         'featured' => 'boolean',
         'reading_time' => 'integer',
-        'views_count' => 'integer',
+        'broadcasted_at' => 'datetime',
     ];
 
     public function sluggable(): array

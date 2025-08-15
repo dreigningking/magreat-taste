@@ -3,8 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Payment;
-use App\Jobs\NotifyUrgentTaskPromotion;
-use App\Models\TaskPromotion;
 
 class PaymentObserver
 {
