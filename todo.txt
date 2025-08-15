@@ -1,4 +1,2 @@
-checkout{
-    display states where user can pick from or receive delivery
-    if user selects pickup, 
-}
+-comment subscription
+- 

@@ -5,14 +5,15 @@ namespace App\Livewire\LandingArea;
 use Livewire\Component;
 use App\Models\Contact;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Log;
 use App\Notifications\ContactNotification;
 use Livewire\Attributes\Layout;
 
 class ContactSection extends Component
 {
-    public string $pageTitle = 'Contact Us | Wonegig';
-    public string $metaTitle = 'Contact Wonegig - Micro-Jobs Platform';
-    public string $metaDescription = "Get in touch with the Wonegig team. We're here to help with support, partnerships, and general inquiries.";
+    public string $pageTitle = 'Contact Us | MaGreat Taste';
+    public string $metaTitle = 'Contact MaGreat Taste - Catering Services';
+    public string $metaDescription = "Get in touch with the MaGreat Taste team. We're here to help with support, partnerships, and general inquiries.";
     
     // Common fields
     public $contact_type = 'inquiry';
@@ -45,7 +46,7 @@ class ContactSection extends Component
         'name' => 'required|string|max:100',
         'email' => 'required|email|max:100',
         'phone' => 'nullable|string|max:20',
-        'preferred_date' => 'nullable|date',
+        'preferred_date' => 'nullable|date|after_or_equal:today',
         'message' => 'required|string|max:2000',
         'contact_type' => 'required|in:inquiry,booking,feedback,review',
         
@@ -108,6 +109,16 @@ class ContactSection extends Component
         $this->validate();
 
         try {
+            // Debug: Log the form data
+            Log::info('Contact form submission', [
+                'contact_type' => $this->contact_type,
+                'name' => $this->name,
+                'email' => $this->email,
+                'phone' => $this->phone,
+                'preferred_date' => $this->preferred_date,
+                'message' => $this->message,
+            ]);
+
             // Create contact record
             $contact = Contact::create([
                 'name' => $this->name,
@@ -124,7 +135,7 @@ class ContactSection extends Component
                 
                 // Booking fields
                 'event_type' => $this->contact_type === 'booking' ? $this->event_type : null,
-                'guest_count' => $this->contact_type === 'booking' ? $this->guest_count : null,
+                'guest_count' => $this->contact_type === 'booking' ? (int) $this->guest_count : null,
                 'event_location' => $this->contact_type === 'booking' ? $this->event_location : null,
                 'service_type' => $this->contact_type === 'booking' ? $this->service_type : null,
                 
@@ -138,23 +149,57 @@ class ContactSection extends Component
                 'publish_review' => $this->contact_type === 'review' ? $this->publish_review : false,
             ]);
 
+            Log::info('Contact created successfully', ['contact_id' => $contact->id]);
+
             // Send notification email
-            $contactEmail = config('app.contact_email');
+            $contactEmail = config('app.contact_email', config('mail.from.address'));
             if ($contactEmail) {
+                // Prepare notification data with all fields
+                $notificationData = [
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'contact_type' => $this->contact_type,
+                    'message' => $this->message,
+                    'contact_id' => $contact->id,
+                ];
+
+                // Add contact type specific data
+                switch ($this->contact_type) {
+                    case 'inquiry':
+                        $notificationData['inquiry_subject'] = $this->inquiry_subject;
+                        $notificationData['inquiry_type'] = $this->inquiry_type;
+                        break;
+                    case 'booking':
+                        $notificationData['event_type'] = $this->event_type;
+                        $notificationData['guest_count'] = $this->guest_count;
+                        $notificationData['event_location'] = $this->event_location;
+                        $notificationData['service_type'] = $this->service_type;
+                        break;
+                    case 'feedback':
+                        $notificationData['feedback_type'] = $this->feedback_type;
+                        $notificationData['rating'] = $this->rating;
+                        break;
+                    case 'review':
+                        $notificationData['dish_name'] = $this->dish_name;
+                        $notificationData['review_rating'] = $this->review_rating;
+                        $notificationData['publish_review'] = $this->publish_review;
+                        break;
+                }
+
+                Log::info('Sending notification', ['notification_data' => $notificationData]);
+
                 Notification::route('mail', $contactEmail)
-                    ->notify(new ContactNotification([
-                        'name' => $this->name,
-                        'email' => $this->email,
-                        'contact_type' => $this->contact_type,
-                        'message' => $this->message,
-                        'contact_id' => $contact->id,
-                    ]));
+                    ->notify(new ContactNotification($notificationData));
             }
 
             session()->flash('success', 'Thank you for your message! We will get back to you soon.');
             $this->resetForm();
 
         } catch (\Exception $e) {
+            Log::error('Contact form submission error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             session()->flash('error', 'There was an error sending your message. Please try again.');
         }
     }

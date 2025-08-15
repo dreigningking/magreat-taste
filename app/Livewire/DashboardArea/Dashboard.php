@@ -81,7 +81,7 @@ class Dashboard extends Component
             'today_orders' => Order::whereDate('created_at', Carbon::today())->count(),
             'monthly_orders' => Order::whereMonth('created_at', Carbon::now()->month)->count(),
             'total_posts' => Post::published()->count(),
-            'total_qualified_views' => PostView::where('is_qualified', true)->count(),
+            'total_views' => PostView::count(),
             'total_comments' => Comment::count(),
         ];
     }
@@ -90,12 +90,11 @@ class Dashboard extends Component
     {
         $this->trendingPosts = Post::published()
             ->withCount([
-                'qualifiedViews as qualified_views_count',
-                'postViews as total_views_count',
+                'views as total_views_count',
                 'comments as comments_count'
             ])
             ->with(['user', 'category'])
-            ->orderBy('qualified_views_count', 'desc')
+            ->orderBy('total_views_count', 'desc')
             ->limit(3)
             ->get();
     }
@@ -112,13 +111,12 @@ class Dashboard extends Component
     {
         return [
             'total_posts' => Post::published()->count(),
-            'total_qualified_views' => \App\Models\PostView::where('is_qualified', true)->count(),
-            'total_unqualified_views' => \App\Models\PostView::where('is_qualified', false)->count(),
+            'total_views' => PostView::count(),
             'total_comments' => Comment::count(),
             'avg_reading_time' => Post::published()->avg('reading_time'),
             'top_performing_post' => Post::published()
-                ->withCount('qualifiedViews')
-                ->orderBy('qualified_views_count', 'desc')
+                ->withCount('views')
+                ->orderBy('total_views_count', 'desc')
                 ->first(),
         ];
     }

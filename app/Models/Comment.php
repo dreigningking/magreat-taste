@@ -5,27 +5,27 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Http\Traits\HasMentions;
 use App\Models\User;
 
 class Comment extends Model
 {
-    use HasFactory, HasMentions;
+    use HasFactory;
 
     protected $fillable = [
         'content',
-        'user_id',
-        'post_id',
         'guest_name',
-        'guest_email',  
+        'guest_email',
+        'post_id',  
+        'ip_address',
+        'user_agent',
         'mentions',
         'status',
         'is_featured',
         'approved_at',
         'approved_by',
         'likes_count',
-        'user_agent',
-        'ip_address',
+        
+        
     ];
 
     protected $casts = [
@@ -34,12 +34,6 @@ class Comment extends Model
         'approved_at' => 'datetime',
         'likes_count' => 'integer',
     ];
-
-    // Relationships
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function post(): BelongsTo
     {
@@ -54,12 +48,12 @@ class Comment extends Model
     // Accessors
     public function getCommenterNameAttribute(): string
     {
-        return $this->user ? $this->user->name : $this->guest_name;
+        return $this->guest_name;
     }
 
     public function getCommenterEmailAttribute(): string
     {
-        return $this->user ? $this->user->email : $this->guest_email;
+        return $this->guest_email;
     }
 
     public function getIsApprovedAttribute(): bool
@@ -118,11 +112,6 @@ class Comment extends Model
         return $query->where('is_featured', true);
     }
 
-    public function scopeByUser($query, $userId)
-    {
-        return $query->where('user_id', $userId);
-    }
-
     public function scopeByPost($query, $post_id)
     {
         return $query->where('post_id', $post_id);
@@ -151,7 +140,6 @@ class Comment extends Model
             'status' => 'rejected',
             'approved_by' => $rejectedBy,
         ]);
-
         return true;
     }
 
@@ -172,39 +160,4 @@ class Comment extends Model
         $this->increment('likes_count');
     }
 
-    public function isByGuest(): bool
-    {
-        return is_null($this->user_id);
-    }
-
-    public function isByUser(User $user): bool
-    {
-        return $this->user_id === $user->id;
-    }
-
-    public function canBeEditedBy(User $user): bool
-    {
-        return $this->isByUser($user) && $this->is_pending;
-    }
-
-    public function canBeDeletedBy(User $user): bool
-    {
-        return $this->isByUser($user) || $user->hasRole('admin');
-    }
-
-    // Boot method for processing mentions
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($comment) {
-            $comment->processMentions();
-        });
-
-        static::updated(function ($comment) {
-            if ($comment->isDirty('content')) {
-                $comment->processMentions();
-            }
-        });
-    }
 }

@@ -56,8 +56,8 @@
         <div class="col-md-2">
             <div class="card border-dark">
                 <div class="card-body">
-                    <h6 class="text-muted">Qualified Views</h6>
-                    <h3 class="mb-0">{{ $stats['total_qualified_views'] }}</h3>
+                    <h6 class="text-muted">Total Views</h6>
+                    <h3 class="mb-0">{{ $stats['total_views'] }}</h3>
                     <small class="text-muted">5+ min reads</small>
                 </div>
             </div>
@@ -185,7 +185,7 @@
 
             <!-- Trending Blog Posts -->
             <div class="card border-info mb-4">
-                <div class="card-header bg-info text-white">Trending Blog Posts</div>
+                <div class="card-header bg-success text-white">Trending Blog Posts</div>
                 <div class="card-body">
                                             @if($trendingPosts->count() > 0)
                             @foreach($trendingPosts as $post)
@@ -194,7 +194,7 @@
                                     <h6 class="mb-1">{{ Str::limit($post->title, 30) }}</h6>
                                     <div class="d-flex flex-column">
                                         <small class="text-muted">
-                                            <i class="fa fa-eye me-1"></i>{{ $post->qualified_views_count ?? 0 }} qualified
+                                            <i class="fa fa-eye me-1"></i>{{ $post->total_views_count ?? 0 }} views
                                         </small>
                                         <small class="text-muted">
                                             <i class="fa fa-comment me-1"></i>{{ $post->comments_count ?? 0 }} comments

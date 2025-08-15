@@ -17,13 +17,10 @@ return new class extends Migration
             $table->string('ip_address', 45);
             $table->string('user_agent')->nullable();
             $table->timestamp('viewed_at');
-            $table->integer('duration_seconds')->default(0);
-            $table->boolean('is_qualified')->default(false); // 5+ minutes = true
             $table->timestamps();
             
             // Indexes for performance
             $table->index(['post_id', 'ip_address']);
-            $table->index(['post_id', 'is_qualified']);
             $table->index('viewed_at');
         });
     }

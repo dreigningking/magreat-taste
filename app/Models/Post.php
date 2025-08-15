@@ -75,14 +75,9 @@ class Post extends Model
         return $this->hasMany(Comment::class, 'post_id')->where('status', 'approved');
     }
 
-    public function postViews(): HasMany
+    public function views(): HasMany
     {
         return $this->hasMany(PostView::class);
-    }
-
-    public function qualifiedViews(): HasMany
-    {
-        return $this->hasMany(PostView::class)->where('is_qualified', true);
     }
 
     // Accessors
@@ -169,66 +164,7 @@ class Post extends Model
               ->orWhere('excerpt', 'like', "%{$search}%");
         });
     }
-
-    // Methods
-    public function incrementViews(): void
-    {
-        $this->increment('views_count');
-    }
-
-    /**
-     * Start tracking a view session for a user
-     */
-    public function startViewTracking(string $ipAddress, ?string $userAgent = null): PostView
-    {
-        return $this->postViews()->create([
-            'ip_address' => $ipAddress,
-            'user_agent' => $userAgent,
-            'viewed_at' => now(),
-            'duration_seconds' => 0,
-            'is_qualified' => false,
-        ]);
-    }
-
-    /**
-     * Update view duration and check if qualified
-     */
-    public function updateViewDuration(PostView $postView, int $durationSeconds): void
-    {
-        $postView->update([
-            'duration_seconds' => $durationSeconds,
-            'is_qualified' => $durationSeconds >= 300, // 5 minutes
-        ]);
-
-        // If this is the first qualified view, increment the views_count
-        if ($postView->is_qualified && $postView->wasChanged('is_qualified')) {
-            $this->increment('views_count');
-        }
-    }
-
-    /**
-     * Get qualified views count (5+ minutes)
-     */
-    public function getQualifiedViewsCountAttribute(): int
-    {
-        return $this->qualified_views_count ?? $this->qualifiedViews()->count();
-    }
-
-    /**
-     * Get total views count (including both qualified and unqualified)
-     */
-    public function getTotalViewsCountAttribute(): int
-    {
-        return $this->postViews()->count();
-    }
-
-    /**
-     * Get unqualified views count (less than 5 minutes)
-     */
-    public function getUnqualifiedViewsCountAttribute(): int
-    {
-        return $this->postViews()->where('is_qualified', false)->count();
-    }
+    
 
     public function getCommentsCountAttribute(): int
     {

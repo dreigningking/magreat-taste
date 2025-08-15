@@ -17,7 +17,7 @@
                 </div>
                 <div class="meta-item">
                     <i class="fas fa-eye"></i>
-                    <span>{{ number_format($post->qualified_views_count ?? 0) }} qualified views</span>
+                    <span>{{ number_format($post->views()->count() ?? 0) }} views</span>
                 </div>
                 <div class="meta-item">
                     <i class="fas fa-comment"></i>
@@ -136,7 +136,7 @@
                             <h4 class="sidebar-title">Related Posts</h4>
                             @foreach($relatedPosts as $relatedPost)
                                 <div class="related-post">
-                                    <img src="{{ $relatedPost->featured_image ?? 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' }}" 
+                                    <img src="{{ $relatedPost->featured_image ? Storage::url($relatedPost->featured_image) : 'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80' }}" 
                                          alt="{{ $relatedPost->title }}" class="related-post-img">
                                     <div>
                                         <h6 class="related-post-title">
@@ -216,57 +216,3 @@
         </div>
     </section>
 </div>
-
-@push('scripts')
-<script>
-    // View tracking timer
-    let viewTimer = null;
-    let viewStartTime = Date.now();
-    
-    // Start tracking when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        startViewTracking();
-    });
-    
-    // Start view tracking
-    function startViewTracking() {
-        viewStartTime = Date.now();
-        
-        // Update view duration every 30 seconds
-        viewTimer = setInterval(function() {
-            updateViewDuration();
-        }, 30000); // 30 seconds
-        
-        // Track when user leaves the page
-        window.addEventListener('beforeunload', function() {
-            updateViewDuration();
-        });
-        
-        // Track when user switches tabs or minimizes
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                // User switched tabs or minimized - pause tracking
-                clearInterval(viewTimer);
-            } else {
-                // User returned - resume tracking
-                startViewTracking();
-            }
-        });
-    }
-    
-    // Update view duration
-    function updateViewDuration() {
-        const durationSeconds = Math.floor((Date.now() - viewStartTime) / 1000);
-        
-        // Send to Livewire component using Livewire's call method
-        if (typeof Livewire !== 'undefined') {
-            Livewire.find('{{ $this->getId() }}').call('updateViewDuration');
-        }
-        
-        // If duration is 5+ minutes, stop tracking
-        if (durationSeconds >= 300) {
-            clearInterval(viewTimer);
-        }
-    }
-</script>
-@endpush

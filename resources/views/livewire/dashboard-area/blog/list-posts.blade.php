@@ -143,7 +143,7 @@
                                 <td>
                                     <div class="d-flex flex-column">
                                         <small class="text-muted">
-                                            <i class="ri-eye-line me-1"></i>{{ number_format($post->qualifiedViews()->count()) }} views
+                                            <i class="ri-eye-line me-1"></i>{{ number_format($post->views()->count()) }} views
                                         </small>
                                         
                                         <small class="text-muted">

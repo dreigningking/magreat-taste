@@ -74,7 +74,7 @@ class ListPosts extends Component
         $totalPosts = Post::count();
         $publishedPosts = Post::where('status', 'published')->count();
         $draftPosts = Post::where('status', 'draft')->count();
-        $totalViews = PostView::sum('is_qualified');
+        $totalViews = PostView::count();
 
         return view('livewire.dashboard-area.blog.list-posts', [
             'posts' => $posts,
