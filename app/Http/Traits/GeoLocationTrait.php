@@ -37,12 +37,6 @@ trait GeoLocationTrait
         return $state;
     }
     
-    protected function getLocation(){
-        $ip = $this->visitorIp();
-        $location = Location::where('ip', $ip)->first();
-        return $location;
-    }
-
     protected function visitorIp(){
         $ip = request()->ip() == '::1'|| request()->ip() == '127.0.0.1'? '197.211.58.12' : request()->ip();
         return $ip;

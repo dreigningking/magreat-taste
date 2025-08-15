@@ -143,11 +143,9 @@
                                 <td>
                                     <div class="d-flex flex-column">
                                         <small class="text-muted">
-                                            <i class="ri-eye-line me-1"></i>{{ number_format($post->views_count) }} views
+                                            <i class="ri-eye-line me-1"></i>{{ number_format($post->qualifiedViews()->count()) }} views
                                         </small>
-                                        <small class="text-muted">
-                                            <i class="ri-heart-line me-1"></i>{{ number_format($post->likes_count) }} likes
-                                        </small>
+                                        
                                         <small class="text-muted">
                                             <i class="ri-message-2-line me-1"></i>{{ $post->comments_count ?? 0 }} comments
                                         </small>

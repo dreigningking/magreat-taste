@@ -2,8 +2,9 @@
 
 namespace App\Livewire\DashboardArea\Blog;
 
-use Livewire\Component;
 use App\Models\Post;
+use Livewire\Component;
+use App\Models\PostView;
 use Livewire\WithPagination;
 
 class ListPosts extends Component
@@ -73,7 +74,7 @@ class ListPosts extends Component
         $totalPosts = Post::count();
         $publishedPosts = Post::where('status', 'published')->count();
         $draftPosts = Post::where('status', 'draft')->count();
-        $totalViews = Post::sum('views_count');
+        $totalViews = PostView::sum('is_qualified');
 
         return view('livewire.dashboard-area.blog.list-posts', [
             'posts' => $posts,

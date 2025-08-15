@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payout;
 use App\Models\Payment;
-use Illuminate\Http\Request;
 use App\Http\Traits\CartTrait;
 use App\Http\Traits\PaymentTrait;
 

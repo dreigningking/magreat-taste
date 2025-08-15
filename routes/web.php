@@ -21,6 +21,8 @@ use App\Livewire\DashboardArea\Orders\Payments;
 use App\Livewire\DashboardArea\Meals\CreateMeal;
 use App\Livewire\DashboardArea\Orders\EditOrder;
 use App\Livewire\DashboardArea\Orders\ViewOrder;
+use App\Livewire\DashboardArea\Places\Locations;
+use App\Livewire\DashboardArea\Places\Logistics;
 use App\Livewire\DashboardArea\Blog\ListComments;
 use App\Livewire\DashboardArea\Orders\ListOrders;
 use App\Livewire\LandingArea\Policies\Disclaimer;
@@ -74,6 +76,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('edit/{order}', EditOrder::class)->name('edit');
             Route::get('view/{order}',ViewOrder::class)->name('view'); 
         });
+        Route::group(['prefix' => 'logistics','as' => 'logistics.'], function () {
+            Route::get('/', Logistics::class)->name('index');
+        });
+        Route::group(['prefix' => 'locations','as' => 'locations.'], function () {
+            Route::get('/', Locations::class)->name('index');
+        });
         Route::group(['prefix' => 'payments','as' => 'payments.'], function () {
             Route::get('/',Payments::class)->name('index');
         });
@@ -90,3 +98,8 @@ Route::group(['middleware' => 'auth'], function () {
 require __DIR__.'/auth.php';
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::get('test',function(){
+    $now = now();
+    dd($now->format('H:i'));
+});

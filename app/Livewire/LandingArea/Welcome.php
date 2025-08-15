@@ -2,19 +2,19 @@
 
 namespace App\Livewire\LandingArea;
 
+
 use App\Models\Meal;
-use App\Models\Category;
+
 use Livewire\Component;
-use App\Models\Platform;
+use App\Models\Category;
+
 use Livewire\Attributes\Layout;
 use App\Http\Traits\HelperTrait;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Traits\GeoLocationTrait;
 
 #[Layout('components.layouts.landing')]
 class Welcome extends Component
 {
-    use HelperTrait,GeoLocationTrait;
+    use HelperTrait;
     
     public $meals;
     public $categories;
@@ -23,7 +23,6 @@ class Welcome extends Component
 
     public function mount()
     {
-        
         $this->meals = Meal::latest()->get();
         $this->categories = Category::where('is_active', true)->get();
     }

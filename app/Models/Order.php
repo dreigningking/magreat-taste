@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ShipmentRoute;
 
 class Order extends Model
 {
@@ -25,6 +26,7 @@ class Order extends Model
         'vat_amount',
         'status',
         'refund_amount',
+        'shipment_route_id',
     ];
 
     protected $casts = [
@@ -43,6 +45,11 @@ class Order extends Model
     public function payment()
     {
         return $this->hasOne(Payment::class);
+    }
+
+    public function shipmentRoute()
+    {
+        return $this->belongsTo(ShipmentRoute::class);
     }
 
     public function getSubTotalAttribute(){

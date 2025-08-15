@@ -54,20 +54,12 @@ class Checkout extends Component
     public $states;
     public $cities;
     public $locations;
-
-    public $startHour;
-    public $endHour;
-    public $cookingMinutes;
-
+    
     public function mount()
     {
         $this->vatRate = config('services.settings.vat_rate', 0);
-        $this->startHour = config('services.settings.operating_hours_start', 6);
-        $this->endHour = config('services.settings.operating_hours_end', 16);
-        $this->cookingMinutes = config('services.settings.cooking_minutes', 30);
         $this->getCartItems();
         $this->loadLocations();
-        $this->generateUserGuidance();
     }
 
     public function loadLocations()
@@ -77,6 +69,7 @@ class Checkout extends Component
         // Get states that have locations
         $stateIds = $this->locations->pluck('state_id')->unique();
         $this->states = State::whereIn('id', $stateIds)->orderBy('name')->get();
+        
         $this->cities = collect(); // Will be populated when state is selected
     }
 
@@ -97,22 +90,21 @@ class Checkout extends Component
         $this->deliveryDate = '';
         $this->deliveryTime = '';
         $this->deliveryTimeError = '';
-        $this->deliveryCity = '';
-        $this->shipmentFee = 0;
-        $this->shipment_route_id = null;
     }
 
     public function updatedDeliveryState($value)
     {
-        $this->resetMinimumDeliveryTime();
         if ($value) {
             // Get all locations in the selected state
             $storeLocations = Location::where('state_id', $value)->get();
+            
             // Get all shipment routes where location_id IN storeLocations IDs
             $shipmentRoutes = ShipmentRoute::whereIn('location_id', $storeLocations->pluck('id'))->get();
+            
             // Get all cities where id IN shipment routes' destination_city_id
             $destinationCityIds = $shipmentRoutes->pluck('destination_city_id')->unique();
             $this->cities = City::whereIn('id', $destinationCityIds)->orderBy('name')->get();
+            
             // Log for debugging
             Log::info('Cities populated for state', [
                 'state_id' => $value,
@@ -121,8 +113,19 @@ class Checkout extends Component
                 'available_cities_count' => $this->cities->count(),
                 'city_ids' => $destinationCityIds->toArray()
             ]);
+            
+            $this->deliveryCity = '';
+            $this->resetMinimumDeliveryTime();
+            $this->deliveryTimeError = '';
+            $this->calculateDeliveryFee();
         } else {
             $this->cities = collect();
+            $this->deliveryCity = '';
+            $this->shipmentFee = 0;
+            $this->shipment_route_id = null;
+            $this->resetMinimumDeliveryTime();
+            $this->deliveryTimeError = '';
+            $this->calculateCartTotals();
         }
     }
 
@@ -146,7 +149,14 @@ class Checkout extends Component
                 $this->updatedDeliveryTime($this->deliveryTime);
             }
         } else {
-            $this->resetMinimumDeliveryTime(); 
+            $this->deliveryAddress = '';
+            $this->shipmentFee = 0;
+            $this->shipment_route_id = null;
+            $this->minDeliveryDate = '';
+            $this->minDeliveryTime = '';
+            $this->totalPreparationMinutes = 0;
+            $this->userGuidance = '';
+            $this->deliveryTimeError = '';
             $this->calculateCartTotals();
         }
     }
@@ -255,7 +265,10 @@ class Checkout extends Component
 
     public function calculateTotalPreparationMinutes()
     {
+        // Get cooking minutes from config
+        $cookingMinutes = config('services.settings.cooking_minutes', 30);
         
+        // Get estimated shipment minutes if city is selected
         $estimatedShipmentMinutes = 0;
         if ($this->deliveryCity) {
             $shipmentRoute = ShipmentRoute::where('destination_city_id', $this->deliveryCity)->first();
@@ -265,17 +278,51 @@ class Checkout extends Component
         }
         
         // Calculate total preparation time
-        $this->totalPreparationMinutes = $this->cookingMinutes + $estimatedShipmentMinutes;
+        $this->totalPreparationMinutes = $cookingMinutes + $estimatedShipmentMinutes;
         
-        // Set minimum delivery date based on current time vs operating hours end
-        $this->minDeliveryDate = $this->getMinimumDeliveryDate();
+        $now = now();
         
-        // Set minimum delivery time to start of operating hours + preparation time
-        $earliestTime = Carbon::parse($this->minDeliveryDate)->setTime($this->startHour, 0, 0)->addMinutes($this->totalPreparationMinutes);
-        $this->minDeliveryTime = $earliestTime->format('H:i');
+        // If past operating hours, minimum delivery is next day with proper start time
+        if ($this->isPastOperatingHours()) {
+            $this->minDeliveryDate = $now->addDay()->format('Y-m-d');
+            
+            // Calculate earliest possible delivery time for next day
+            $nextDayStart = $this->getStartOfOperatingHours($this->minDeliveryDate);
+            $earliestDeliveryTime = $nextDayStart->copy()->addMinutes($this->totalPreparationMinutes);
+            
+            $this->minDeliveryTime = $earliestDeliveryTime->format('H:i');
+        } else {
+            // Calculate minimum delivery date and time based on preparation time
+            $minDateTime = $now->copy()->addMinutes($this->totalPreparationMinutes);
+            
+            // Check if preparation time extends beyond operating hours
+            $endOfOperatingHours = $this->getEndOfOperatingHours();
+            
+            if ($minDateTime->gt($endOfOperatingHours)) {
+                // Preparation extends beyond operating hours, move to next day
+                $this->minDeliveryDate = $now->addDay()->format('Y-m-d');
+                $nextDayStart = $this->getStartOfOperatingHours($this->minDeliveryDate);
+                $earliestDeliveryTime = $nextDayStart->copy()->addMinutes($this->totalPreparationMinutes);
+                $this->minDeliveryTime = $earliestDeliveryTime->format('H:i');
+            } else {
+                // Can deliver today within operating hours
+                $this->minDeliveryDate = $now->format('Y-m-d');
+                $this->minDeliveryTime = $minDateTime->format('H:i');
+            }
+        }
         
         // Generate user guidance
         $this->generateUserGuidance();
+        
+        Log::info('Minimum delivery time calculated', [
+            'cooking_minutes' => $cookingMinutes,
+            'estimated_shipment_minutes' => $estimatedShipmentMinutes,
+            'total_preparation_minutes' => $this->totalPreparationMinutes,
+            'operating_hours_end' => $this->getEndOfOperatingHours()->format('H:i'),
+            'is_past_operating_hours' => $this->isPastOperatingHours(),
+            'min_delivery_date' => $this->minDeliveryDate,
+            'min_delivery_time' => $this->minDeliveryTime
+        ]);
     }
 
     /**
@@ -284,7 +331,8 @@ class Checkout extends Component
     public function getMinimumDeliveryDate()
     {
         $now = now();
-        $endTime = $now->copy()->setTime($this->endHour, 0, 0);
+        $endHour = config('services.settings.operating_hours_end', 16);
+        $endTime = $now->copy()->setTime($endHour, 0, 0);
         
         if ($now->gt($endTime)) {
             return now()->addDay()->format('Y-m-d');
@@ -320,9 +368,11 @@ class Checkout extends Component
             $selectedDateTime = Carbon::parse($this->deliveryDate . ' ' . $value);
             
             // Get start and end of operating hours for the selected date
+            $startHour = config('services.settings.operating_hours_start', 6);
+            $endHour = config('services.settings.operating_hours_end', 16);
             
-            $startTime = Carbon::parse($this->deliveryDate)->setTime($this->startHour, 0, 0);
-            $endTime = Carbon::parse($this->deliveryDate)->setTime($this->endHour, 0, 0);
+            $startTime = Carbon::parse($this->deliveryDate)->setTime($startHour, 0, 0);
+            $endTime = Carbon::parse($this->deliveryDate)->setTime($endHour, 0, 0);
             
             // Calculate earliest possible delivery time (start hour + cooking + delivery)
             $earliestTime = $startTime->copy()->addMinutes($this->totalPreparationMinutes);
@@ -345,37 +395,36 @@ class Checkout extends Component
 
     public function generateUserGuidance()
     {
+        $cookingMinutes = config('services.settings.cooking_minutes', 30);
         $estimatedShipmentMinutes = 0;
+        
         if ($this->deliveryCity) {
             $shipmentRoute = ShipmentRoute::where('destination_city_id', $this->deliveryCity)->first();
             if ($shipmentRoute) {
                 $estimatedShipmentMinutes = $shipmentRoute->estimated_minutes ?? 0;
             }
         }
-        $totalPreparationMinutes = $this->cookingMinutes + $estimatedShipmentMinutes;
-
-        $now = now();
-        $startHour = $this->startHour;
-        $endHour = $this->endHour;
-
-        $startTimeToday = $now->copy()->setTime($startHour, 0, 0);
-        $endTimeToday = $now->copy()->setTime($endHour, 0, 0);
-
-        if ($now->gte($endTimeToday)) {
-            // After end of operating hours (after 4pm)
-            $deliveryTime = $now->copy()->addDay()->setTime($startHour, 0, 0)->addMinutes($totalPreparationMinutes);
-            $datetimeString = $deliveryTime->format('g:i A, F j, Y');
-            $this->userGuidance = "Orders placed after {$endHour}:00 can only be delivered from tomorrow after {$deliveryTime->format('g:i A')}.";
-        } elseif ($now->lt($startTimeToday)) {
-            // Before start of operating hours (before 6am)
-            $deliveryTime = $now->copy()->setTime($startHour, 0, 0)->addMinutes($totalPreparationMinutes);
-            $datetimeString = $deliveryTime->format('g:i A, F j, Y');
-            $this->userGuidance = "Please select a date and time after {$datetimeString}.";
+        
+        $totalHours = floor($this->totalPreparationMinutes / 60);
+        $totalMinutes = $this->totalPreparationMinutes % 60;
+        
+        if ($totalHours > 0) {
+            $timeString = $totalHours . ' hour' . ($totalHours > 1 ? 's' : '');
+            if ($totalMinutes > 0) {
+                $timeString .= ' and ' . $totalMinutes . ' minute' . ($totalMinutes > 1 ? 's' : '');
+            }
         } else {
-            // Between 6am and 4pm
-            $deliveryTime = $now->copy()->addMinutes($totalPreparationMinutes);
-            $datetimeString = $deliveryTime->format('g:i A, F j, Y');
-            $this->userGuidance = "Please select a date and time after {$datetimeString}.";
+            $timeString = $totalMinutes . ' minute' . ($totalMinutes > 1 ? 's' : '');
+        }
+        
+        // Simple guidance message
+        $endHour = config('services.settings.operating_hours_end', 16);
+        $endTime = now()->setTime($endHour, 0, 0);
+        
+        if (now()->gt($endTime)) {
+            $this->userGuidance = "Orders placed after {$endHour}:00 (end of operating hours) can only be delivered from tomorrow onwards. Please select a delivery date for tomorrow or later.";
+        } else {
+            $this->userGuidance = "Please select a date and time at least {$timeString} from now to allow for cooking ({$cookingMinutes} min) and delivery time ({$estimatedShipmentMinutes} min). Orders placed after {$endHour}:00 (end of operating hours) can only be delivered from tomorrow onwards.";
         }
     }
 
@@ -401,19 +450,6 @@ class Checkout extends Component
     public function completePayment()
     {
         Log::info('Processing order',['entered']);
-        // Calculate validation constraints for delivery time
-        $earliestTime = null;
-        $endTime = null;
-        
-        if ($this->deliveryDate) {
-            
-            $startTime = Carbon::parse($this->deliveryDate)->setTime($this->startHour, 0, 0);
-            $earliestTime = $startTime->copy()->addMinutes($this->totalPreparationMinutes);
-            $endTime = Carbon::parse($this->deliveryDate)
-                ->setTime($this->endHour, 0, 0)
-                ->addMinutes($this->totalPreparationMinutes);
-        }
-        
         // Validate required fields
         $this->validate([
             'customerName' => 'required|string|max:255',
@@ -423,14 +459,65 @@ class Checkout extends Component
             'deliveryCity' => 'required|exists:sqlite_cities.cities,id',
             'deliveryAddress' => 'required_if:deliveryType,delivery|string|max:500',
             'deliveryDate' => 'required|date|after_or_equal:' . $this->getMinimumDeliveryDate(),
-            'deliveryTime' => 'required|after:' . ($earliestTime ? $earliestTime->format('H:i:s') : '00:00:00') . '|before:' . ($endTime ? $endTime->format('H:i:s') : '23:59:59'),
+            'deliveryTime' => 'required',
             'deliveryType' => 'required|in:delivery,pickup',
-        ], [
-            'deliveryTime.after' => 'The delivery time must be after ' . ($earliestTime ? $earliestTime->format('g:i A') : ''),
-            'deliveryTime.before' => 'The delivery time must be before ' . ($endTime ? $endTime->format('g:i A') : ''),
         ]);
         Log::info('Processing order',['validated']);
-        
+        // Additional validation for minimum delivery time
+        if ($this->deliveryDate && $this->deliveryTime) {
+            
+
+            
+
+            
+            // Check if the selected time allows for preparation and delivery
+            $minDateTime = $this->getEarliestDeliveryTimeForDate($this->deliveryDate);
+            if (!$minDateTime) {
+                session()->flash('error', 'Cannot deliver on the selected date. Please choose a different date.');
+                return;
+            }
+            
+            Log::info('Minimum delivery time calculated', [
+                'min_datetime' => $minDateTime->format('Y-m-d H:i:s'),
+                'selected_datetime' => $selectedDateTime->format('Y-m-d H:i:s'),
+                'is_valid' => $selectedDateTime->gte($minDateTime)
+            ]);
+            
+            if ($selectedDateTime->lt($minDateTime)) {
+                $minTimeFormatted = $minDateTime->format('g:i A');
+                session()->flash('error', "Delivery time must be after {$minTimeFormatted} on the selected date to allow for preparation and delivery time.");
+                return;
+            }
+            
+            // Check if we're past operating hours and trying to order for today
+            if ($this->isPastOperatingHours() && $selectedDateTime->isToday()) {
+                $endOfOperatingHours = $this->getEndOfOperatingHours();
+                session()->flash('error', "Orders placed after {$endOfOperatingHours->format('g:i A')} (end of operating hours) can only be delivered from tomorrow onwards. Please select a delivery date for tomorrow or later.");
+                return;
+            }
+
+            // Check if delivery time is within operating hours
+            $deliveryDate = Carbon::parse($this->deliveryDate);
+            $startOfOperatingHours = $this->getStartOfOperatingHours($deliveryDate);
+            $endOfOperatingHours = $this->getStartOfOperatingHours($deliveryDate)->copy()->setTime(
+                config('services.settings.operating_hours_end', 16), 
+                0, 
+                0
+            );
+
+            // Check if delivery time is before start of operating hours
+            if ($selectedDateTime->lt($startOfOperatingHours)) {
+                session()->flash('error', "Delivery time must be after {$startOfOperatingHours->format('g:i A')} (start of operating hours) on the selected date.");
+                return;
+            }
+
+            // Check if delivery time is after end of operating hours
+            if ($selectedDateTime->gt($endOfOperatingHours)) {
+                session()->flash('error', "Delivery time must be before {$endOfOperatingHours->format('g:i A')} (end of operating hours) on the selected date.");
+                return;
+            }
+        }
+        Log::info('Processing order',['before try']);
         try {
             DB::beginTransaction();
             

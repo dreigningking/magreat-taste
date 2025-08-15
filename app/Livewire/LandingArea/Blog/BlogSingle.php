@@ -33,6 +33,10 @@ class BlogSingle extends Component
     public $title;
     public $meta_title;
     public $meta_description;
+    
+    // View tracking properties
+    public $currentViewSession = null;
+    public $viewStartTime = null;
 
     public function mount(Post $post)
     {
@@ -42,8 +46,8 @@ class BlogSingle extends Component
             abort(404);
         }
 
-        // Increment view count
-        $this->post->incrementViews();
+        // Start view tracking
+        $this->startViewTracking();
         
         // Load related posts
         $this->loadRelatedPosts();
@@ -53,6 +57,46 @@ class BlogSingle extends Component
         
         // Set meta properties
         $this->setMetaProperties();
+        
+        // Load qualified views count
+        $this->post->loadCount('qualifiedViews');
+    }
+
+    public function startViewTracking()
+    {
+        $userIp = request()->ip();
+        
+        // Check if there's already an active view session for this IP and post
+        $existingView = $this->post->postViews()
+            ->where('ip_address', $userIp)
+            ->where('is_qualified', false)
+            ->where('viewed_at', '>=', now()->subHours(24)) // Within last 24 hours
+            ->first();
+        
+        if ($existingView) {
+            // Resume existing session
+            $this->currentViewSession = $existingView;
+            $this->viewStartTime = $existingView->viewed_at;
+        } else {
+            // Start new session
+            $this->currentViewSession = $this->post->startViewTracking($userIp, request()->userAgent());
+            $this->viewStartTime = now();
+        }
+    }
+
+    public function updateViewDuration()
+    {
+        if ($this->currentViewSession && $this->viewStartTime) {
+            $durationSeconds = now()->diffInSeconds($this->viewStartTime);
+            
+            // Update the view duration
+            $this->post->updateViewDuration($this->currentViewSession, $durationSeconds);
+            
+            // If qualified, update the session
+            if ($durationSeconds >= 300) {
+                $this->currentViewSession->refresh();
+            }
+        }
     }
 
     public function loadRelatedPosts()

@@ -24,11 +24,13 @@ return new class extends Migration
             $table->string('state')->nullable();
             $table->string('city')->nullable();
             $table->text('instructions')->nullable();
+            $table->unsignedBigInteger('shipment_route_id')->nullable();
             $table->string('shipment_fee')->default(0.00);
             $table->string('vat_amount')->default(0.00);
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
             $table->string('refund_amount')->default(0.00);
             $table->timestamps();
+            $table->foreign('shipment_route_id')->references('id')->on('shipment_routes')->onDelete('set null');
         });
     }
 

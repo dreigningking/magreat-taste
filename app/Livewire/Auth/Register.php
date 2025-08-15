@@ -7,7 +7,6 @@ use Livewire\Component;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Traits\GeoLocationTrait;
 use Illuminate\Auth\Events\Registered;
 use App\Notifications\WelcomeNotification;
 use Livewire\Attributes\Layout;
@@ -15,7 +14,6 @@ use Livewire\Attributes\Layout;
 #[Layout('components.layouts.landing')]
 class Register extends Component
 {
-    use GeoLocationTrait;
 
     public string $name = '';
 
@@ -40,10 +38,7 @@ class Register extends Component
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
-        $location = $this->getLocation();
-        $validated['country_id'] = $location->country_id;
-        $validated['state_id'] = $location->state_id;
-        $validated['city_id'] = $location->city_id;
+        
 
         event(new Registered(($user = User::create($validated))));
 

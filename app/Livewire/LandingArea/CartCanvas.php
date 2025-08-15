@@ -17,7 +17,7 @@ class CartCanvas extends Component
 
     public function mount()
     {
-        $this->vatRate = config('services.vat_rate', 0);
+        $this->vatRate = config('services.settings.vat_rate', 0);
         $this->getCartItems();
     }
 

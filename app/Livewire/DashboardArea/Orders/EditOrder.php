@@ -103,7 +103,7 @@ class EditOrder extends Component
         }
         
         $this->order_status = $order->status;
-        $this->vat_rate = config('services.vat_rate', 0);
+        $this->vat_rate = config('services.settings.vat_rate', 0);
         $this->vat_amount = $order->vat_amount;
         $this->shipment_fee = $order->shipment_fee;
         

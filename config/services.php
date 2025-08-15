@@ -44,6 +44,14 @@ return [
     ],
     'countrystatecity' => env('COUNTRYSTATECITY'),
     'ipdata' => env('IPDATA_API_KEY'),
-    'vat_rate' => env('VAT_RATE'),
+    'settings'=> [
+        'vat_rate' => env('VAT_RATE'),
+        'shipment_quantity_cap' => env('SHIPMENT_QTY_CAP', 10),
+        'shipment_quantity_multiplier' => env('SHIPMENT_QTY_MULTIPLIER', 0.1),
+        'cooking_minutes' => env('COOKING_MINUTES', 180),
+        'operating_hours_start' => env('OPERATING_HOURS_START', 6),
+        'operating_hours_end' => env('OPERATING_HOURS_END', 16),
+    ],
+    
 
 ];

@@ -18,6 +18,7 @@ class ListOrders extends Component
     public $deliveryTypeFilter = '';
     public $deliveryDateFilter = '';
     public $statusFilter = '';
+    public $locationFilter = '';
 
     // Status change modal properties
     public $selectedOrderId = null;
@@ -48,6 +49,11 @@ class ListOrders extends Component
         $this->resetPage();
     }
 
+    public function updatingLocationFilter()
+    {
+        $this->resetPage();
+    }
+
     public function updateOrderStatus()
     {
         $this->validate([
@@ -69,7 +75,7 @@ class ListOrders extends Component
 
     public function render()
     {
-        $query = Order::with(['orderItems.meal', 'orderItems.food', 'orderItems.foodSize']);
+        $query = Order::with(['orderItems.meal', 'orderItems.food', 'orderItems.foodSize', 'shipmentRoute.location']);
 
         // Apply search filter
         if ($this->search) {
@@ -115,6 +121,13 @@ class ListOrders extends Component
             }
         }
 
+        // Apply location filter
+        if ($this->locationFilter) {
+            $query->whereHas('shipmentRoute', function($q) {
+                $q->where('location_id', $this->locationFilter);
+            });
+        }
+
         $orders = $query->orderBy('created_at', 'desc')->paginate(15);
 
         // Calculate statistics
@@ -129,6 +142,9 @@ class ListOrders extends Component
             $q->whereDate('created_at', Carbon::today());
         })->sum('amount');
 
+        // Get locations for filter dropdown
+        $locations = \App\Models\Location::orderBy('name')->get();
+
         return view('livewire.dashboard-area.orders.list-orders', [
             'orders' => $orders,
             'totalOrders' => $totalOrders,
@@ -137,6 +153,7 @@ class ListOrders extends Component
             'deliveryOrders' => $deliveryOrders,
             'totalRevenue' => $totalRevenue,
             'todayRevenue' => $todayRevenue,
+            'locations' => $locations,
         ]);
     }
 }

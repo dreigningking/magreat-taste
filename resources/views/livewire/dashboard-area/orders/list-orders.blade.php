@@ -111,9 +111,18 @@
                         <option value="completed">Completed</option>
                     </select>
                 </div>
+                <div class="col-md-2">
+                    <label class="form-label">Branch</label>
+                    <select wire:model.live="locationFilter" class="form-control">
+                        <option value="">All Branches</option>
+                        @foreach($locations as $location)
+                            <option value="{{ $location->id }}">{{ $location->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="col-md-1">
                     <label class="form-label">&nbsp;</label>
-                    <button class="btn btn-outline-secondary w-100" wire:click="$set('search', ''); $set('dateFilter', ''); $set('deliveryTypeFilter', ''); $set('deliveryDateFilter', ''); $set('statusFilter', '')">
+                    <button class="btn btn-outline-secondary w-100" wire:click="$set('search', ''); $set('dateFilter', ''); $set('deliveryTypeFilter', ''); $set('deliveryDateFilter', ''); $set('statusFilter', ''); $set('locationFilter', '')">
                         <i class="fa fa-refresh"></i>
                     </button>
                 </div>
@@ -137,6 +146,7 @@
                                 <th>Order ID</th>
                                 <th>Customer Info</th>
                                 <th>Delivery Details</th>
+                                <th>Branch</th>
                                 <th>Order Items</th>
                                 <th>Total Amount</th>
                                 <th>Status</th>
@@ -161,7 +171,7 @@
                                 </td>
                                 <td>
                                     <div class="d-flex flex-column">
-                                        <span class="badge bg-{{ $order->delivery_color }}">
+                                        <span class="mb-2 badge bg-{{ $order->delivery_color }}">
                                             {{ ucfirst($order->delivery_details) }}
                                         </span>
                                         
@@ -172,6 +182,19 @@
                                             @endif
                                         @endif
                                         
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        @if($order->shipmentRoute && $order->shipmentRoute->location)
+                                            <strong class="text-primary">{{ $order->shipmentRoute->location->name }}</strong>
+                                            <small class="text-muted">{{ $order->shipmentRoute->location->city->name ?? '' }}</small>
+                                        @elseif($order->delivery_type === 'pickup')
+                                            <span class="badge bg-info">Pickup</span>
+                                            <small class="text-muted">No branch assigned</small>
+                                        @else
+                                            <span class="text-muted">N/A</span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td>
@@ -233,7 +256,7 @@
                     <i class="fa fa-shopping-cart text-muted" style="font-size: 4rem;"></i>
                     <h5 class="text-muted mt-3">No Orders Found</h5>
                     <p class="text-muted">No orders match your current filters.</p>
-                    <button class="btn btn-outline-secondary" wire:click="$set('search', ''); $set('dateFilter', ''); $set('deliveryTypeFilter', ''); $set('deliveryDateFilter', ''); $set('statusFilter', '')">
+                    <button class="btn btn-outline-secondary" wire:click="$set('search', ''); $set('dateFilter', ''); $set('deliveryTypeFilter', ''); $set('deliveryDateFilter', ''); $set('statusFilter', ''); $set('locationFilter', '')">
                         <i class="fa fa-refresh me-2"></i>Clear Filters
                     </button>
                 </div>

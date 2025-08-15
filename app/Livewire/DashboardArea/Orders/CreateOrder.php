@@ -72,7 +72,7 @@ class CreateOrder extends Component
         $this->delivery_time = now()->format('H:i');
         
         // Initialize VAT rate from config
-        $this->vat_rate = config('services.vat_rate', 0);
+        $this->vat_rate = config('services.settings.vat_rate', 0);
     }
 
     public function addMeal($mealId)

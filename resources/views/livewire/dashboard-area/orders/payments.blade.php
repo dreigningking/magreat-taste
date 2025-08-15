@@ -65,7 +65,7 @@
             <div class="card bg-warning text-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <div>
+<div>
                             <h4 class="mb-0">{{ $pendingPayments }}</h4>
                             <p class="mb-0">Pending</p>
                         </div>

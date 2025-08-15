@@ -23,7 +23,7 @@ class State extends Model
         return $this->hasMany(User::class);
     }
     public function locations(){
-        return $this->hasMany(Location::class);
+        return $this->setConnection('mysql')->hasMany(Location::class);
     }
 
     

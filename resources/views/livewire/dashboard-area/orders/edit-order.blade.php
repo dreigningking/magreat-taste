@@ -23,7 +23,7 @@
     <div class="row mb-4">
         <div class="col-12 d-flex justify-content-between align-items-center">
             <h3 class="font-weight-bold">Edit Order #{{ $order->id }}</h3>
-            <div>
+<div>
                 <a href="{{ route('orders.view', $order) }}" class="btn btn-outline-secondary">
                     <i class="fa fa-arrow-left me-2"></i>Back to Order
                 </a>

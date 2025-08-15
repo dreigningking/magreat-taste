@@ -313,7 +313,7 @@
                                     <td><strong class="text-success">₦{{ number_format($order->sub_total, 2) }}</strong></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="6" class="text-end"><strong>VAT ({{ config('services.vat_rate', 0) }}%):</strong></td>
+                                    <td colspan="6" class="text-end"><strong>VAT ({{ config('services.settings.vat_rate', 0) }}%):</strong></td>
                                     <td><strong class="text-info">₦{{ number_format($order->vat_amount, 2) }}</strong></td>
                                 </tr>
                                 <tr>
@@ -372,7 +372,7 @@
                             @if($order->payment)
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Payment Status</label>
-                                <div>
+<div>
                                     @php
                                     $paymentStatusColors = [
                                     'pending' => 'warning',

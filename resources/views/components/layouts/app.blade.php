@@ -183,6 +183,20 @@
                     </li>
 
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('locations.index') }}">
+                            <i class="mdi mdi-store menu-icon fs-5"></i>
+                            <span class="menu-title">Locations</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('logistics.index') }}">
+                            <i class="mdi mdi-truck menu-icon fs-5"></i>
+                            <span class="menu-title">Logistics</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('payments.index') }}">
                             <i class="icon-paper menu-icon"></i>
                             <span class="menu-title">Transactions</span>

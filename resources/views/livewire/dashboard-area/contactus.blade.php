@@ -65,7 +65,7 @@
             <div class="card bg-secondary text-dark">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <div>
+<div>
                             <h4 class="mb-0">{{ $closedContacts }}</h4>
                             <p class="mb-0">Closed</p>
                         </div>

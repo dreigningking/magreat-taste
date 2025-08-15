@@ -20,25 +20,25 @@
                              data-bs-target="#mealModal" 
                              wire:click="selectMeal({{ $meal->id }})"
                              data-meal-id="{{ $meal->id }}">
-                            <div class="position-relative">
+                        <div class="position-relative">
                                 <img src="{{ $meal->image_url }}" 
                                      alt="{{ $meal->name }}" class="menu-card-img">
-                                <div class="video-overlay">
+                            <div class="video-overlay">
                                     @if($meal->video_url)
-                                        <div class="play-btn">
-                                            <i class="fas fa-play"></i>
-                                        </div>
+                                <div class="play-btn">
+                                    <i class="fas fa-play"></i>
+                                </div>
                                     @else
                                         <div class="info-btn">
                                             <i class="fas fa-info"></i>
-                                        </div>
+                            </div>
                                     @endif
                                 </div>
                                 <div class="price-badge">
                                     From {{ $meal->formatted_from_price ?? '0' }}
                                 </div>
-                            </div>
-                            <div class="menu-card-body">
+                        </div>
+                        <div class="menu-card-body">
                                 <h5 class="menu-card-title">{{ $meal->name }}</h5>
                                 <p>{{ Str::limit($meal->description, 100) }}</p>
                             </div>
@@ -69,13 +69,13 @@
                             @if($modalVideoUrl)
                                 <div id="modalVideoThumbnail" class="video-thumbnail position-relative mt-3" data-bs-toggle="modal" data-bs-target="#videoModal">
                                     <img src="{{ $modalMealImage }}" alt="Video Thumbnail" class="img-fluid rounded w-100 h-100 object-fit-cover">
-                                    <div class="play-btn position-absolute top-50 start-50 translate-middle">
-                                        <i class="fas fa-play"></i>
-                                    </div>
-                                    <div class="position-absolute bottom-0 start-0 bg-dark bg-opacity-75 text-white p-2 w-100">
-                                        Watch Preparation Video
-                                    </div>
+                                <div class="play-btn position-absolute top-50 start-50 translate-middle">
+                                    <i class="fas fa-play"></i>
                                 </div>
+                                <div class="position-absolute bottom-0 start-0 bg-dark bg-opacity-75 text-white p-2 w-100">
+                                    Watch Preparation Video
+                                </div>
+                            </div>
                             @else
                                 <img id="modalMealImage" src="{{ $modalMealImage }}" alt="Meal Image" class="img-fluid rounded mb-3 w-100 h-100 object-fit-cover">
                             @endif
@@ -140,12 +140,12 @@
                                                     <button class="btn btn-outline-secondary" type="button" wire:click="updateFoodQuantity({{ $food['id'] }}, {{ ($selectedQuantities[$food['id']] ?? 1) + 1 }})">+</button>
                                                 </div>
                                             </div>
-                                        </div>
+                                    </div>
                                     </div>
                                 @endforeach
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
                     <div class="row mt-4">
                         <div class="col-12">
