@@ -68,30 +68,39 @@
                     <h4>Ma'Great Taste</h4>
                     <p>Meals crafted with passion and precision by Chef Margaret. Available for private events, catering, and personal orders.</p>
                     <div class="mt-3">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/magreattaste/" class="social-icon text-decoration-none">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="https://www.instagram.com/magreattaste/" class="social-icon text-decoration-none">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon text-decoration-none"><i class="fab fa-twitter"></i></a>
+                        <a href="https://api.whatsapp.com/send?phone=2349058271973&text=Good%20day%20Chef%20Margaret" class="social-icon">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        
+                        
                     </div>
                 </div>
                 <div class="col-md-4 mb-4 mb-md-0">
                     <h5>Service Areas</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-map-marker-alt me-2"></i> Greater Metropolitan Area</li>
-                        <li><i class="fas fa-map-marker-alt me-2"></i> Surrounding Counties</li>
-                        <li><i class="fas fa-map-marker-alt me-2"></i> Special Events Nationwide</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Lagos, Nigeria</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> North Rhine-Westphalia, Germany</li>
+                        <li><i class="fas fa-map-marker-alt me-2"></i> Liverpool, United Kingdom</li>
                     </ul>
                 </div>
                 <div class="col-md-4">
                     <h5>Contact Chef Margaret</h5>
                     <ul class="list-unstyled">
-                        <li><i class="fas fa-phone me-2"></i> (555) 123-4567</li>
-                        <li><i class="fas fa-envelope me-2"></i> margaret@chefsdelight.com</li>
-                        <li><i class="fas fa-calendar me-2"></i> Bookings: 3+ weeks in advance</li>
+                        <li><i class="fa fa-phone me-2"></i> <a href="tel:+2349058271973" class="text-white text-decoration-none">+2349058271973</a> </li>
+                        <li><i class="fas fa-envelope me-2"></i> <a href="mailto:magreattaste@gmail.com" class="text-white text-decoration-none">magreattaste@gmail.com</a></li>
+                        <li><i class="fas fa-calendar me-2"></i> Office Hours: 8:00am - 6:00pm</li>
                     </ul>
                 </div>
             </div>
             <div class="copyright text-center">
-                <p>&copy; 2023 Ma'Great Taste Catering. All rights reserved.</p>
+                <p>&copy; {{ now()->year }} Ma'Great Taste. All rights reserved.</p>
             </div>
         </div>
     </footer>

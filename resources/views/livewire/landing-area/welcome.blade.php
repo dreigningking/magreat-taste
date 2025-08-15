@@ -49,7 +49,7 @@
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Sarah Johnson" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/joseph.png') }}" alt="Ezetu Joseph" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
                                         <p class="testimonial-text mb-4">"Chef Margaret's catering for our wedding was absolutely phenomenal! The truffle arancini was the talk of the evening. Every dish was perfectly executed and the presentation was stunning."</p>
