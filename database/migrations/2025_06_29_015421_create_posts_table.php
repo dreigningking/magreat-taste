@@ -32,8 +32,7 @@ return new class extends Migration
             $table->string('meta_keywords')->nullable();
             
             // Engagement and analytics
-            $table->integer('views_count')->default(0);
-            $table->integer('likes_count')->default(0);
+            
             // Tags (JSON for flexibility)
             $table->json('tags')->nullable();
             
