@@ -49,7 +49,6 @@ Finally, the frying technique is what brings everything together. The oil should
                 'status' => 'published',
                 'published_at' => now()->subDays(5),
                 'tags' => 'Italian,Truffle,Appetizer,Arborio Rice',
-                'views_count' => 1200,
                 'featured' => true,
             ],
             [
@@ -73,7 +72,6 @@ Practice these techniques regularly, and you\'ll notice a significant improvemen
                 'status' => 'published',
                 'published_at' => now()->subDays(8),
                 'tags' => 'Technique,Knife Skills,Basics,Safety',
-                'views_count' => 856,
             ],
             [
                 'title' => 'From Paris to Your Plate: My Culinary Journey',
@@ -90,76 +88,103 @@ Today, I bring these lessons to my own kitchen, combining French techniques with
                 'status' => 'published',
                 'published_at' => now()->subDays(10),
                 'tags' => 'Journey,Paris,Inspiration,French Cuisine',
-                'views_count' => 1500,
             ],
             [
                 'title' => 'The Ultimate Guide to Selecting Fresh Seafood',
                 'excerpt' => 'Learn how to identify the freshest seafood at your local market. From checking the eyes and gills to understanding seasonal availability, this guide will help you make the best choices.',
                 'content' => 'Selecting fresh seafood is both an art and a science. The key indicators of freshness vary by type of seafood, but there are some universal principles to follow.
 
-For whole fish, the eyes should be clear and bright, not cloudy or sunken. The gills should be bright red or pink, not brown or gray. The flesh should be firm and spring back when pressed, and there should be no strong fishy odor - fresh fish should smell clean and briny.
-
-When selecting shellfish like clams, mussels, and oysters, they should be alive and responsive. The shells should be tightly closed or close when tapped. Avoid any with broken shells or that don\'t close when handled.
-
-For shrimp, look for firm, translucent flesh with no black spots or discoloration. The shells should be intact and the tails should be curled under the body.
-
-Understanding seasonal availability is also crucial. Different types of seafood are at their peak during different times of the year, and buying in season ensures the best quality and often better prices.
-
-Building a relationship with your fishmonger is invaluable. A good fishmonger can provide information about the source, catch date, and preparation recommendations for any seafood you\'re considering.',
+For whole fish, the eyes should be clear and bright, not cloudy or sunken. The gills should be bright red or pink, not brown or gray. The flesh should be firm and spring back when pressed, and there should be no strong fishy odor - fresh fish should smell clean and briny.',
                 'category_id' => Category::where('name', 'Ingredients')->first()->id,
                 'user_id' => $user->id,
                 'status' => 'published',
                 'published_at' => now()->subDays(12),
-                'tags' => 'Seafood,Fresh,Selection,Quality',
-                'views_count' => 723,
-            ],
-            [
-                'title' => 'Upcoming Cooking Classes: Master the Art of French Pastry',
-                'excerpt' => 'Join me for an exclusive series of French pastry classes. From croissants to éclairs, learn the techniques that make French pastries so special. Limited spots available!',
-                'content' => 'I\'m excited to announce a new series of French pastry classes that will take you through the fundamentals of classic French baking. These hands-on workshops will cover everything from basic techniques to advanced pastry skills.
-
-The curriculum includes:
-- Laminated dough techniques for croissants and pain au chocolat
-- Choux pastry for éclairs and profiteroles
-- Pâte sucrée for tarts and tartlets
-- French buttercream and ganache techniques
-- Decorative piping and finishing skills
-
-Each class is limited to 12 participants to ensure personalized attention and hands-on practice. All skill levels are welcome, from complete beginners to experienced bakers looking to refine their techniques.
-
-The classes will be held in our professional kitchen, equipped with all the tools and ingredients you\'ll need. You\'ll take home your creations and receive detailed recipe booklets with step-by-step instructions.
-
-Registration is now open for the spring session, with classes beginning next month. Early bird pricing is available for those who register before the end of this week.',
-                'category_id' => Category::where('name', 'Events')->first()->id,
-                'user_id' => $user->id,
-                'status' => 'published',
-                'published_at' => now()->subDays(15),
-                'tags' => 'Classes,French,Pastry,Baking',
-                'views_count' => 945,
-            ],
-            [
-                'title' => 'Artisan Sourdough Bread: A Complete Beginner\'s Guide',
-                'excerpt' => 'Master the art of sourdough bread making with this comprehensive guide. From creating your own starter to achieving the perfect crust, every step is explained in detail.',
-                'content' => 'Sourdough bread making is a rewarding journey that connects us to ancient baking traditions. The process begins with creating and maintaining a sourdough starter - a living culture of wild yeast and bacteria that gives sourdough its distinctive flavor and texture.
-
-Creating your starter is simple but requires patience. Mix equal parts flour and water, and let it sit at room temperature. Over the next few days, feed it regularly with fresh flour and water. You\'ll know it\'s ready when it doubles in size within 4-6 hours of feeding and has a pleasant, slightly sour aroma.
-
-The key to successful sourdough bread is understanding the fermentation process. The starter needs time to develop flavor and structure, which is why sourdough breads typically require longer fermentation times than commercial yeast breads.
-
-Shaping and scoring the dough are crucial steps that affect both the appearance and texture of the final loaf. Proper shaping creates tension in the dough, while scoring allows for controlled expansion during baking.
-
-Baking in a Dutch oven or on a baking stone helps create the perfect crust and oven spring. The high heat and steam environment mimics the conditions of traditional bread ovens.',
-                'category_id' => Category::where('name', 'Recipes')->first()->id,
-                'user_id' => $user->id,
-                'status' => 'published',
-                'published_at' => now()->subDays(17),
-                'tags' => 'Bread,Sourdough,Baking,Artisan',
-                'views_count' => 678,
+                'tags' => 'Seafood,Freshness,Selection,Quality',
             ],
         ];
 
         foreach ($posts as $postData) {
             Post::create($postData);
+        }
+
+        // Create sample comments for testing
+        $this->createSampleComments();
+    }
+
+    private function createSampleComments()
+    {
+        $posts = Post::all();
+        
+        if ($posts->isEmpty()) {
+            return;
+        }
+
+        $commentData = [
+            [
+                'content' => 'This recipe looks amazing! I can\'t wait to try making truffle arancini at home. The step-by-step instructions are so clear.',
+                'guest_name' => 'Sarah Johnson',
+                'guest_email' => 'sarah.j@example.com',
+                'status' => 'pending',
+                'ip_address' => '192.168.1.100',
+            ],
+            [
+                'content' => 'I made this last night and it was incredible! The truffle oil really makes a difference. Thanks for sharing this recipe!',
+                'guest_name' => 'Mike Chen',
+                'guest_email' => 'mike.chen@example.com',
+                'status' => 'approved',
+                'ip_address' => '192.168.1.101',
+                'approved_at' => now()->subDays(2),
+                'approved_by' => User::first()->id,
+            ],
+            [
+                'content' => 'Great tips! I\'ve been struggling with knife skills and this really helped. The claw grip technique is a game-changer.',
+                'guest_name' => 'Emma Davis',
+                'guest_email' => 'emma.davis@example.com',
+                'status' => 'approved',
+                'ip_address' => '192.168.1.102',
+                'approved_at' => now()->subDays(1),
+                'approved_by' => User::first()->id,
+                'is_featured' => true,
+            ],
+            [
+                'content' => 'This is exactly what I needed! I\'ve been looking for a comprehensive guide to knife skills.',
+                'guest_name' => 'David Wilson',
+                'guest_email' => 'david.w@example.com',
+                'status' => 'pending',
+                'ip_address' => '192.168.1.103',
+            ],
+            [
+                'content' => 'Your journey is so inspiring! I love how you combine French techniques with local ingredients.',
+                'guest_name' => 'Lisa Rodriguez',
+                'guest_email' => 'lisa.r@example.com',
+                'status' => 'approved',
+                'ip_address' => '192.168.1.104',
+                'approved_at' => now()->subDays(3),
+                'approved_by' => User::first()->id,
+            ],
+            [
+                'content' => 'This is spam content trying to sell fake products. Please remove.',
+                'guest_name' => 'Spam Bot',
+                'guest_email' => 'spam@fake.com',
+                'status' => 'spam',
+                'ip_address' => '192.168.1.105',
+            ],
+            [
+                'content' => 'I tried the seafood selection tips and they worked perfectly! My fish was so fresh.',
+                'guest_name' => 'Tom Anderson',
+                'guest_email' => 'tom.a@example.com',
+                'status' => 'rejected',
+                'ip_address' => '192.168.1.106',
+                'approved_by' => User::first()->id,
+            ],
+        ];
+
+        foreach ($commentData as $data) {
+            $post = $posts->random();
+            $data['post_id'] = $post->id;
+            $data['user_agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
+            
+            \App\Models\Comment::create($data);
         }
     }
 }

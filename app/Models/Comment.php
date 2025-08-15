@@ -78,7 +78,10 @@ class Comment extends Model
 
     public function getFormattedContentAttribute(): string
     {
-        return $this->formatContentWithMentions();
+        if (method_exists($this, 'formatContentWithMentions')) {
+            return $this->formatContentWithMentions();
+        }
+        return $this->content;
     }
 
     public function getTimeAgoAttribute(): string

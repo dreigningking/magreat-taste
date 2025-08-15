@@ -101,7 +101,7 @@ class Dashboard extends Component
 
     public function loadRecentComments()
     {
-        $this->recentComments = Comment::with(['post', 'user'])
+        $this->recentComments = Comment::with(['post'])
             ->orderBy('created_at', 'desc')
             ->limit(5)
             ->get();

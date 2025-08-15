@@ -18,15 +18,15 @@
                 <div class="col-md-7">
                     <div class="chef-info">
                         <h2 class="chef-name">Meet Chef Margaret</h2>
-                        <p>With over 15 years of culinary experience, Chef Margaret brings passion and creativity to every dish. Trained in Paris and having worked in Michelin-starred restaurants, she now focuses on creating bespoke dining experiences for clients.</p>
-                        <p>Specializing in farm-to-table cuisine, Chef Margaret sources only the freshest local ingredients to create memorable meals tailored to your preferences.</p>
+                        <p>With over 15 years of culinary experience, Chef Margaret brings passion and creativity to every dish. Trained in Nigeria and Asia, and having worked in home and abroads, she now focuses on creating bespoke dining experiences for clients.</p>
+                        <p>Specializing in African, Chinese, Indian, and Italian cuisine, Chef Margaret sources only the freshest local ingredients to create memorable meals tailored to your preferences.</p>
                         <div class="mt-4">
                             <h5>Signature Styles:</h5>
                             <div class="d-flex flex-wrap mt-3">
-                                <span class="badge bg-light text-dark me-2 mb-2 p-2">French Cuisine</span>
-                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Mediterranean</span>
-                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Plant-Based</span>
-                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Artisan Baking</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">African Cuisine</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Chinese Cuisine</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Indian Cuisine</span>
+                                <span class="badge bg-light text-dark me-2 mb-2 p-2">Italian Cuisine</span>
                             </div>
                         </div>
                     </div>
@@ -46,14 +46,16 @@
                     <!-- Slide 1 -->
                     <div class="testimonial-slide active">
                         <div class="row">
+                            <!-- Mrs Oluwafunmilayo Idera -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
+                                    
                                     <div class="testimonial-img mb-4">
-                                        <img src="{{ asset('images/faces/joseph.png') }}" alt="Ezetu Joseph" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/oluwafunmilayo.jpeg') }}" alt="Mrs Oluwafunmilayo Idera" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
-                                        <p class="testimonial-text mb-4">"Chef Margaret's catering for our wedding was absolutely phenomenal! The truffle arancini was the talk of the evening. Every dish was perfectly executed and the presentation was stunning."</p>
-                                        <h5 class="testimonial-name">Sarah Johnson</h5>
+                                        <p class="testimonial-text mb-4">"Chef Margaret's catering for my son's wedding was absolutely phenomenal! The chinese food was the talk of the evening. Every dish was perfectly executed and the presentation was stunning."</p>
+                                        <h5 class="testimonial-name">Mrs Oluwafunmilayo Idera</h5>
                                         <p class="testimonial-title text-muted">Wedding Client</p>
                                         <div class="testimonial-rating">
                                             <i class="fas fa-star text-warning"></i>
@@ -65,15 +67,15 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                            <!-- Ezetu Joseph -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Michael Chen" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/joseph.png') }}" alt="Ezetu Joseph" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
                                         <p class="testimonial-text mb-4">"The corporate event catering exceeded all expectations. Chef Margaret's attention to detail and ability to accommodate dietary restrictions made our event a huge success."</p>
-                                        <h5 class="testimonial-name">Michael Chen</h5>
+                                        <h5 class="testimonial-name">Ezetu Joseph</h5>
                                         <p class="testimonial-title text-muted">Corporate Event Planner</p>
                                         <div class="testimonial-rating">
                                             <i class="fas fa-star text-warning"></i>
@@ -85,16 +87,16 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                            <!-- Mr Bello Abiodun -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Emily Rodriguez" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/bello.png') }}" alt="Ezetu Joseph" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
                                         <p class="testimonial-text mb-4">"I've been ordering Chef Margaret's artisan bread basket for my family gatherings. The quality and taste are consistently outstanding. Highly recommend!"</p>
-                                        <h5 class="testimonial-name">Emily Rodriguez</h5>
-                                        <p class="testimonial-title text-muted">Regular Client</p>
+                                        <h5 class="testimonial-name">Mr Bello Abiodun</h5>
+                                        <p class="testimonial-title text-muted">Housewarming Client</p>
                                         <div class="testimonial-rating">
                                             <i class="fas fa-star text-warning"></i>
                                             <i class="fas fa-star text-warning"></i>
@@ -111,13 +113,14 @@
                     <!-- Slide 2 -->
                     <div class="testimonial-slide">
                         <div class="row">
+                            <!-- David Thompson -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="David Thompson" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/face25.jpg') }}" alt="David Thompson" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
-                                        <p class="testimonial-text mb-4">"Chef Margaret's seafood paella is absolutely divine! She catered our anniversary party and everyone was raving about the authentic flavors and perfect execution."</p>
+                                        <p class="testimonial-text mb-4">"Chef Margaret's jollof rice is absolutely divine! She catered our anniversary party and everyone was raving about the authentic flavors and perfect execution."</p>
                                         <h5 class="testimonial-name">David Thompson</h5>
                                         <p class="testimonial-title text-muted">Anniversary Celebration</p>
                                         <div class="testimonial-rating">
@@ -131,15 +134,16 @@
                                 </div>
                             </div>
                             
+                            <!-- Lisa Martinez -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Lisa Martinez" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/face2.jpg') }}" alt="Lisa Martinez" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
-                                        <p class="testimonial-text mb-4">"The chocolate soufflé was the perfect ending to our dinner party. Chef Margaret's attention to detail and presentation skills are unmatched in the industry."</p>
-                                        <h5 class="testimonial-name">Lisa Martinez</h5>
-                                        <p class="testimonial-title text-muted">Dinner Party Host</p>
+                                        <p class="testimonial-text mb-4">"Now i can make different kinds of African food and soup. Thanks to Chef Margaret."</p>
+                                        <h5 class="testimonial-name">Rose Clement</h5>
+                                        <p class="testimonial-title text-muted">Culinary Student</p>
                                         <div class="testimonial-rating">
                                             <i class="fas fa-star text-warning"></i>
                                             <i class="fas fa-star text-warning"></i>
@@ -151,13 +155,14 @@
                                 </div>
                             </div>
                             
+                            <!-- Robert Wilson -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Robert Wilson" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/face14.jpg') }}" alt="Robert Wilson" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
-                                        <p class="testimonial-text mb-4">"Chef Margaret's wild mushroom risotto is simply incredible. The depth of flavor and creamy texture made it the highlight of our corporate luncheon."</p>
+                                        <p class="testimonial-text mb-4">"We had a light breakfast at work and her setting was so nice. I will definitely order from her again."</p>
                                         <h5 class="testimonial-name">Robert Wilson</h5>
                                         <p class="testimonial-title text-muted">Corporate Client</p>
                                         <div class="testimonial-rating">

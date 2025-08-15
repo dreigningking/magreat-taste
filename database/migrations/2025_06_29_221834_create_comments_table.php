@@ -37,6 +37,9 @@ return new class extends Migration
             $table->string('user_agent')->nullable();
             $table->ipAddress('ip_address')->nullable();
             
+            // Engagement metrics
+            $table->integer('likes_count')->default(0);
+            
             // Timestamps
             $table->timestamps();
             

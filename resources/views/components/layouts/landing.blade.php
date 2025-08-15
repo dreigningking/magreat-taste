@@ -74,7 +74,7 @@
                         <a href="https://www.instagram.com/magreattaste/" class="social-icon text-decoration-none">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="social-icon text-decoration-none"><i class="fab fa-twitter"></i></a>
+                        <a href="https://x.com/magreattaste" class="social-icon text-decoration-none"><i class="fab fa-twitter"></i></a>
                         <a href="https://api.whatsapp.com/send?phone=2349058271973&text=Good%20day%20Chef%20Margaret" class="social-icon">
                             <i class="fab fa-whatsapp"></i>
                         </a>
