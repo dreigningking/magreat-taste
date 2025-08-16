@@ -94,7 +94,7 @@
                     <h5>Contact Chef Margaret</h5>
                     <ul class="list-unstyled">
                         <li><i class="fa fa-phone me-2"></i> <a href="tel:+2349058271973" class="text-white text-decoration-none">+2349058271973</a> </li>
-                        <li><i class="fas fa-envelope me-2"></i> <a href="mailto:magreattaste@gmail.com" class="text-white text-decoration-none">magreattaste@gmail.com</a></li>
+                        <li><i class="fas fa-envelope me-2"></i> <a href="mailto:hello@magreattaste.ng" class="text-white text-decoration-none">hello@magreattaste.ng</a></li>
                         <li><i class="fas fa-calendar me-2"></i> Office Hours: 8:00am - 6:00pm</li>
                     </ul>
                 </div>
