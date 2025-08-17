@@ -155,6 +155,7 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{route('meals.create')}}"> New Meal </a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{route('meals.index')}}"> All Meals </a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{route('food.index')}}"> Food </a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{route('sizes.index')}}"> Sizes </a></li>
                             </ul>
                         </div>
                     </li>

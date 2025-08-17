@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Food;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class CreateMeal extends Component
 {

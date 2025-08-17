@@ -58,7 +58,7 @@ class Meal extends Model
         $totalPrice = 0;
         
         foreach ($this->foods as $food) {
-            $minPrice = $food->sizes()->min('price') ?? 0;
+            $minPrice = $food->sizes()->min('food_sizes.price') ?? 0;
             $totalPrice += $minPrice;
         }
         

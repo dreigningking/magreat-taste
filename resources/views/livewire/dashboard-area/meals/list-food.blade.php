@@ -103,7 +103,7 @@
                                     @foreach($food->sizes as $size)
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <small class="text-muted">{{ $size->name }}</small>
-                                        <span class="badge bg-success">{{ $size->formatted_price }}</span>
+                                        <span class="badge bg-success">₦{{ number_format($size->pivot->price, 2) }}</span>
                                     </div>
                                     @endforeach
                                     @if($food->sizes->count() > 1)
@@ -119,9 +119,7 @@
                                     <button class="btn btn-sm btn-outline-primary edit-food-btn"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editFoodModal"
-                                        data-id="{{ $food->id }}"
-                                        data-name="{{ $food->name }}"
-                                        data-description="{{ $food->description }}">
+                                        data-id="{{ $food->id }}">
                                         <i class="fa fa-edit"></i>
                                     </button>
                                     <button class="btn btn-sm btn-outline-danger"
@@ -161,7 +159,7 @@
 
     <!-- Create Food Modal -->
     <div wire:ignore.self class="modal fade" id="createFoodModal" tabindex="-1" aria-labelledby="createFoodModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="createFoodModalLabel">
@@ -172,14 +170,14 @@
                 <form wire:submit.prevent="store">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Food Name *</label>
                                     <input type="text" class="form-control" id="name" wire:model="name" required>
                                     @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description *</label>
                                     <textarea class="form-control" id="description" wire:model="description" rows="3" required></textarea>
@@ -191,26 +189,26 @@
                         <!-- Sizes Section -->
                         <div class="card mt-3">
                             <div class="card-header">
-                                <h6 class="mb-0">Food Sizes</h6>
+                                <h6 class="mb-0">Food Sizes & Prices</h6>
                             </div>
                             <div class="card-body">
                                 <div id="sizes-container">
-                                    @foreach($sizes as $index => $size)
+                                    @foreach($selectedSizes as $index => $size)
                                     <div class="row mb-3 size-row" data-index="{{ $index }}">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Size Name *</label>
-                                            <input type="text" class="form-control" wire:model="sizes.{{ $index }}.name" required>
-                                            @error("sizes.{$index}.name") <small class="text-danger">{{ $message }}</small> @enderror
+                                        <div class="col-md-5">
+                                            <label class="form-label">Select Size *</label>
+                                            <select class="form-select" wire:model="selectedSizes.{{ $index }}.size_id" required>
+                                                <option value="">Choose a size...</option>
+                                                @foreach($availableSizes as $availableSize)
+                                                <option value="{{ $availableSize->id }}">{{ $availableSize->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error("selectedSizes.{$index}.size_id") <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-5">
                                             <label class="form-label">Price *</label>
-                                            <input type="number" class="form-control" wire:model="sizes.{{ $index }}.price" step="0.01" min="0" required>
-                                            @error("sizes.{$index}.price") <small class="text-danger">{{ $message }}</small> @enderror
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="form-label">Image</label>
-                                            <input type="file" class="form-control" wire:model="sizes.{{ $index }}.image" accept="image/*">
-                                            @error("sizes.{$index}.image") <small class="text-danger">{{ $message }}</small> @enderror
+                                            <input type="number" class="form-control" wire:model="selectedSizes.{{ $index }}.price" step="0.01" min="0" placeholder="0.00" required>
+                                            @error("selectedSizes.{$index}.price") <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                         <div class="col-md-2 d-flex align-items-end">
                                             @if($index > 0)
@@ -241,7 +239,7 @@
 
     <!-- Edit Food Modal -->
     <div wire:ignore.self class="modal fade" id="editFoodModal" tabindex="-1" aria-labelledby="editFoodModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="editFoodModalLabel">
@@ -254,14 +252,14 @@
                         <input type="hidden" id="edit_id" wire:model="edit_id">
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="edit_name" class="form-label">Food Name *</label>
                                     <input type="text" class="form-control" id="edit_name" wire:model="edit_name" required>
                                     @error('edit_name') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="edit_description" class="form-label">Description *</label>
                                     <textarea class="form-control" id="edit_description" wire:model="edit_description" rows="3" required></textarea>
@@ -273,26 +271,26 @@
                         <!-- Edit Sizes Section -->
                         <div class="card mt-3">
                             <div class="card-header">
-                                <h6 class="mb-0">Food Sizes</h6>
+                                <h6 class="mb-0">Food Sizes & Prices</h6>
                             </div>
                             <div class="card-body">
                                 <div id="edit-sizes-container">
-                                    @foreach($editSizes as $index => $size)
+                                    @foreach($editSelectedSizes as $index => $size)
                                     <div class="row mb-3 edit-size-row" data-index="{{ $index }}">
-                                        <div class="col-md-4">
-                                            <label class="form-label">Size Name *</label>
-                                            <input type="text" class="form-control" wire:model="editSizes.{{ $index }}.name" required>
-                                            @error("editSizes.{$index}.name") <small class="text-danger">{{ $message }}</small> @enderror
+                                        <div class="col-md-5">
+                                            <label class="form-label">Select Size *</label>
+                                            <select class="form-select" wire:model="editSelectedSizes.{{ $index }}.size_id" required>
+                                                <option value="">Choose a size...</option>
+                                                @foreach($availableSizes as $availableSize)
+                                                <option value="{{ $availableSize->id }}">{{ $availableSize->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error("editSelectedSizes.{$index}.size_id") <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-5">
                                             <label class="form-label">Price *</label>
-                                            <input type="number" class="form-control" wire:model="editSizes.{{ $index }}.price" step="0.01" min="0" required>
-                                            @error("editSizes.{$index}.price") <small class="text-danger">{{ $message }}</small> @enderror
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label class="form-label">Image</label>
-                                            <input type="file" class="form-control" wire:model="editSizes.{{ $index }}.image" accept="image/*">
-                                            @error("editSizes.{$index}.image") <small class="text-danger">{{ $message }}</small> @enderror
+                                            <input type="number" class="form-control" wire:model="editSelectedSizes.{{ $index }}.price" step="0.01" min="0" placeholder="0.00" required>
+                                            @error("editSelectedSizes.{$index}.price") <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                         <div class="col-md-2 d-flex align-items-end">
                                             @if($index > 0)
@@ -327,27 +325,22 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const editModal = document.getElementById('editFoodModal');
         const editBtns = document.querySelectorAll('.edit-food-btn');
 
         editBtns.forEach(btn => {
             btn.addEventListener('click', function(event) {
                 const button = event.currentTarget;
                 const id = button.dataset.id;
-                const name = button.dataset.name;
-                const description = button.dataset.description;
 
-                // Set the values in the form
+                // Set the ID in the form
                 document.getElementById('edit_id').value = id;
-                document.getElementById('edit_name').value = name;
-                document.getElementById('edit_description').value = description;
 
                 // Dispatch event to Livewire to populate edit data
                 const livewireId = document.querySelector('[wire\\:id]').getAttribute('wire:id');
                 const livewireComponent = window.Livewire.find(livewireId);
 
                 if (livewireComponent) {
-                    livewireComponent.call('editFood', id, name, description);
+                    livewireComponent.call('editFood', id);
                 }
             });
         });

@@ -106,13 +106,42 @@
                                     <option value="{{ $food->id }}">
                                         {{ $food->name }} 
                                         @if($food->sizes->count() > 0)
-                                            (₦{{ number_format($food->sizes->min('price'), 2) }} - ₦{{ number_format($food->sizes->max('price'), 2) }})
+                                            @php
+                                                $prices = $food->sizes->pluck('pivot.price')->filter()->sort();
+                                                $minPrice = $prices->first();
+                                                $maxPrice = $prices->last();
+                                            @endphp
+                                            @if($minPrice && $maxPrice)
+                                                (₦{{ number_format($minPrice, 2) }} - ₦{{ number_format($maxPrice, 2) }})
+                                            @else
+                                                (Debug: {{ $food->sizes->count() }} sizes, pivot data: {{ $food->sizes->first()->pivot ?? 'no pivot' }})
+                                            @endif
+                                        @else
+                                            (No sizes)
                                         @endif
                                     </option>
                                 @endforeach
                             </select>
                             @error('selectedFoods') <div class="text-danger text-xs mt-1">{{ $message }}</div> @enderror
                             <small class="text-muted">Select one or more foods to include in this meal</small>
+                            
+                            <!-- Debug Information -->
+                            <div class="mt-3 p-3 bg-light rounded">
+                                <h6 class="text-muted">Debug Info:</h6>
+                                @foreach($foods->take(3) as $food)
+                                    <div class="mb-2">
+                                        <strong>{{ $food->name }}</strong>: 
+                                        {{ $food->sizes->count() }} sizes
+                                        @if($food->sizes->count() > 0)
+                                            <br>
+                                            <small class="text-muted">
+                                                First size: {{ $food->sizes->first()->name }} 
+                                                (Pivot: {{ json_encode($food->sizes->first()->pivot ?? 'no pivot') }})
+                                            </small>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
 
                         <!-- Selected Foods Preview -->
@@ -126,6 +155,21 @@
                                                 <strong>{{ $food->name }}</strong>
                                                 <br>
                                                 <small class="text-muted">{{ Str::limit($food->description, 50) }}</small>
+                                                @if($food->sizes->count() > 0)
+                                                    <br>
+                                                    <small class="text-success">
+                                                        @php
+                                                            $prices = $food->sizes->pluck('pivot.price')->filter()->sort();
+                                                            $minPrice = $prices->first();
+                                                            $maxPrice = $prices->last();
+                                                        @endphp
+                                                        @if($minPrice && $maxPrice)
+                                                            ₦{{ number_format($minPrice, 2) }} - ₦{{ number_format($maxPrice, 2) }}
+                                                        @else
+                                                            Price not set
+                                                        @endif
+                                                    </small>
+                                                @endif
                                             </div>
                                             <span class="badge bg-primary">
                                                 {{ $food->sizes->count() }} sizes
@@ -206,7 +250,8 @@
 
         // Handle Select2 change events
         $('#selectedFoods').on('change', function() {
-            @this.set('selectedFoods', $(this).val());
+            var selectedValues = $(this).val();
+            window.Livewire.find(document.querySelector('[wire\\:id]').getAttribute('wire:id')).set('selectedFoods', selectedValues);
         });
 
         // Update Select2 when Livewire updates the property

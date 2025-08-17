@@ -17,6 +17,7 @@ use App\Livewire\DashboardArea\Meals\EditMeal;
 use App\Livewire\DashboardArea\Meals\ListFood;
 use App\Livewire\DashboardArea\Blog\CreatePost;
 use App\Livewire\DashboardArea\Meals\ListMeals;
+use App\Livewire\DashboardArea\Meals\ListSizes;
 use App\Livewire\DashboardArea\Orders\Payments;
 use App\Livewire\DashboardArea\Meals\CreateMeal;
 use App\Livewire\DashboardArea\Orders\EditOrder;
@@ -61,6 +62,10 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::group(['prefix' => 'food','as' => 'food.'], function () {
             Route::get('/', ListFood::class)->name('index');
+        });
+
+        Route::group(['prefix' => 'sizes','as' => 'sizes.'], function () {
+            Route::get('/', ListSizes::class)->name('index');
         });
 
         Route::group(['prefix' => 'posts','as' => 'posts.'], function () {

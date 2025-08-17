@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Size;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Food extends Model
@@ -14,9 +14,9 @@ class Food extends Model
     ];
 
     // Relationships
-    public function sizes(): HasMany
+    public function sizes(): BelongsToMany
     {
-        return $this->hasMany(FoodSize::class);
+        return $this->belongsToMany(Size::class, 'food_sizes')->withPivot('price');
     }
 
     public function meals(): BelongsToMany
@@ -27,12 +27,12 @@ class Food extends Model
     // Accessors
     public function getMinPriceAttribute()
     {
-        return $this->sizes()->min('price') ?? 0;
+        return $this->sizes()->min('food_sizes.price') ?? 0;
     }
 
     public function getMaxPriceAttribute()
     {
-        return $this->sizes()->max('price') ?? 0;
+        return $this->sizes()->max('food_sizes.price') ?? 0;
     }
 
     public function getPriceRangeAttribute()

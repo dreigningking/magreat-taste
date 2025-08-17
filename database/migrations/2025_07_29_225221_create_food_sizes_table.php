@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('food_sizes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('food_id');
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->string('price')->default(0);
+            $table->unsignedBigInteger('size_id');
+            $table->decimal('price', 10, 2)->default(0);
             $table->timestamps();
+            
+            $table->foreign('food_id')->references('id')->on('food')->onDelete('cascade');
+            $table->foreign('size_id')->references('id')->on('sizes')->onDelete('cascade');
         });
     }
 

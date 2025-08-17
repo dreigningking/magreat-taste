@@ -105,39 +105,63 @@
                                                 <p class="text-muted mb-0 small">{{ $food['description'] ?? '' }}</p>
                                             </div>
                                             <div class="col-md-5">
-                                                <label class="form-label small mb-2">Select Size:</label>
-                                                <div class="food-sizes">
-                                                    @foreach($food['sizes'] as $size)
-                                                        @php
-                                                            $isLowestPrice = $size['price'] == $lowestPrice;
-                                                            $isSelected = isset($selectedSizes[$food['id']]) && $selectedSizes[$food['id']] == $size['id'];
-                                                        @endphp
-                                                        <div class="pricing-tier {{ $isSelected ? 'active' : '' }}" 
-                                                             wire:click="updateFoodSize({{ $food['id'] }}, {{ $size['id'] }})"
-                                                             data-food-id="{{ $food['id'] }}" 
-                                                             data-size-id="{{ $size['id'] }}" 
-                                                             data-price="{{ $size['price'] }}"
-                                                             data-meal-id="{{ $selectedMeal->id ?? '' }}">
-                                                            <img src="{{ $size['image'] ?? 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80' }}" 
-                                                                 alt="{{ $size['name'] }}" class="tier-image">
-                                                            <div class="tier-title">{{ $size['name'] }}</div>
-                                                            <div class="tier-price">₦{{ $size['price'] }}</div>
-                                                        </div>
-                                                    @endforeach
+                                                <label class="form-label small mb-2">Select Sizes & Quantities:</label>
+                                                <div class="food-sizes-container">
+                                                    <div class="food-sizes-scroll">
+                                                        @foreach($food['sizes'] as $size)
+                                                            @php
+                                                                $isLowestPrice = $size['price'] == $lowestPrice;
+                                                                $isSelected = isset($selectedSizes[$food['id']][$size['id']]) && $selectedSizes[$food['id']][$size['id']] > 0;
+                                                                $quantity = $selectedSizes[$food['id']][$size['id']] ?? 0;
+                                                            @endphp
+                                                            <div class="pricing-tier {{ $isSelected ? 'active' : '' }} {{ $isLowestPrice ? 'best-value' : '' }}" 
+                                                                 data-food-id="{{ $food['id'] }}" 
+                                                                 data-size-id="{{ $size['id'] }}" 
+                                                                 data-price="{{ $size['price'] }}"
+                                                                 data-meal-id="{{ $selectedMeal->id ?? '' }}">
+                                                                @if($isLowestPrice)
+                                                                    <div class="best-value-badge">Best Value</div>
+                                                                @endif
+                                                                <div class="tier-content">
+                                                                    <div class="tier-image-container">
+                                                                        <img src="{{ $size['image'] ?? 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80' }}" 
+                                                                             alt="{{ $size['name'] }}" class="tier-image">
+                                                                    </div>
+                                                                    <div class="tier-text">
+                                                                        <div class="tier-title">{{ $size['name'] }}</div>
+                                                                        <div class="tier-price">₦{{ number_format($size['price'], 2) }}</div>
+                                                                        <div class="tier-quantity">
+                                                                            <label class="form-label small mb-1">Qty:</label>
+                                                                            <div class="input-group input-group-sm">
+                                                                                <button class="btn btn-outline-secondary btn-sm" type="button" 
+                                                                                        wire:click="updateFoodSizeQuantity({{ $food['id'] }}, {{ $size['id'] }}, {{ max(0, $quantity - 1) }})">-</button>
+                                                                                <input type="number" class="form-control form-control-sm text-center" 
+                                                                                       value="{{ $quantity }}" 
+                                                                                       min="0" 
+                                                                                       wire:model.live="selectedSizes.{{ $food['id'] }}.{{ $size['id'] }}"
+                                                                                       wire:change="updateFoodSizeQuantity({{ $food['id'] }}, {{ $size['id'] }}, $event.target.value)"
+                                                                                       data-food-id="{{ $food['id'] }}" 
+                                                                                       data-size-id="{{ $size['id'] }}"
+                                                                                       data-meal-id="{{ $selectedMeal->id ?? '' }}">
+                                                                                <button class="btn btn-outline-secondary btn-sm" type="button" 
+                                                                                        wire:click="updateFoodSizeQuantity({{ $food['id'] }}, {{ $size['id'] }}, {{ $quantity + 1 }})">+</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label small mb-2">Quantity:</label>
-                                                <div class="input-group">
-                                                    <button class="btn btn-outline-secondary" type="button" wire:click="updateFoodQuantity({{ $food['id'] }}, {{ max(1, ($selectedQuantities[$food['id']] ?? 1) - 1) }})">-</button>
-                                                    <input type="number" class="form-control text-center" 
-                                                           value="{{ $selectedQuantities[$food['id']] ?? 1 }}" 
-                                                           min="1" 
-                                                           wire:model.live="selectedQuantities.{{ $food['id'] }}"
-                                                           wire:change="updateFoodQuantity({{ $food['id'] }}, $event.target.value)"
-                                                           data-food-id="{{ $food['id'] }}" 
-                                                           data-meal-id="{{ $selectedMeal->id ?? '' }}">
-                                                    <button class="btn btn-outline-secondary" type="button" wire:click="updateFoodQuantity({{ $food['id'] }}, {{ ($selectedQuantities[$food['id']] ?? 1) + 1 }})">+</button>
+                                                <div class="d-flex align-items-center h-100">
+                                                    <div class="text-center w-100">
+                                                        <small class="text-muted d-block mb-2">Total for this food:</small>
+                                                        <div class="h5 text-primary mb-0">
+                                                            ₦{{ number_format($food['total_price'] ?? 0, 2) }}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                     </div>
@@ -276,50 +300,131 @@ document.addEventListener('DOMContentLoaded', function() {
     background-color: #f8f9fa;
 }
 
-.food-sizes {
+.food-sizes-container {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+.food-sizes-container::-webkit-scrollbar {
+    height: 6px;
+}
+
+.food-sizes-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.food-sizes-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+.food-sizes-container::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.food-sizes-scroll {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 12px;
+    padding: 4px 0;
+    min-width: max-content;
 }
 
 .food-sizes .pricing-tier {
-    flex: 1;
-    min-width: 80px;
-    text-align: center;
-    padding: 8px;
+    flex: 0 0 200px;
+    width: 200px;
+    height: 120px;
+    text-align: left;
+    padding: 12px;
     border: 2px solid #eee;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     background: white;
+    position: relative;
+    overflow: hidden;
 }
 
 .food-sizes .pricing-tier:hover,
 .food-sizes .pricing-tier.active {
     border-color: var(--primary);
     background: rgba(212, 167, 106, 0.1);
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.food-sizes .pricing-tier.active {
+    background: rgba(212, 167, 106, 0.2);
+    border-color: var(--primary);
+}
+
+.tier-content {
+    display: flex;
+    height: 100%;
+    gap: 12px;
+}
+
+.tier-image-container {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .food-sizes .tier-image {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
     object-fit: cover;
-    margin: 0 auto 4px;
+}
+
+.tier-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .food-sizes .tier-title {
-    font-weight: 600;
-    margin-bottom: 2px;
-    font-size: 0.8rem;
+    font-weight: 400;
+    margin-bottom: 4px;
+    font-size: 0.75rem;
     line-height: 1.2;
+    color: #666;
 }
 
 .food-sizes .tier-price {
     color: var(--primary);
     font-weight: 700;
     font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.tier-quantity {
+    margin-top: auto;
+}
+
+.tier-quantity .form-label {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
+}
+
+.tier-quantity .input-group {
+    max-width: 100%;
+}
+
+.tier-quantity .input-group .form-control {
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.tier-quantity .input-group .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
 }
 
 .food-item .input-group {
@@ -336,6 +441,28 @@ document.addEventListener('DOMContentLoaded', function() {
     font-size: 0.875rem;
 }
 
+.food-sizes .pricing-tier.best-value {
+    border-color: #28a745;
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.food-sizes .pricing-tier.best-value .tier-price {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.best-value-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #28a745;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .food-item .row {
@@ -349,13 +476,34 @@ document.addEventListener('DOMContentLoaded', function() {
         margin-bottom: 1rem;
     }
     
-    .food-sizes {
-        justify-content: center;
+    .food-sizes-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
     
     .food-sizes .pricing-tier {
-        min-width: 70px;
-        flex: 0 0 auto;
+        flex: 0 0 180px;
+        width: 180px;
+        height: 110px;
+        min-width: 180px;
+    }
+    
+    .tier-content {
+        gap: 8px;
+    }
+    
+    .tier-quantity .input-group {
+        max-width: 100%;
+    }
+    
+    .tier-quantity .input-group .form-control {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.4rem;
+    }
+    
+    .tier-quantity .input-group .btn {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
     }
     
     #modalMealImage,

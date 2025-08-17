@@ -1,2 +1,92 @@
--comment subscription
--
+MAIN DISHES
+1. Rice and Beans - ₦2,000 - Nigerian Rice and Beans
+2. Amala and Ewedu - ₦2,500 - Take Amala, ewedu with gbegiri. Step down with Meat
+3. Roasted Plantain - ₦1,500 - Peppered Plantain with Sauce and Fish
+4. Cat Fish Pepper soup - ₦1,500 - Cat fish with pudding
+5. Coconut Rice - ₦2,000 - Coconut Rice with shrimps and Turkey
+6. Pap and Akara - ₦2,000 - Pap, milk, sugar, and 5 balls of Akara
+7. French Fries - ₦1,500 - A pack of french fries with Chicken or Beef and Ketchup
+8. Fried Rice - ₦1,800 - Enjoy fried rice cooked with green peas, onions, orishirishi and fish
+9. Fufu and Egusi - ₦2,000 - African Fufu with Egusi soup and Chicken
+10. Jollof Rice - ₦2,500 - Real jollof rice served with Chicken and 1 bottle of drink
+11. Moimoi and Pudding - ₦1,000 - Moimoi with soft home made pudding
+12. Noodles - ₦1,500 - Tasty noodles served with chicken and omelete
+13. Eba (Garri) - ₦2,000 - Eba (Garri) with Ogbonna soup and beef
+14. Plantain Porridge - ₦2,000 - Plantain porridge cooked with vegetables and served with beef
+15. Yam and Egg - ₦1,000 - Boiled Yam with Fried Egg Source
+16. Veg Salad - ₦1,400 - Vegetarian Salad
+17. Basmati rice - ₦2,800 - Basmati rice with Chinese sauce & chicken
+18. Oat meal & Fish - ₦1,700 - Oat meal served with milk, sugar & air fried fish
+19. Yamarita/fish sauce - ₦1,800 - Well coated Yamarita served with spicy fish sauce and prawns
+20. Sandwich/Tea - ₦1,500 - Fresh Sandwich served with rich Tea
+21. Shortbread/green tea - ₦2,000 - Shortbread served with green tea/milk
+22. Beans/plantain/fish - ₦1,700 - Beans served with plantain & fried fish
+23. Macaroni coleslaw - ₦1,800 - Macaroni coleslaw salad served with grilled turkey
+24. Chicken pie/tea - ₦1,500 - Hot chicken pie served with tea
+25. Pancakes/fish - ₦1,500 - Pancakes mixed with carrot served with fried fish
+26. Hamburger &cheese - ₦2,000 - Hamburger & cheese burger served with hot tea
+27. French toast bread - ₦1,500 - French toast bread served with hot tea & coffee
+28. Fried plantain/omelet - ₦1,600 - fried plantain & omelet served with chilli sauce
+29. Coconut rice - ₦2,400 - coconut rice with fried goat meat
+30. Fried rice/chicken - ₦1,800 - Fried rice with chicken and salad
+31. Potatoe Poundo/Banga - ₦2,200 - Potatoes poundo with banga soup and beef
+32. Yam porridge/Fish - ₦1,800 - Yam porridge/vegetables//fish
+33. Tuwo/ogbonor soup - ₦2,100 - Tuwo and ogbonor soup with beef
+34. Semolina/Banga soup - ₦2,200 - Semolina and Banga soup with catfish
+35. Rice/beans/plantain - ₦2,500 - Rice, beans, plantain with fish sauce & beef
+36. Catfish Pepper Soup - ₦3,500 - Hot spicy pepper soup with diced plantain
+37. Pea Nut soup/Eba - ₦2,000 - Ground nut or pea nut soup made with goat meat and stock fish and Eba
+38. Pounded Yam/Banga - ₦2,200 - Pounded Yam served with Banga soup and catfish and diced beef
+39. Boiled Plantain/sauc - ₦1,600 - Boiled Unripe Plantain with fish and vegetable sauce
+40. White Rice - ₦1,800 - White Rice served with shredded beef and vegetables
+41. Fisher man soup - ₦2,500 - Potato pound served with fisherman soup
+42. Chinese chicken pot - ₦2,200 - Chinese chicken pot served with rice
+43. White rice and stew - ₦2,200 - White rice, plantain, served with grilled fish
+44. Chicken Sandwich - ₦1,800 - Fried Chicken Sandwich with vegetables
+45. Vegetable Sandwich - ₦1,600 - Vegetable sandwich served with green tea
+46. Cuban Chicken Rice - ₦2,600 - Cuban chicken served with red beans, plantain & diced veggies
+47. Eko with Efo Riro - ₦1,800 - Eko with Efo Riro & Fish
+48. Banku/Okra - ₦2,200 - Freshly prepared Banku served with slimy Okra & fish
+49. Angwamu (Oil rice) - ₦2,200 - Ghanaian rich recipe made with sardines, fried eggs, sliced chicken franks, veggies & peppers
+50. Vegetable Pizza - ₦2,000 - finely baked pizza with cheese & vegetables
+51. Chicken Pizza - ₦2,500 - Freshly baked chicken pizza with added vegetables and cheese
+52. Lobster Roll - ₦2,500 - Finely prepared bread filled vegetables, bacon, cheese and whip cream
+53. Fish & chips - ₦2,200 - Chips served with coated fish and Cole-slaw
+54. BlackSoup/PoundedYam - ₦2,600 - African vegetable soup smoothly blended prepared with goat meat, crayfish, pepper, stock fish, smoked panla and palm oil
+55. African Salad Abacha - ₦2,200 - Fully Garnished Abacha with sauced cow skin, fish & vegetable
+56. Owo & Starch - ₦1,800 - finely prepared owo soup with beef and fish served with starch
+
+DESSERTS & SNACKS
+57. Peanuts - ₦300 - baked Peanuts or Ground nut
+58. Scotch Eggs - ₦200 - 2 balls of Scotch Eggs
+59. Almond Nuts - ₦500 - 1 plastic cup size of Baked Almond Nuts
+60. Ginger Chin-Chin - ₦400 - Chin-Chin rich in ginger
+61. Cashew Nuts - ₦500 - Roasted Cashew Nuts
+62. Banana - ₦500 - Fresh Banana Desert
+63. Plantain Chips - ₦500 - Deep fry plantain chips
+
+INTERNATIONAL DISHES
+64. Bunny chow - ₦2,000 - A South African fast food dish consisting of a hollowed-out loaf of white bread filled with beef, vegetables, curry
+65. Namibian Venison - ₦2,200 - Namibian Dried Meat Strips Stew (Eedingu) served with Rice
+66. Sadza with Kapenta - ₦2,200 - Finely grounded dry maize/corn maize (mealie-meal) served with soup made of dried fish called (kapenta) in Zimbabwe
+67. Cachupa – Cape Verde - ₦2,200 - Finely cooked with diced sweet potato, corn, beans, cassava, tomatoes, meat or tuna
+
+FRUITS
+68. Fruit Salad - ₦2,000 - Freshly Diced pineapple, crisp sweet apple, seedless red grapes and banana
+69. Avocado - ₦500 - Medium size avocado
+70. Water Melon - ₦500 - Freshly diced watermelon
+
+SUMMARY
+Total Items: 72 meals
+Price Range: ₦200 - ₦3,500
+Categories: Main Dishes (56), Desserts & Snacks (7), International Dishes (4), Fruits (3)
+
+
+
+
+
+1. For the desktop size display, lets make it 2.5 on large screens, 2 on medium screens and 1 on small screens
+2. We can place the remove button below the quantity. Only show remove button when there's quantity selected for a size. 
+3. Keep the current layout but Let's make the image rounded corners instead of circle. Then place the title below the image. Then the price, quantity and remove button can be on the right. 
+4.Use what we have right now, or 90% which ever is better
+5. Maintain the current behaviour

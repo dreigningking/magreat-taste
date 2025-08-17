@@ -6,8 +6,9 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use App\Models\Food;
-use App\Models\FoodSize;
+use App\Models\Size;
 use App\Models\Meal;
+use Illuminate\Support\Facades\DB;
 
 class ListFood extends Component
 {
@@ -16,42 +17,42 @@ class ListFood extends Component
     // Create food properties
     public $name = '';
     public $description = '';
-    public $sizes = [];
+    public $selectedSizes = [];
 
     // Edit food properties
     public $edit_id = '';
     public $edit_name = '';
     public $edit_description = '';
-    public $editSizes = [];
+    public $editSelectedSizes = [];
 
     public function mount()
     {
-        // Initialize with one empty size for create form
-        $this->sizes = [
-            ['name' => '', 'price' => '', 'image' => null]
+        // Initialize with one empty size selection for create form
+        $this->selectedSizes = [
+            ['size_id' => '', 'price' => '']
         ];
     }
 
     public function addSize()
     {
-        $this->sizes[] = ['name' => '', 'price' => '', 'image' => null];
+        $this->selectedSizes[] = ['size_id' => '', 'price' => ''];
     }
 
     public function removeSize($index)
     {
-        unset($this->sizes[$index]);
-        $this->sizes = array_values($this->sizes);
+        unset($this->selectedSizes[$index]);
+        $this->selectedSizes = array_values($this->selectedSizes);
     }
 
     public function addEditSize()
     {
-        $this->editSizes[] = ['name' => '', 'price' => '', 'image' => null];
+        $this->editSelectedSizes[] = ['size_id' => '', 'price' => ''];
     }
 
     public function removeEditSize($index)
     {
-        unset($this->editSizes[$index]);
-        $this->editSizes = array_values($this->editSizes);
+        unset($this->editSelectedSizes[$index]);
+        $this->editSelectedSizes = array_values($this->editSelectedSizes);
     }
 
     public function store()
@@ -59,9 +60,8 @@ class ListFood extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'sizes.*.name' => 'required|string|max:255',
-            'sizes.*.price' => 'required|numeric|min:0',
-            'sizes.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'selectedSizes.*.size_id' => 'required|exists:sizes,id',
+            'selectedSizes.*.price' => 'required|numeric|min:0',
         ]);
 
         // Create the food
@@ -70,29 +70,21 @@ class ListFood extends Component
             'description' => $this->description,
         ]);
 
-        // Create the sizes
-        foreach ($this->sizes as $sizeData) {
-            $imagePath = null;
-            if ($sizeData['image']) {
-                $imagePath = $sizeData['image']->store('foods', 'public');
-            }
-
-            FoodSize::create([
-                'food_id' => $food->id,
-                'name' => $sizeData['name'],
-                'price' => $sizeData['price'],
-                'image' => $imagePath,
+        // Attach sizes with prices
+        foreach ($this->selectedSizes as $sizeData) {
+            $food->sizes()->attach($sizeData['size_id'], [
+                'price' => $sizeData['price']
             ]);
         }
 
         // Reset form
         $this->reset(['name', 'description']);
-        $this->sizes = [['name' => '', 'price' => '', 'image' => null]];
+        $this->selectedSizes = [['size_id' => '', 'price' => '']];
         $this->dispatch('closeModal', ['modalId' => 'createFoodModal']);
         session()->flash('message', 'Food created successfully!');
     }
 
-    public function editFood($id, $name, $description)
+    public function editFood($id)
     {
         $food = Food::with('sizes')->find($id);
         
@@ -101,15 +93,12 @@ class ListFood extends Component
             $this->edit_name = $food->name;
             $this->edit_description = $food->description;
             
-            // Populate edit sizes
-            $this->editSizes = [];
+            // Populate edit sizes with existing data
+            $this->editSelectedSizes = [];
             foreach ($food->sizes as $size) {
-                $this->editSizes[] = [
-                    'id' => $size->id,
-                    'name' => $size->name,
-                    'price' => $size->price,
-                    'image' => null,
-                    'existing_image' => $size->image
+                $this->editSelectedSizes[] = [
+                    'size_id' => $size->id,
+                    'price' => $size->pivot->price
                 ];
             }
         }
@@ -121,9 +110,8 @@ class ListFood extends Component
             'edit_id' => 'required|exists:food,id',
             'edit_name' => 'required|string|max:255',
             'edit_description' => 'required|string|max:500',
-            'editSizes.*.name' => 'required|string|max:255',
-            'editSizes.*.price' => 'required|numeric|min:0',
-            'editSizes.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'editSelectedSizes.*.size_id' => 'required|exists:sizes,id',
+            'editSelectedSizes.*.price' => 'required|numeric|min:0',
         ]);
 
         $food = Food::find($this->edit_id);
@@ -132,34 +120,16 @@ class ListFood extends Component
             'description' => $this->edit_description,
         ]);
 
-        // Update or create sizes
-        foreach ($this->editSizes as $sizeData) {
-            $imagePath = $sizeData['existing_image'] ?? null;
-            
-            if (isset($sizeData['image']) && $sizeData['image']) {
-                $imagePath = $sizeData['image']->store('foods', 'public');
-            }
-
-            if (isset($sizeData['id'])) {
-                // Update existing size
-                FoodSize::where('id', $sizeData['id'])->update([
-                    'name' => $sizeData['name'],
-                    'price' => $sizeData['price'],
-                    'image' => $imagePath,
-                ]);
-            } else {
-                // Create new size
-                FoodSize::create([
-                    'food_id' => $food->id,
-                    'name' => $sizeData['name'],
-                    'price' => $sizeData['price'],
-                    'image' => $imagePath,
-                ]);
-            }
+        // Sync sizes with prices
+        $sizeData = [];
+        foreach ($this->editSelectedSizes as $sizeItem) {
+            $sizeData[$sizeItem['size_id']] = ['price' => $sizeItem['price']];
         }
+        
+        $food->sizes()->sync($sizeData);
 
         // Reset edit form
-        $this->reset(['edit_id', 'edit_name', 'edit_description', 'editSizes']);
+        $this->reset(['edit_id', 'edit_name', 'edit_description', 'editSelectedSizes']);
         $this->dispatch('closeModal', ['modalId' => 'editFoodModal']);
         session()->flash('message', 'Food updated successfully!');
     }
@@ -168,10 +138,9 @@ class ListFood extends Component
     {
         $food = Food::find($id);
         if ($food) {
-            // Delete associated sizes first
-            $food->sizes()->delete();
+            // Detach associated sizes first
+            $food->sizes()->detach();
             $food->delete();
-            $this->dispatch('closeModal', ['modalId' => 'deleteFoodModal']);
             session()->flash('message', 'Food deleted successfully!');
         }
     }
@@ -182,14 +151,20 @@ class ListFood extends Component
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
+        // Get all available sizes for dropdowns
+        $availableSizes = Size::orderBy('name')->get();
+
         // Calculate statistics
         $totalFoods = Food::count();
-        $totalSizes = FoodSize::count();
+        $totalSizes = Size::count();
         $totalMeals = Meal::count();
-        $averagePrice = FoodSize::avg('price') ?? 0;
+        
+        // Calculate average price from food_sizes pivot table
+        $averagePrice = DB::table('food_sizes')->avg('price') ?? 0;
 
         return view('livewire.dashboard-area.meals.list-food', [
             'foods' => $foods,
+            'availableSizes' => $availableSizes,
             'totalFoods' => $totalFoods,
             'totalSizes' => $totalSizes,
             'totalMeals' => $totalMeals,
