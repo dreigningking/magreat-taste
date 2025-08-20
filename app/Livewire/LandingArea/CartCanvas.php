@@ -31,12 +31,12 @@ class CartCanvas extends Component
 
     public function calculateCartTotals()
     {
-        $this->subtotal = $this->cartItems->sum('amount');
+        $this->subtotal = 0;
         
         if ($this->cartItems && $this->cartItems->count() > 0) {
             foreach ($this->cartItems as $mealGroup) {
                 foreach ($mealGroup as $item) {
-                    $this->subtotal += $item->amount;
+                    $this->subtotal += $item->price * $item->quantity;
                 }
             }
         }
@@ -53,11 +53,29 @@ class CartCanvas extends Component
         return !$this->cartItems || $this->cartItems->count() === 0;
     }
 
+    public function getTotalCartItemsCount()
+    {
+        if (!$this->cartItems || $this->cartItems->count() === 0) {
+            return 0;
+        }
+        
+        $totalCount = 0;
+        foreach ($this->cartItems as $mealGroup) {
+            foreach ($mealGroup as $item) {
+                $totalCount += $item->quantity;
+            }
+        }
+        
+        return $totalCount;
+    }
+
     public function removeFromCart($meal_id)
     {
+        // Use the trait method to remove items
         $this->removeFromCartDb($meal_id);
+        
+        // Refresh cart items and recalculate totals
         $this->getCartItems();
-        $this->calculateCartTotals();
     }
 
     public function render()

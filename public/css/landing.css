@@ -222,6 +222,7 @@ body {
     margin: 0 5px;
     cursor: pointer;
     transition: all 0.3s;
+    max-width: 300px;
 }
 
 .pricing-tier:hover,
