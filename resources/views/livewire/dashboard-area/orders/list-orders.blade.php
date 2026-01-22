@@ -248,7 +248,7 @@
                         Showing {{ $orders->firstItem() }} to {{ $orders->lastItem() }} of {{ $orders->total() }} orders
                     </div>
                     <div>
-                        {{ $orders->links() }}
+                        {{ $orders->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
             @else

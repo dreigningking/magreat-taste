@@ -192,7 +192,7 @@
                         Showing {{ $meals->firstItem() }} to {{ $meals->lastItem() }} of {{ $meals->total() }} meals
                     </div>
                     <div>
-                        {{ $meals->links() }}
+                        {{ $meals->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
             @else

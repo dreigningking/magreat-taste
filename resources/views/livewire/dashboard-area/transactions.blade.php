@@ -135,7 +135,7 @@
                     Showing <span class="fw-semibold">{{ $payments->firstItem() }}</span> to <span class="fw-semibold">{{ $payments->lastItem() }}</span> of <span class="fw-semibold">{{ $payments->total() }}</span> results
                 </div>
                 <div>
-            {{ $payments->links() }}
+            {{ $payments->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>

@@ -92,7 +92,7 @@
                     Showing {{ $locations->firstItem() }} to {{ $locations->lastItem() }} of {{ $locations->total() }} locations
                 </div>
                 <div>
-                    {{ $locations->links() }}
+                    {{ $locations->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @else

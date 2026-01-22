@@ -262,7 +262,7 @@
                     Showing <span class="fw-semibold">{{ $tasks->firstItem() }}</span> to <span class="fw-semibold">{{ $tasks->lastItem() }}</span> of <span class="fw-semibold">{{ $tasks->total() }}</span> results
                 </div>
                 <div>
-                    {{ $tasks->links() }}
+                    {{ $tasks->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>

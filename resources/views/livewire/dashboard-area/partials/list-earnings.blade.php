@@ -173,7 +173,7 @@
                     Showing <span class="fw-semibold">{{ $settlements->firstItem() }}</span> to <span class="fw-semibold">{{ $settlements->lastItem() }}</span> of <span class="fw-semibold">{{ $settlements->total() }}</span> results
                 </div>
                 <div>
-                    {{ $settlements->links() }}
+                    {{ $settlements->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @endif
@@ -236,7 +236,7 @@
                     Showing <span class="fw-semibold">{{ $withdrawals->firstItem() }}</span> to <span class="fw-semibold">{{ $withdrawals->lastItem() }}</span> of <span class="fw-semibold">{{ $withdrawals->total() }}</span> results
                 </div>
                 <div>
-                    {{ $withdrawals->links() }}
+                    {{ $withdrawals->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @endif
@@ -303,7 +303,7 @@
                     Showing <span class="fw-semibold">{{ $exchanges->firstItem() }}</span> to <span class="fw-semibold">{{ $exchanges->lastItem() }}</span> of <span class="fw-semibold">{{ $exchanges->total() }}</span> results
                 </div>
                 <div>
-                    {{ $exchanges->links() }}
+                    {{ $exchanges->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @endif

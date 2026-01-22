@@ -108,7 +108,7 @@
                     Showing {{ $sizes->firstItem() }} to {{ $sizes->lastItem() }} of {{ $sizes->total() }} sizes
                 </div>
                 <div>
-                    {{ $sizes->links() }}
+                    {{ $sizes->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @else

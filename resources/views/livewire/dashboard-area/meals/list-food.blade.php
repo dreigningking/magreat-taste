@@ -141,7 +141,7 @@
                     Showing {{ $foods->firstItem() }} to {{ $foods->lastItem() }} of {{ $foods->total() }} foods
                 </div>
 <div>
-                    {{ $foods->links() }}
+                    {{ $foods->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @else

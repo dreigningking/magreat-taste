@@ -80,13 +80,3 @@ SUMMARY
 Total Items: 72 meals
 Price Range: ₦200 - ₦3,500
 Categories: Main Dishes (56), Desserts & Snacks (7), International Dishes (4), Fruits (3)
-
-
-
-
-
-1. For the desktop size display, lets make it 2.5 on large screens, 2 on medium screens and 1 on small screens
-2. We can place the remove button below the quantity. Only show remove button when there's quantity selected for a size. 
-3. Keep the current layout but Let's make the image rounded corners instead of circle. Then place the title below the image. Then the price, quantity and remove button can be on the right. 
-4.Use what we have right now, or 90% which ever is better
-5. Maintain the current behaviour

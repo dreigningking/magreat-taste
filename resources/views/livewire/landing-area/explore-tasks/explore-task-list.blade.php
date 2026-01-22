@@ -145,7 +145,7 @@
                 
                 <!-- Pagination -->
                 <div class="mt-5">
-                    {{ $tasks->links() }}
+                    {{ $tasks->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
         </div>

@@ -325,14 +325,48 @@ h1, h2, h3, h4, h5, h6 {
   background-color: var(--danger-red) !important;
 }
 
+/* ===== PAGINATION OVERRIDES ===== */
+
+.pagination {
+  margin-bottom: 0 !important;
+}
+
+.pagination .page-link {
+  color: var(--primary-purple) !important;
+  border-color: var(--border-gray) !important;
+  padding: var(--spacing-xs) var(--spacing-sm) !important;
+  font-size: var(--text-sm) !important;
+  border-radius: var(--radius-md) !important;
+  background-color: var(--bg-primary) !important;
+}
+
+.pagination .page-link:hover {
+  color: var(--text-white) !important;
+  background-color: var(--primary-purple) !important;
+  border-color: var(--primary-purple) !important;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-purple) !important;
+  border-color: var(--primary-purple) !important;
+  color: var(--text-white) !important;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: var(--text-muted) !important;
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border-gray) !important;
+  pointer-events: none !important;
+}
+
 /* ===== RESPONSIVE OVERRIDES ===== */
 
 @media (max-width: 768px) {
   .sidebar {
     width: 100% !important;
   }
-  
+
   .content-wrapper {
     margin: var(--spacing-sm) !important;
   }
-} 
+}

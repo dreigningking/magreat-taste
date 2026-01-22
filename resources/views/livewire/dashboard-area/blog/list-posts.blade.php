@@ -181,13 +181,8 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <div class="text-muted">
-                        Showing {{ $posts->firstItem() }} to {{ $posts->lastItem() }} of {{ $posts->total() }} posts
-                    </div>
-                    <div>
-                        {{ $posts->links() }}
-                    </div>
+                <div class="pagination-wrapper mt-4">
+                    {{ $posts->links('vendor.pagination.bootstrap-5') }}
                 </div>
             @else
                 <div class="text-center py-5">

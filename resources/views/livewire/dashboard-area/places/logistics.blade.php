@@ -104,7 +104,7 @@
                     Showing {{ $shipmentRoutes->firstItem() }} to {{ $shipmentRoutes->lastItem() }} of {{ $shipmentRoutes->total() }} shipmentRoutes
                 </div>
                 <div>
-                    {{ $shipmentRoutes->links() }}
+                    {{ $shipmentRoutes->links('vendor.pagination.bootstrap-5') }}
                 </div>
             </div>
             @else

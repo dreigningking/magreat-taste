@@ -269,7 +269,7 @@
                         of {{ $comments->total() }} comments
                     </div>
                     <div>
-                        {{ $comments->links() }}
+                        {{ $comments->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
             @else

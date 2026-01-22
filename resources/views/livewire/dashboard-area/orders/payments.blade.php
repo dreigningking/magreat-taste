@@ -255,7 +255,7 @@
 
             <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
-                {{ $payments->links() }}
+                {{ $payments->links('vendor.pagination.bootstrap-5') }}
             </div>
             @else
             <div class="text-center py-5">

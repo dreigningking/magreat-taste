@@ -14,13 +14,11 @@
     <link rel="stylesheet" href="{{asset('vendors/mdi/css/materialdesignicons.min.css')}}">
     <!-- endinject -->
     <!-- Plugin css for this page -->
-    <link rel="stylesheet" href="{{asset('vendors/datatables.net-bs5/dataTables.bootstrap5.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('vendors/select.dataTables.min.css')}}">
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{asset('css/variables.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
-    <link rel="stylesheet" href="{{asset('css/dashboard-overrides.css')}}">
+    <!-- <link rel="stylesheet" href="{{asset('css/dashboard-overrides.css')}}"> -->
     <!-- endinject -->
     <link rel="shortcut icon" href="{{asset('images/logo.jpeg')}}" />
     @livewireStyles
@@ -236,9 +234,6 @@
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <script src="{{asset('vendors/chart.js/chart.umd.js')}}"></script>
-    <script src="{{asset('vendors/datatables.net/jquery.dataTables.js')}}"></script>
-    <script src="{{asset('vendors/datatables.net-bs5/dataTables.bootstrap5.js')}}"></script>
-    <script src="{{asset('vendors/dataTables.select.min.js')}}"></script>
     <!-- End plugin js for this page -->
     <!-- inject:js -->
     <script src="{{asset('js/off-canvas.js')}}"></script>
