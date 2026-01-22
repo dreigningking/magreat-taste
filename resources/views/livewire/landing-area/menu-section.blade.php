@@ -3,9 +3,6 @@
         <div class="container">
             <h2 class="section-title">Signature Creations</h2>
             
-            <!-- Test button for debugging -->
-            <button wire:click="testMethod" class="btn btn-sm btn-secondary mb-3">Test Livewire</button>
-
             <!-- Filter Buttons -->
             <div class="filter-buttons">
                 <button class="filter-btn active" data-filter="all">All Dishes</button>
