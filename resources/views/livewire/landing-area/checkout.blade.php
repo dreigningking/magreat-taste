@@ -143,20 +143,20 @@
                                     @if($cartItems && $cartItems->count() > 0)
                                     @foreach($cartItems as $mealGroup)
                                     <div class="mb-3 p-3 border rounded bg-light">
-                                        <h6 class="mb-2 fw-bold">{{ optional($mealGroup->first())->meal->name ?? 'Meal' }}</h6>
+                                        <h6 class="mb-2 fw-bold">{{ $mealGroup->first()['meal']['name'] ?? 'Meal' }}</h6>
                                         @foreach($mealGroup as $item)
                                         <div class="d-flex justify-content-between mb-1">
                                             <span class="text-muted small">
-                                                {{ optional($item->food)->name ?? 'Food' }} -
-                                                {{ optional($item->foodSize)->name ?? 'Size' }} × {{ $item->quantity }}
+                                                {{ $item['food']['name'] ?? 'Food' }} -
+                                                {{ $item['food_size']['name'] ?? 'Size' }} × {{ $item['quantity'] }}
                                             </span>
-                                            <span class="small fw-bold">₦{{ number_format($item->price * $item->quantity, 2) }}</span>
+                                            <span class="small fw-bold">₦{{ number_format($item['price'] * $item['quantity'], 2) }}</span>
                                         </div>
                                         @endforeach
                                         <div class="d-flex justify-content-between mt-2 pt-2 border-top">
                                             <span class="fw-bold">Meal Total:</span>
                                             <span class="fw-bold text-primary">
-                                                ₦{{ number_format($mealGroup->sum(function($item) { return $item->price * $item->quantity; }), 2) }}
+                                                ₦{{ number_format($mealGroup->sum(function($item) { return $item['price'] * $item['quantity']; }), 2) }}
                                             </span>
                                         </div>
                                     </div>

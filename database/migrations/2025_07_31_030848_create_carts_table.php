@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string('ip');
             $table->unsignedBigInteger('meal_id');
             $table->unsignedBigInteger('food_id');
-            $table->unsignedBigInteger('food_size_id');
-            $table->string('price')->default(0);
-            $table->string('quantity')->default(0);
-            $table->string('amount')->default(0);
+            $table->unsignedBigInteger('size_id');
+            $table->decimal('price', 10, 2)->default(0);
+            $table->unsignedBigInteger('quantity')->default(0);
+            $table->decimal('amount', 10, 2)->default(0);
             $table->timestamps();
         });
     }

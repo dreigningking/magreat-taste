@@ -27,6 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('shipment_route_id')->nullable();
             $table->string('shipment_fee')->default(0.00);
             $table->string('vat_amount')->default(0.00);
+            $table->decimal('total_amount', 10, 2)->default(0.00);
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled'])->default('pending');
             $table->string('refund_amount')->default(0.00);
             $table->timestamps();

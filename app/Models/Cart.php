@@ -10,7 +10,7 @@ class Cart extends Model
         'ip',
         'meal_id',
         'food_id',
-        'food_size_id',
+        'size_id',
         'price',
         'quantity',
         'amount'
@@ -28,9 +28,9 @@ class Cart extends Model
         return $this->belongsTo(Food::class);
     }
 
-    public function foodSize()
+    public function size()
     {
-        return $this->belongsTo(FoodSize::class);
+        return $this->belongsTo(Size::class);
     }
 
     public function getTotalAttribute()

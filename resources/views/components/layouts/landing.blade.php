@@ -106,7 +106,6 @@
     </footer>
 
     <script data-navigate-once src="{{ asset('vendors/bootstrap/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/landing.js') }}"></script>
     <script src="{{ asset('vendors/jquery.min.js') }}"></script>
     @livewireScripts
     <script>

@@ -5,6 +5,7 @@ namespace App\Livewire\LandingArea;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Http\Traits\CartTrait;
+use Illuminate\Support\Facades\Log;
 
 class CartCanvas extends Component
 {
@@ -15,18 +16,21 @@ class CartCanvas extends Component
     public $total = 0;
     public $vatRate = 0;
 
+    protected $listeners = ['cartUpdated' => 'getCartItems'];
+
     public function mount()
     {
         $this->vatRate = config('services.settings.vat_rate', 0);
         $this->getCartItems();
     }
 
-    #[On('updateCart')]
     public function getCartItems()
     {
-        $cartItems = $this->getCartDb();
+        Log::info('CartCanvas: getting cart items');
+        $cartItems = $this->getCartDb()->load(['meal', 'food', 'size'])->toArray();
         $this->cartItems = collect($cartItems)->groupBy('meal_id');
         $this->calculateCartTotals();
+        Log::info('CartCanvas: finished getting cart items');
     }
 
     public function calculateCartTotals()
@@ -36,7 +40,7 @@ class CartCanvas extends Component
         if ($this->cartItems && $this->cartItems->count() > 0) {
             foreach ($this->cartItems as $mealGroup) {
                 foreach ($mealGroup as $item) {
-                    $this->subtotal += $item->price * $item->quantity;
+                    $this->subtotal += $item['price'] * $item['quantity'];
                 }
             }
         }
@@ -62,7 +66,7 @@ class CartCanvas extends Component
         $totalCount = 0;
         foreach ($this->cartItems as $mealGroup) {
             foreach ($mealGroup as $item) {
-                $totalCount += $item->quantity;
+                $totalCount += $item['quantity'];
             }
         }
         
@@ -73,10 +77,20 @@ class CartCanvas extends Component
     {
         // Use the trait method to remove items
         $this->removeFromCartDb($meal_id);
-        
+
         // Refresh cart items and recalculate totals
         $this->getCartItems();
     }
+
+    public function removeCartItem($cartItemId)
+    {
+        // Remove specific cart item
+        $this->removeCartItemDb($cartItemId);
+
+        // Refresh cart items and recalculate totals
+        $this->getCartItems();
+    }
+
 
     public function render()
     {

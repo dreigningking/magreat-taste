@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 
 class Dashboard extends Component
 {
+    public $title = 'Dashboard';
     public $topBranches;
     public $recentOrders;
     public $pendingOrders;
@@ -40,11 +41,13 @@ class Dashboard extends Component
 
     public function loadTopBranches()
     {
+        // Get top branches for the current week
         $this->topBranches = DB::table('orders')
             ->join('shipment_routes', 'orders.shipment_route_id', '=', 'shipment_routes.id')
             ->join('locations', 'shipment_routes.location_id', '=', 'locations.id')
             ->select('locations.name as branch_name', 'locations.city_id', DB::raw('COUNT(orders.id) as order_count'))
             ->whereNotNull('orders.shipment_route_id')
+            ->whereBetween('orders.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
             ->groupBy('locations.id', 'locations.name', 'locations.city_id')
             ->orderBy('order_count', 'desc')
             ->limit(5)

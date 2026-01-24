@@ -113,15 +113,15 @@
                     <!-- Slide 2 -->
                     <div class="testimonial-slide">
                         <div class="row">
-                            <!-- David Thompson -->
+                            <!-- Pastor Lilian Nnogo -->
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="{{ asset('images/faces/face25.jpg') }}" alt="David Thompson" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/face25.jpg') }}" alt="Pastor Lilian Nnogo" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
                                         <p class="testimonial-text mb-4">"Chef Margaret's jollof rice is absolutely divine! She catered our anniversary party and everyone was raving about the authentic flavors and perfect execution."</p>
-                                        <h5 class="testimonial-name">David Thompson</h5>
+                                        <h5 class="testimonial-name">Pastor Lilian Nnogo</h5>
                                         <p class="testimonial-title text-muted">Anniversary Celebration</p>
                                         <div class="testimonial-rating">
                                             <i class="fas fa-star text-warning"></i>
@@ -203,5 +203,72 @@
 
 @endpush
 @push('scripts')
+<script>
+// Testimonial Carousel Functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const carousel = document.getElementById('testimonialCarousel');
+    const slides = document.querySelectorAll('.testimonial-slide');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicators = document.querySelectorAll('.indicator');
 
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    // Function to show slide
+    function showSlide(slideIndex) {
+        // Hide all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // Show current slide
+        slides[slideIndex].classList.add('active');
+
+        // Update indicators
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === slideIndex);
+        });
+
+        currentSlide = slideIndex;
+    }
+
+    // Next slide
+    function nextSlide() {
+        const nextIndex = (currentSlide + 1) % totalSlides;
+        showSlide(nextIndex);
+    }
+
+    // Previous slide
+    function prevSlide() {
+        const prevIndex = (currentSlide - 1 + totalSlides) % totalSlides;
+        showSlide(prevIndex);
+    }
+
+    // Event listeners
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextSlide);
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevSlide);
+    }
+
+    // Indicator clicks
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            showSlide(index);
+        });
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowLeft') {
+            prevSlide();
+        } else if (e.key === 'ArrowRight') {
+            nextSlide();
+        }
+    });
+});
+</script>
 @endpush

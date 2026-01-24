@@ -15,17 +15,7 @@ class BlogSeeder extends Seeder
     public function run(): void
     {
         // Create categories
-        $categories = [
-            ['name' => 'Recipes', 'type' => 'post', 'description' => 'Delicious recipes and cooking guides'],
-            ['name' => 'Cooking Tips', 'type' => 'post', 'description' => 'Professional cooking tips and techniques'],
-            ['name' => 'Chef Stories', 'type' => 'post', 'description' => 'Behind-the-scenes stories from the kitchen'],
-            ['name' => 'Events', 'type' => 'post', 'description' => 'Cooking events and workshops'],
-            ['name' => 'Ingredients', 'type' => 'post', 'description' => 'Ingredient guides and selection tips'],
-        ];
-
-        foreach ($categories as $categoryData) {
-            Category::create($categoryData);
-        }
+        
 
         // Get the first user (or create one if none exists)
         $user = User::first() ?? User::factory()->create();

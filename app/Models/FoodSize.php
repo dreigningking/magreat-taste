@@ -10,8 +10,7 @@ class FoodSize extends Model
 {
     protected $fillable = [
         'food_id',
-        'name',
-        'image',
+        'size_id',
         'price',
     ];
 
@@ -23,6 +22,11 @@ class FoodSize extends Model
     public function food(): BelongsTo
     {
         return $this->belongsTo(Food::class);
+    }
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class);
     }
 
     // Accessors

@@ -49,7 +49,7 @@ class Meal extends Model
 
     public function foods(): BelongsToMany
     {
-        return $this->belongsToMany(Food::class);
+        return $this->belongsToMany(Food::class)->withPivot('required');
     }
 
     // Accessors

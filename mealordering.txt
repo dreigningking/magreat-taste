@@ -1,0 +1,35 @@
+1. The user clicks to open the meal modal (happens via bootstrap)
+2. On selectMeal(meal_id), display {
+    list of the food items with checkboxes
+    foreach food item{
+        if item is required, checkbox is on
+        elseif item is in cart, checkbox is on
+        else checkbox is off
+    }
+    if checkbox is on, display the food-item div
+
+    foreach food-item div that is displayed{
+        if(food-item is in cart)
+            show the cart quantity on the selected sizes
+        elseif(food-item is required)
+            select the size with the lowest price and place 1 as quantity
+        else{
+            just show all the sizes
+        }
+    }
+    
+}
+3. When user clicks add to cart{
+    if(no food-item is selected){
+        add-to-cart button remains disabled
+    }
+    remove all the food items with the selected meal id
+    add all the food items on the meal with the selected sizes and where quantity is > 0 to cart
+    close menu-section modal with $this->dispatch('closeModal', ['modalId' => 'mealModal']);
+    update cart canvas with $this->dispatch('updateCart');
+}
+4. On the cart-canvas{
+    User can remove a single food item
+    User can remove a meal which will in turn remove all the food items in that meal
+}
+

@@ -15,6 +15,9 @@ class Size extends Model
     protected $fillable = [
         'name',
         'slug',
+        'type',
+        'unit',
+        'value',
         'image',
     ];
 

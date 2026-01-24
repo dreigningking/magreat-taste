@@ -1,10 +1,13 @@
 <?php
 
+use App\Models\Cart;
+use App\Livewire\DashboardArea\Staff;
 use App\Livewire\LandingArea\Welcome;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\DashboardArea\Profile;
 use App\Http\Controllers\HomeController;
-use App\Livewire\DashboardArea\Contactus;
+use App\Livewire\DashboardArea\Messages;
+use App\Livewire\DashboardArea\Customers;
 use App\Livewire\DashboardArea\Dashboard;
 use App\Livewire\DashboardArea\Categories;
 use App\Http\Controllers\PaymentController;
@@ -53,6 +56,9 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('dashboard', Dashboard::class)->name('dashboard');
         Route::get('profile', Profile::class)->name('profile');
+        Route::get('staff', Staff::class)->name('staff');
+        Route::get('customers', Customers::class)->name('customers');
+
         Route::get('categories', Categories::class)->name('categories');
         Route::group(['prefix' => 'meals','as' => 'meals.'], function () {
             Route::get('/', ListMeals::class)->name('index');
@@ -92,7 +98,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::get('notifications', ListNotifications::class)->name('notifications');
-        Route::get('contact', Contactus::class)->name('contact');
+        Route::get('messages', Messages::class)->name('messages');
         Route::get('payment/callback',[PaymentController::class,'paymentcallback'])->name('payment.callback');
         Route::get('payment/status/{payment}',PaymentStatus::class)->name('payment.status');
         
@@ -105,6 +111,25 @@ require __DIR__.'/auth.php';
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('test',function(){
-    $now = now();
-    dd($now->format('H:i'));
+    $cartItems = Cart::where('ip',request()->ip())->get()->load(['meal', 'food', 'size']);
+    $items = $cartItems->groupBy('meal_id');
+    
+    $subtotal = 0;
+        
+    if ($items && $items->count() > 0) {
+        foreach ($items as $mealGroup) {
+            foreach ($mealGroup as $item) {
+                $subtotal += $item->price * $item->quantity;
+            }
+        }
+    }
+    
+    // Calculate VAT
+    $vatAmount = $subtotal * (config('services.settings.vat_rate', 0) / 100);
+
+    // Calculate total
+    $total = $subtotal + $vatAmount;
+    
+    dd($total);
+
 });

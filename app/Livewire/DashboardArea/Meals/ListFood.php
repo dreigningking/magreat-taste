@@ -8,6 +8,8 @@ use Livewire\WithFileUploads;
 use App\Models\Food;
 use App\Models\Size;
 use App\Models\Meal;
+use App\Imports\FoodsImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 
 class ListFood extends Component
@@ -17,12 +19,17 @@ class ListFood extends Component
     // Create food properties
     public $name = '';
     public $description = '';
+    public $image = null;
     public $selectedSizes = [];
+
+    // Upload foods properties
+    public $uploadFile = null;
 
     // Edit food properties
     public $edit_id = '';
     public $edit_name = '';
     public $edit_description = '';
+    public $edit_image = null;
     public $editSelectedSizes = [];
 
     public function mount()
@@ -60,14 +67,21 @@ class ListFood extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'selectedSizes.*.size_id' => 'required|exists:sizes,id',
             'selectedSizes.*.price' => 'required|numeric|min:0',
         ]);
+
+        $imagePath = null;
+        if ($this->image) {
+            $imagePath = $this->image->store('foods', 'public');
+        }
 
         // Create the food
         $food = Food::create([
             'name' => $this->name,
             'description' => $this->description,
+            'image' => $imagePath,
         ]);
 
         // Attach sizes with prices
@@ -78,7 +92,7 @@ class ListFood extends Component
         }
 
         // Reset form
-        $this->reset(['name', 'description']);
+        $this->reset(['name', 'description', 'image']);
         $this->selectedSizes = [['size_id' => '', 'price' => '']];
         $this->dispatch('closeModal', ['modalId' => 'createFoodModal']);
         session()->flash('message', 'Food created successfully!');
@@ -87,12 +101,13 @@ class ListFood extends Component
     public function editFood($id)
     {
         $food = Food::with('sizes')->find($id);
-        
+
         if ($food) {
             $this->edit_id = $food->id;
             $this->edit_name = $food->name;
             $this->edit_description = $food->description;
-            
+            $this->edit_image = null; // Reset for new upload
+
             // Populate edit sizes with existing data
             $this->editSelectedSizes = [];
             foreach ($food->sizes as $size) {
@@ -110,14 +125,22 @@ class ListFood extends Component
             'edit_id' => 'required|exists:food,id',
             'edit_name' => 'required|string|max:255',
             'edit_description' => 'required|string|max:500',
+            'edit_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'editSelectedSizes.*.size_id' => 'required|exists:sizes,id',
             'editSelectedSizes.*.price' => 'required|numeric|min:0',
         ]);
 
         $food = Food::find($this->edit_id);
+
+        $imagePath = $food->image; // Keep existing image by default
+        if ($this->edit_image) {
+            $imagePath = $this->edit_image->store('foods', 'public');
+        }
+
         $food->update([
             'name' => $this->edit_name,
             'description' => $this->edit_description,
+            'image' => $imagePath,
         ]);
 
         // Sync sizes with prices
@@ -129,9 +152,27 @@ class ListFood extends Component
         $food->sizes()->sync($sizeData);
 
         // Reset edit form
-        $this->reset(['edit_id', 'edit_name', 'edit_description', 'editSelectedSizes']);
+        $this->reset(['edit_id', 'edit_name', 'edit_description', 'edit_image', 'editSelectedSizes']);
         $this->dispatch('closeModal', ['modalId' => 'editFoodModal']);
         session()->flash('message', 'Food updated successfully!');
+    }
+
+    public function upload()
+    {
+        $this->validate([
+            'uploadFile' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max
+        ]);
+
+        try {
+            Excel::import(new FoodsImport, $this->uploadFile->getRealPath());
+
+            // Reset form
+            $this->reset(['uploadFile']);
+            $this->dispatch('closeModal', ['modalId' => 'uploadFoodsModal']);
+            session()->flash('message', 'Foods uploaded successfully!');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error uploading foods: ' . $e->getMessage());
+        }
     }
 
     public function delete($id)
@@ -152,7 +193,7 @@ class ListFood extends Component
             ->paginate(10);
 
         // Get all available sizes for dropdowns
-        $availableSizes = Size::orderBy('name')->get();
+        $availableSizes = Size::orderBy('id')->get();
 
         // Calculate statistics
         $totalFoods = Food::count();

@@ -22,7 +22,8 @@ class EditMeal extends Component
     public $currentImage;
     public $video = '';
     public $is_active = true;
-    public $selectedFoods = [];
+    public $primaryFood = '';
+    public $additionalFoods = [];
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -32,8 +33,9 @@ class EditMeal extends Component
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'video' => 'nullable|url|max:255',
         'is_active' => 'boolean',
-        'selectedFoods' => 'required|array|min:1',
-        'selectedFoods.*' => 'exists:food,id',
+        'primaryFood' => 'required|exists:food,id',
+        'additionalFoods' => 'nullable|array',
+        'additionalFoods.*' => 'exists:food,id',
     ];
 
     protected $messages = [
@@ -46,9 +48,9 @@ class EditMeal extends Component
         'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
         'image.max' => 'The image may not be greater than 2MB.',
         'video.url' => 'Please enter a valid video URL.',
-        'selectedFoods.required' => 'Please select at least one food.',
-        'selectedFoods.min' => 'Please select at least one food.',
-        'selectedFoods.*.exists' => 'One or more selected foods are invalid.',
+        'primaryFood.required' => 'Please select a primary food.',
+        'primaryFood.exists' => 'Selected primary food is invalid.',
+        'additionalFoods.*.exists' => 'One or more selected additional foods are invalid.',
     ];
 
     public function mount($meal)
@@ -60,7 +62,7 @@ class EditMeal extends Component
     public function loadMeal()
     {
         $meal = Meal::with(['category', 'foods'])->findOrFail($this->meal->id);
-        
+
         $this->name = $meal->name;
         $this->excerpt = $meal->excerpt;
         $this->description = $meal->description;
@@ -68,7 +70,18 @@ class EditMeal extends Component
         $this->currentImage = $meal->image;
         $this->video = $meal->video;
         $this->is_active = $meal->is_active;
-        $this->selectedFoods = $meal->foods->pluck('id')->toArray();
+
+        // Load primary food (required = true) and additional foods (required = false)
+        $this->primaryFood = '';
+        $this->additionalFoods = [];
+
+        foreach ($meal->foods as $food) {
+            if ($food->pivot->required) {
+                $this->primaryFood = $food->id;
+            } else {
+                $this->additionalFoods[] = $food->id;
+            }
+        }
     }
 
     public function update()
@@ -99,8 +112,25 @@ class EditMeal extends Component
                 'is_active' => $this->is_active,
             ]);
 
-            // Sync selected foods to the meal
-            $meal->foods()->sync($this->selectedFoods);
+            // Sync foods with pivot data
+            $foodData = [];
+
+            // Add primary food with required=true
+            if ($this->primaryFood) {
+                $foodData[$this->primaryFood] = ['required' => true];
+            }
+
+            // Add additional foods with required=false
+            if (!empty($this->additionalFoods)) {
+                foreach ($this->additionalFoods as $foodId) {
+                    if ($foodId != $this->primaryFood) { // Avoid duplicate if primary is also in additional
+                        $foodData[$foodId] = ['required' => false];
+                    }
+                }
+            }
+
+            // Sync all foods to the meal
+            $meal->foods()->sync($foodData);
 
             session()->flash('message', 'Meal updated successfully!');
             

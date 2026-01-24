@@ -16,8 +16,8 @@ class OrderItem extends Model
         return $this->belongsTo(Food::class);
     }
 
-    public function foodSize(){
-        return $this->belongsTo(FoodSize::class);
+    public function size(){
+        return $this->belongsTo(Size::class);
     }
     
 

@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->nullable();
+            $table->string('type')->nullable(); //bowl, bucket, cup, bottle, box, etc
+            $table->string('unit')->default('L');
+            $table->string('value')->default(0);
             $table->string('image')->nullable();
-            $table->timestamps();
+            $table->timestamps(); 
         });
     }
 

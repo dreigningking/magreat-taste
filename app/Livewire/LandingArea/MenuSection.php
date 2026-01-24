@@ -18,6 +18,7 @@ class MenuSection extends Component
     public $selectedMeal = null;
     public $selectedMealFoods = [];
     public $selectedMealSizes = [];
+    public $selectedFoods = []; // Track which foods are included
     public $modalTitle = '';
     public $modalMealName = '';
     public $modalMealDescription = '';
@@ -28,7 +29,6 @@ class MenuSection extends Component
     public $modalFoodItems = [];
     public $modalTotal = 0;
     public $selectedSizes = [];
-    public $selectedQuantities = [];
     
     public function mount()
     {
@@ -54,24 +54,30 @@ class MenuSection extends Component
     public function selectMeal($mealId)
     {
         $this->selectedMeal = Meal::with(['foods.sizes', 'category'])->find($mealId);
-        
+
         if ($this->selectedMeal) {
             $this->selectedMealFoods = $this->selectedMeal->foods;
             $this->selectedMealSizes = [];
             $this->selectedSizes = [];
-            $this->selectedQuantities = [];
-            
-            // Initialize sizes for each food - select the lowest price size with quantity 1
+            $this->selectedFoods = [];
+
+            // Load existing cart selections first
+            $this->loadExistingCartSelections();
+
+            // Then pre-select required foods (this will override cart if needed)
             foreach ($this->selectedMealFoods as $food) {
-                if ($food->sizes->count() > 0) {
-                    // Find the size with the lowest price from pivot
-                    $lowestPriceSize = $food->sizes->sortBy('pivot.price')->first();
-                    $this->selectedMealSizes[$food->id] = $lowestPriceSize->id;
-                    $this->selectedSizes[$food->id] = [$lowestPriceSize->id => 1];
-                    $this->selectedQuantities[$food->id] = 1;
+                if ($food->pivot && $food->pivot->required) {
+                    $this->selectedFoods[$food->id] = true;
+                    // Initialize with lowest price size for required foods
+                    if (!isset($this->selectedSizes[$food->id]) || empty($this->selectedSizes[$food->id])) {
+                        if ($food->sizes->count() > 0) {
+                            $lowestPriceSize = $food->sizes->sortBy('pivot.price')->first();
+                            $this->selectedSizes[$food->id] = [$lowestPriceSize->id => 1];
+                        }
+                    }
                 }
             }
-            
+
             $this->modalTitle = $this->selectedMeal->name;
             $this->modalMealName = $this->selectedMeal->name;
             $this->modalMealDescription = $this->selectedMeal->description;
@@ -79,18 +85,43 @@ class MenuSection extends Component
             $this->modalMealCategory = $this->selectedMeal->category ? $this->selectedMeal->category->name : 'Uncategorized';
             $this->modalMealImage = $this->selectedMeal->image_url;
             $this->modalVideoUrl = $this->selectedMeal->video_url;
-            
+
             // Update modal food items with the new structure
             $this->updateModalFoodItems();
-            
+
             // Calculate initial total
             $this->calculateModalTotal();
-            
-            // Load existing cart selections if any
-            $this->loadExistingCartSelections();
         }
     }
     
+    public function updatedSelectedFoods($value, $key)
+    {
+        $foodId = $key;
+        $food = $this->selectedMealFoods->where('id', $foodId)->first();
+
+        if (!$food) return;
+
+        // Prevent unselecting required foods
+        if ($food && $food->pivot && $food->pivot->required && !$value) {
+            $this->selectedFoods[$foodId] = true; // Force it back to selected
+            return;
+        }
+
+        if (isset($this->selectedFoods[$foodId]) && $this->selectedFoods[$foodId]) {
+            // Food was just selected - initialize with lowest price size
+            if ($food && $food->sizes->count() > 0) {
+                $lowestPriceSize = $food->sizes->sortBy('pivot.price')->first();
+                $this->selectedSizes[$foodId] = [$lowestPriceSize->id => 1];
+            }
+        } else {
+            // Food was deselected - remove all its sizes
+            unset($this->selectedSizes[$foodId]);
+        }
+
+        $this->calculateModalTotal();
+        $this->updateModalFoodItems();
+    }
+
     public function updateFoodSize($foodId, $sizeId)
     {
         $this->selectedMealSizes[$foodId] = $sizeId;
@@ -100,6 +131,11 @@ class MenuSection extends Component
     
     public function updateFoodSizeQuantity($foodId, $sizeId, $quantity)
     {
+        // Only allow updates if food is selected
+        if (!isset($this->selectedFoods[$foodId])) {
+            return;
+        }
+
         // Debug: Log the method call
         Log::info('updateFoodSizeQuantity called', [
             'foodId' => $foodId,
@@ -107,23 +143,23 @@ class MenuSection extends Component
             'quantity' => $quantity,
             'selectedSizes' => $this->selectedSizes
         ]);
-        
+
         $quantity = max(0, (int) $quantity);
-        
+
         if ($quantity > 0) {
             $this->selectedSizes[$foodId][$sizeId] = $quantity;
         } else {
             // Check if this is the last size being removed for this food
             $currentSizes = $this->selectedSizes[$foodId] ?? [];
             $hasOtherSizes = false;
-            
+
             foreach ($currentSizes as $sid => $qty) {
                 if ($sid != $sizeId && $qty > 0) {
                     $hasOtherSizes = true;
                     break;
                 }
             }
-            
+
             if ($hasOtherSizes) {
                 unset($this->selectedSizes[$foodId][$sizeId]);
             } else {
@@ -132,12 +168,12 @@ class MenuSection extends Component
                 return;
             }
         }
-        
+
         // Debug: Log the updated selectedSizes
         Log::info('updateFoodSizeQuantity completed', [
             'updated_selectedSizes' => $this->selectedSizes
         ]);
-        
+
         $this->calculateModalTotal();
         $this->updateModalFoodItems();
     }
@@ -164,12 +200,6 @@ class MenuSection extends Component
         
         $this->calculateModalTotal();
         $this->updateModalFoodItems();
-    }
-    
-    public function updateFoodQuantity($foodId, $quantity)
-    {
-        $this->selectedQuantities[$foodId] = (int) $quantity;
-        $this->calculateModalTotal();
     }
     
     public function calculateFoodTotal($foodId)
@@ -221,6 +251,7 @@ class MenuSection extends Component
                 'id' => $food->id,
                 'name' => $food->name,
                 'description' => $food->description,
+                'required' => $food->pivot->required ?? false,
                 'total_price' => $this->calculateFoodTotal($food->id),
                 'lowest_price' => $lowestPrice,
                 'best_value_size_id' => $bestValueSize['id'] ?? null,
@@ -290,27 +321,33 @@ class MenuSection extends Component
     public function addToCart()
     {
         Log::info('addToCart method called');
-        
-        // Validate that all foods have at least one size selected
-        if (empty($this->selectedSizes)) {
-            Log::info('addToCart: No sizes selected');
-            session()->flash('error', 'Please select at least one size for each food item.');
+
+        // Validate that at least one food is selected
+        if (empty($this->selectedFoods)) {
+            Log::info('addToCart: No foods selected');
+            session()->flash('error', 'Please select at least one food item.');
             return;
         }
 
-        // Check if each food has at least one size with quantity > 0
-        foreach ($this->selectedSizes as $foodId => $sizes) {
+        // Validate that each selected food has at least one size with quantity > 0
+        foreach ($this->selectedFoods as $foodId => $selected) {
+            if (!isset($this->selectedSizes[$foodId]) || empty($this->selectedSizes[$foodId])) {
+                Log::info('addToCart: Selected food has no sizes', ['foodId' => $foodId]);
+                session()->flash('error', 'Please select at least one size for each selected food item.');
+                return;
+            }
+
             $hasValidSize = false;
-            foreach ($sizes as $sizeId => $quantity) {
+            foreach ($this->selectedSizes[$foodId] as $sizeId => $quantity) {
                 if ($quantity > 0) {
                     $hasValidSize = true;
                     break;
                 }
             }
-            
+
             if (!$hasValidSize) {
-                Log::info('addToCart: Food has no valid sizes', ['foodId' => $foodId]);
-                session()->flash('error', 'Please select at least one size for each food item.');
+                Log::info('addToCart: Selected food has no valid sizes', ['foodId' => $foodId]);
+                session()->flash('error', 'Please select at least one size for each selected food item.');
                 return;
             }
         }
@@ -319,7 +356,7 @@ class MenuSection extends Component
 
         // Get the selected meal
         $meal = $this->selectedMeal;
-        
+
         if (!$meal) {
             Log::info('addToCart: No meal selected');
             session()->flash('error', 'Meal not found.');
@@ -347,11 +384,11 @@ class MenuSection extends Component
                     // Get food and size details
                     $food = Food::find($foodId);
                     $size = Size::find($sizeId);
-                    
+
                     if ($food && $size) {
                         // Get price from pivot table
                         $price = $food->sizes()->where('size_id', $sizeId)->first()->pivot->price ?? 0;
-                        
+
                         Log::info('addToCart: Adding item to cart', [
                             'mealId' => $meal->id,
                             'foodId' => $foodId,
@@ -359,7 +396,7 @@ class MenuSection extends Component
                             'price' => $price,
                             'quantity' => $quantity
                         ]);
-                        
+
                         // Add to cart using the trait method
                         try {
                             $this->addToCartDb(
@@ -374,29 +411,63 @@ class MenuSection extends Component
                         } catch (\Exception $e) {
                             Log::error('addToCart: Error adding item to cart', ['error' => $e->getMessage()]);
                             session()->flash('error', 'Error adding item to cart: ' . $e->getMessage());
+                            return; // Don't continue if there's an error
                         }
                     }
                 }
             }
         }
 
-        Log::info('addToCart: Cart update completed', ['itemsAdded' => $itemsAdded]);
+        if ($itemsAdded > 0) {
+            Log::info('addToCart: Cart update completed', ['itemsAdded' => $itemsAdded]);
 
-        // Reset selections
-        $this->selectedSizes = [];
-        $this->selectedMeal = null;
-        $this->modalTotal = 0;
-        $this->modalFoodItems = [];
-        
-        Log::info('addToCart: Dispatching closeModal and updateCart');
-        
-        // Close modal and update cart
-        $this->dispatch('closeModal', ['modalId' => 'mealModal']);
-        $this->dispatch('updateCart');
-        
-        Log::info('addToCart: Method completed successfully');
-        
-        session()->flash('success', 'Cart updated successfully!');
+            // Reset selections
+            $this->selectedSizes = [];
+            $this->selectedFoods = [];
+            $this->selectedMeal = null;
+            $this->modalTotal = 0;
+            $this->modalFoodItems = [];
+
+            Log::info('addToCart: Dispatching events');
+
+            // Close modal and update cart as per mealordering.txt
+            $this->dispatch('closeModal', ['modalId' => 'mealModal']);
+            $this->dispatch('cartUpdated');
+
+            Log::info('addToCart: Method completed successfully');
+        } else {
+            Log::info('addToCart: No items were added to cart');
+            session()->flash('error', 'No items were added to cart.');
+        }
+    }
+
+    public function canAddToCart()
+    {
+        // Check if at least one food is selected
+        if (empty($this->selectedFoods)) {
+            return false;
+        }
+
+        // Check if each selected food has at least one size with quantity > 0
+        foreach ($this->selectedFoods as $foodId => $selected) {
+            if (!isset($this->selectedSizes[$foodId]) || empty($this->selectedSizes[$foodId])) {
+                return false;
+            }
+
+            $hasValidSize = false;
+            foreach ($this->selectedSizes[$foodId] as $sizeId => $quantity) {
+                if ($quantity > 0) {
+                    $hasValidSize = true;
+                    break;
+                }
+            }
+
+            if (!$hasValidSize) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public function loadExistingCartSelections()
@@ -405,27 +476,40 @@ class MenuSection extends Component
             return;
         }
 
+        // First, ensure required foods are selected
+        foreach ($this->selectedMealFoods as $food) {
+            if ($food->pivot && $food->pivot->required) {
+                $this->selectedFoods[$food->id] = true;
+                // Initialize with lowest price size if not already set
+                if (!isset($this->selectedSizes[$food->id]) || empty($this->selectedSizes[$food->id])) {
+                    if ($food->sizes->count() > 0) {
+                        $lowestPriceSize = $food->sizes->sortBy('pivot.price')->first();
+                        $this->selectedSizes[$food->id] = [$lowestPriceSize->id => 1];
+                    }
+                }
+            }
+        }
+
         // Get existing cart items for this meal
         $existingCartItems = $this->getCartDb();
         $mealCartItems = collect($existingCartItems)->where('meal_id', $this->selectedMeal->id);
 
         if ($mealCartItems->count() > 0) {
-            // Reset current selections
-            $this->selectedSizes = [];
-            
-            // Populate selections from cart
+            // Populate selections from cart (this will override required food defaults if they exist in cart)
             foreach ($mealCartItems as $cartItem) {
                 $foodId = $cartItem->food_id;
-                $sizeId = $cartItem->food_size_id;
+                $sizeId = $cartItem->size_id;
                 $quantity = $cartItem->quantity;
-                
+
+                $this->selectedFoods[$foodId] = true; // Mark food as selected
+
                 if (!isset($this->selectedSizes[$foodId])) {
                     $this->selectedSizes[$foodId] = [];
                 }
-                
+
                 $this->selectedSizes[$foodId][$sizeId] = $quantity;
             }
-            
+
             // Update modal food items and total
             $this->updateModalFoodItems();
             $this->calculateModalTotal();

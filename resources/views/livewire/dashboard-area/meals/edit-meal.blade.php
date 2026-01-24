@@ -106,39 +106,126 @@
                         <h5 class="mb-0"><i class="fa fa-list me-2"></i>Food Selection</h5>
                     </div>
                     <div class="card-body">
-                        <div wire:ignore class="mb-3">
-                            <label for="selectedFoods" class="form-label">Select Foods <span class="text-danger">*</span></label>
-                            <select class="form-control" id="selectedFoods" wire:model="selectedFoods" multiple>
+                        <!-- Primary Food Selection -->
+                        <div class="mb-4">
+                            <label for="primaryFood" class="form-label">Primary Food <span class="text-danger">*</span></label>
+                            <select class="form-control" id="primaryFood" wire:model="primaryFood">
+                                <option value="">Select Primary Food</option>
                                 @foreach($foods as $food)
                                     <option value="{{ $food->id }}">
-                                        {{ $food->name }} 
+                                        {{ $food->name }}
                                         @if($food->sizes->count() > 0)
-                                            (₦{{ number_format($food->sizes->min('price'), 2) }} - ₦{{ number_format($food->sizes->max('price'), 2) }})
+                                            @php
+                                                $prices = $food->sizes->pluck('pivot.price')->filter()->sort();
+                                                $minPrice = $prices->first();
+                                                $maxPrice = $prices->last();
+                                            @endphp
+                                            @if($minPrice && $maxPrice)
+                                                (₦{{ number_format($minPrice, 2) }} - ₦{{ number_format($maxPrice, 2) }})
+                                            @endif
                                         @endif
                                     </option>
                                 @endforeach
                             </select>
-                            @error('selectedFoods') <div class="text-danger text-xs mt-1">{{ $message }}</div> @enderror
-                            <small class="text-muted">Select one or more foods to include in this meal</small>
+                            @error('primaryFood') <div class="text-danger text-xs mt-1">{{ $message }}</div> @enderror
+                            <small class="text-muted">Select the main/required food for this meal</small>
+                        </div>
+
+                        <!-- Additional Foods Selection -->
+                        <div class="mb-3">
+                            <label class="form-label">Additional Foods</label>
+                            <small class="text-muted d-block mb-2">Select additional foods (optional)</small>
+                            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                                @foreach($foods as $food)
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox"
+                                               id="additionalFood{{ $food->id }}"
+                                               wire:model="additionalFoods"
+                                               value="{{ $food->id }}">
+                                        <label class="form-check-label" for="additionalFood{{ $food->id }}">
+                                            <strong>{{ $food->name }}</strong>
+                                            @if($food->sizes->count() > 0)
+                                                @php
+                                                    $prices = $food->sizes->pluck('pivot.price')->filter()->sort();
+                                                    $minPrice = $prices->first();
+                                                    $maxPrice = $prices->last();
+                                                @endphp
+                                                @if($minPrice && $maxPrice)
+                                                    <small class="text-muted">(₦{{ number_format($minPrice, 2) }} - ₦{{ number_format($maxPrice, 2) }})</small>
+                                                @endif
+                                            @endif
+                                            <br>
+                                            <small class="text-muted">{{ Str::limit($food->description, 60) }}</small>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error('additionalFoods') <div class="text-danger text-xs mt-1">{{ $message }}</div> @enderror
                         </div>
 
                         <!-- Selected Foods Preview -->
-                        @if(!empty($selectedFoods))
-                            <div class="mt-3">
+                        @if($primaryFood || !empty($additionalFoods))
+                            <div class="mt-4">
                                 <h6 class="text-muted">Selected Foods:</h6>
                                 <div class="list-group list-group-flush">
-                                    @foreach($foods->whereIn('id', $selectedFoods) as $food)
-                                        <div class="list-group-item d-flex justify-content-between align-items-center py-2">
-                                            <div>
-                                                <strong>{{ $food->name }}</strong>
-                                                <br>
-                                                <small class="text-muted">{{ Str::limit($food->description, 50) }}</small>
+                                    @if($primaryFood)
+                                        @php $primaryFoodObj = $foods->find($primaryFood); @endphp
+                                        @if($primaryFoodObj)
+                                            <div class="list-group-item d-flex justify-content-between align-items-center py-2 bg-light">
+                                                <div>
+                                                    <strong>{{ $primaryFoodObj->name }}</strong>
+                                                    <br>
+                                                    <small class="text-muted">{{ Str::limit($primaryFoodObj->description, 50) }}</small>
+                                                    @if($primaryFoodObj->sizes->count() > 0)
+                                                        <br>
+                                                        <small class="text-success">
+                                                            @php
+                                                                $prices = $primaryFoodObj->sizes->pluck('pivot.price')->filter()->sort();
+                                                                $minPrice = $prices->first();
+                                                                $maxPrice = $prices->last();
+                                                            @endphp
+                                                            @if($minPrice && $maxPrice)
+                                                                ₦{{ number_format($minPrice, 2) }} - ₦{{ number_format($maxPrice, 2) }}
+                                                            @else
+                                                                Price not set
+                                                            @endif
+                                                        </small>
+                                                    @endif
+                                                </div>
+                                                <span class="badge bg-danger">Primary</span>
                                             </div>
-                                            <span class="badge bg-primary">
-                                                {{ $food->sizes->count() }} sizes
-                                            </span>
-                                        </div>
-                                    @endforeach
+                                        @endif
+                                    @endif
+
+                                    @if(!empty($additionalFoods))
+                                        @foreach($foods->whereIn('id', $additionalFoods) as $food)
+                                            @if($food->id != $primaryFood)
+                                                <div class="list-group-item d-flex justify-content-between align-items-center py-2">
+                                                    <div>
+                                                        <strong>{{ $food->name }}</strong>
+                                                        <br>
+                                                        <small class="text-muted">{{ Str::limit($food->description, 50) }}</small>
+                                                        @if($food->sizes->count() > 0)
+                                                            <br>
+                                                            <small class="text-success">
+                                                                @php
+                                                                    $prices = $food->sizes->pluck('pivot.price')->filter()->sort();
+                                                                    $minPrice = $prices->first();
+                                                                    $maxPrice = $prices->last();
+                                                                @endphp
+                                                                @if($minPrice && $maxPrice)
+                                                                    ₦{{ number_format($minPrice, 2) }} - ₦{{ number_format($maxPrice, 2) }}
+                                                                @else
+                                                                    Price not set
+                                                                @endif
+                                                            </small>
+                                                        @endif
+                                                    </div>
+                                                    <span class="badge bg-secondary">Additional</span>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
                         @endif
@@ -211,56 +298,16 @@
 </div>
 
 @push('styles')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
-    .select2-container--default .select2-selection--multiple {
-        border: 1px solid #ced4da;
+    .food-selection-container {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
         border-radius: 0.375rem;
-        min-height: 38px;
+        padding: 1rem;
     }
-    .select2-container--default .select2-selection--multiple .select2-selection__choice {
-        background-color: #007bff;
-        border: 1px solid #0056b3;
-        color: white;
-        border-radius: 0.25rem;
-        padding: 2px 8px;
-        margin: 2px;
-    }
-    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-        color: white;
-        margin-right: 5px;
-    }
-    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-        color: #fff;
-        background-color: #0056b3;
+    .form-check-label {
+        cursor: pointer;
     }
 </style>
-@endpush
-
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize Select2
-        $('#selectedFoods').select2({
-            placeholder: 'Select foods for this meal',
-            allowClear: true,
-            width: '100%'
-        });
-
-        // Set initial values for Select2
-        const selectedValues = @json($selectedFoods);
-        $('#selectedFoods').val(selectedValues).trigger('change');
-
-        // Handle Select2 change events
-        $('#selectedFoods').on('change', function() {
-            @this.set('selectedFoods', $(this).val());
-        });
-
-        // Update Select2 when Livewire updates the property
-        Livewire.on('selectedFoodsUpdated', function(value) {
-            $('#selectedFoods').val(value).trigger('change');
-        });
-    });
-</script>
 @endpush

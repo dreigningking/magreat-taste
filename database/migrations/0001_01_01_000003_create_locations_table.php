@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -22,6 +23,14 @@ return new class extends Migration
             $table->timestamps();
             
         });
+
+        $locations = [
+            ['name' => 'Ebute Ikorodu Branch', 'country_id' => 161, 'state_id' => 306,'city_id'=> 76851,'address'=> '21, Irewunmi Badru Street','status'=> 1],
+        ];
+
+            foreach ($locations as $location) {
+                DB::table('locations')->insert($location);
+            }
     }
 
     /**

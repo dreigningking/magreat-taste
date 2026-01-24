@@ -29,6 +29,10 @@ class Checkout extends Component
     public $total = 0;
     public $vatRate = 0;
     
+    // Modal properties (for meal display)
+    public $modalMealImage = '';
+    public $modalVideoUrl = '';
+    
     // Customer information
     public $customerName = '';
     public $customerEmail = '';
@@ -59,6 +63,8 @@ class Checkout extends Component
     public $endHour;
     public $cookingMinutes;
 
+    protected $listeners = ['cartUpdated' => 'getCartItems'];
+
     public function mount()
     {
         $this->vatRate = config('services.settings.vat_rate', 0);
@@ -80,10 +86,11 @@ class Checkout extends Component
         $this->cities = collect(); // Will be populated when state is selected
     }
 
-    #[On('updateCart')]
     public function getCartItems()
     {
-        $cartItems = $this->getCartDb();
+        $cartItems = $this->getCartDb()->load(['meal', 'food', 'size'])->map(function ($item) {
+            return $item->toArray();
+        });
         $this->cartItems = collect($cartItems)->groupBy('meal_id');
         $this->calculateCartTotals();
     }
@@ -204,7 +211,7 @@ class Checkout extends Component
             if ($this->cartItems && $this->cartItems->count() > 0) {
                 foreach ($this->cartItems as $mealGroup) {
                     foreach ($mealGroup as $item) {
-                        $totalQuantity += $item->quantity;
+                        $totalQuantity += $item['quantity'];
                     }
                 }
             }
@@ -386,7 +393,7 @@ class Checkout extends Component
         if ($this->cartItems && $this->cartItems->count() > 0) {
             foreach ($this->cartItems as $mealGroup) {
                 foreach ($mealGroup as $item) {
-                    $this->subtotal += $item->price * $item->quantity;
+                    $this->subtotal += $item['price'] * $item['quantity'];
                 }
             }
         }
@@ -473,12 +480,12 @@ class Checkout extends Component
                 foreach ($mealGroup as $cartItem) {
                     OrderItem::create([
                         'order_id' => $order->id,
-                        'meal_id' => $cartItem->meal_id,
-                        'food_id' => $cartItem->food_id,
-                        'food_size_id' => $cartItem->food_size_id,
-                        'quantity' => $cartItem->quantity,
-                        'price' => $cartItem->price,
-                        'amount' => $cartItem->price * $cartItem->quantity,
+                        'meal_id' => $cartItem['meal_id'],
+                        'food_id' => $cartItem['food_id'],
+                        'size_id' => $cartItem['size_id'],
+                        'quantity' => $cartItem['quantity'],
+                        'price' => $cartItem['price'],
+                        'amount' => $cartItem['price'] * $cartItem['quantity'],
                     ]);
                 }
             }

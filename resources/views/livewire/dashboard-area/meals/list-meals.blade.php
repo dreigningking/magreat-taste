@@ -13,6 +13,12 @@
                 <a href="{{ route('meals.create') }}" class="btn btn-primary">
                     <i class="fa fa-plus me-2"></i>Add New Meal
                 </a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadMealsModal">
+                    <i class="fa fa-upload me-2"></i>Upload Meals
+                </button>
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#categoriesModal">
+                    <i class="fa fa-list me-2"></i>View Categories
+                </button>
             </div>
         </div>
     </div>
@@ -63,7 +69,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label class="form-label">Search Meals</label>
-                    <input type="text" wire:model.live="search" class="form-control" placeholder="Search by name, excerpt...">
+                    <input type="text" wire:model.live="search" class="form-control p-1" placeholder="Search by name, excerpt...">
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Filter by Category</label>
@@ -91,6 +97,127 @@
                         <option value="1">Active</option>
                         <option value="0">Inactive</option>
                     </select>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Upload Meals Modal -->
+        <div wire:ignore.self class="modal fade" id="uploadMealsModal" tabindex="-1" aria-labelledby="uploadMealsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="uploadMealsModalLabel">
+                            <i class="fa fa-upload me-2"></i>Upload Meals
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form wire:submit.prevent="upload">
+                        <div class="modal-body">
+                            <div class="mb-4">
+                                <h6>Sample CSV/Excel Format:</h6>
+                                <small class="text-muted">Your file should have headers in the first row. Images will be downloaded from the URLs provided.</small>
+                                <div class="table-responsive mt-2">
+                                    <table class="table table-bordered table-sm">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>name</th>
+                                                <th>category_id</th>
+                                                <th>excerpt</th>
+                                                <th>description</th>
+                                                <th>image</th>
+                                                <th>video</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Jollof Rice Special</td>
+                                                <td>1</td>
+                                                <td>Traditional Nigerian rice dish</td>
+                                                <td>Our signature jollof rice made with premium ingredients</td>
+                                                <td>https://example.com/jollof.jpg</td>
+                                                <td>https://youtube.com/watch?v=123</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Egusi Soup</td>
+                                                <td>2</td>
+                                                <td>Melon seed soup</td>
+                                                <td>Authentic Egusi soup with vegetables and meat</td>
+                                                <td>https://example.com/egusi.jpg</td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+    
+                            <div class="mb-3">
+                                <label for="uploadFile" class="form-label">Select File *</label>
+                                <input type="file" class="form-control" id="uploadFile" wire:model="uploadFile" accept=".xlsx,.xls,.csv" required>
+                                @error('uploadFile') <small class="text-danger">{{ $message }}</small> @enderror
+                                <small class="text-muted">Supported formats: Excel (.xlsx, .xls) or CSV. Maximum size: 10MB</small>
+                            </div>
+    
+                            @if($uploadFile)
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle me-2"></i>
+                                File selected: <strong>{{ $uploadFile->getClientOriginalName() }}</strong>
+                            </div>
+                            @endif
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                                <span wire:loading.remove><i class="fa fa-upload me-2"></i>Upload Meals</span>
+                                <span wire:loading><i class="fa fa-spinner fa-spin me-2"></i>Uploading...</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Categories Modal -->
+        <div wire:ignore.self class="modal fade" id="categoriesModal" tabindex="-1" aria-labelledby="categoriesModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-info text-white">
+                        <h5 class="modal-title" id="categoriesModalLabel">
+                            <i class="fa fa-list me-2"></i>Meal Categories
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-muted">Use these category IDs when uploading meals via Excel/CSV:</p>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Category Name</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($categories as $category)
+                                    <tr>
+                                        <td><code>{{ $category->id }}</code></td>
+                                        <td>{{ $category->name }}</td>
+                                        <td>
+                                            @if($category->is_active)
+                                                <span class="badge bg-success">Active</span>
+                                            @else
+                                                <span class="badge bg-secondary">Inactive</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>

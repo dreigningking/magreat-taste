@@ -4,19 +4,25 @@ namespace App\Livewire\DashboardArea\Meals;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use App\Models\Meal;
 use App\Models\Category;
 use App\Models\Food;
+use App\Imports\MealsImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ListMeals extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     // Search and filter properties
     public $search = '';
     public $categoryFilter = '';
     public $statusFilter = '';
     public $sortBy = 'created_at';
+
+    // Upload meals properties
+    public $uploadFile = null;
 
     public function updatingSearch()
     {
@@ -38,6 +44,24 @@ class ListMeals extends Component
         $this->resetPage();
     }
 
+    public function upload()
+    {
+        $this->validate([
+            'uploadFile' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max
+        ]);
+
+        try {
+            Excel::import(new MealsImport, $this->uploadFile->getRealPath());
+
+            // Reset form
+            $this->reset(['uploadFile']);
+            $this->dispatch('closeModal', ['modalId' => 'uploadMealsModal']);
+            session()->flash('message', 'Meals uploaded successfully!');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error uploading meals: ' . $e->getMessage());
+        }
+    }
+
     public function delete($id)
     {
         $meal = Meal::find($id);
@@ -45,7 +69,7 @@ class ListMeals extends Component
             // Detach foods first
             $meal->foods()->detach();
             $meal->delete();
-            
+
             session()->flash('message', 'Meal deleted successfully!');
         }
     }

@@ -13,7 +13,12 @@
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFoodModal">
                     <i class="fa fa-plus me-2"></i>Add New Food
                 </button>
-
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadFoodsModal">
+                    <i class="fa fa-upload me-2"></i>Upload Foods
+                </button>
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#sizesModal">
+                    <i class="fa fa-list me-2"></i>View Sizes
+                </button>
             </div>
         </div>
     </div>
@@ -184,6 +189,14 @@
                                     @error('description') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Food Image</label>
+                                    <input type="file" class="form-control" id="image" wire:model="image" accept="image/*">
+                                    @error('image') <small class="text-danger">{{ $message }}</small> @enderror
+                                    <small class="text-muted">Upload an image to represent this food (optional)</small>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Sizes Section -->
@@ -266,6 +279,14 @@
                                     @error('edit_description') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="edit_image" class="form-label">Food Image</label>
+                                    <input type="file" class="form-control" id="edit_image" wire:model="edit_image" accept="image/*">
+                                    @error('edit_image') <small class="text-danger">{{ $message }}</small> @enderror
+                                    <small class="text-muted">Upload a new image to replace the existing one (optional)</small>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Edit Sizes Section -->
@@ -315,6 +336,141 @@
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Foods Modal -->
+    <div wire:ignore.self class="modal fade" id="uploadFoodsModal" tabindex="-1" aria-labelledby="uploadFoodsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="uploadFoodsModalLabel">
+                        <i class="fa fa-upload me-2"></i>Upload Foods
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form wire:submit.prevent="upload">
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <h6>Sample CSV/Excel Format:</h6>
+                            <small class="text-muted">Your file should have headers in the first row. Use comma-separated values for sizes and prices (must match in count).</small>
+                            <div class="table-responsive mt-2">
+                                <table class="table table-bordered table-sm">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>name</th>
+                                            <th>description</th>
+                                            <th>image</th>
+                                            <th>sizes</th>
+                                            <th>prices</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Jollof Rice</td>
+                                            <td>Traditional Nigerian rice dish</td>
+                                            <td>https://example.com/jollof-rice.jpg</td>
+                                            <td>1,2</td>
+                                            <td>2500.00,3000.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Egusi Soup</td>
+                                            <td>Melon seed soup with vegetables</td>
+                                            <td>https://example.com/egusi-soup.jpg</td>
+                                            <td>1,3</td>
+                                            <td>3500.00,4000.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Pounded Yam</td>
+                                            <td>Traditional Nigerian swallow food</td>
+                                            <td>https://example.com/pounded-yam.jpg</td>
+                                            <td>2</td>
+                                            <td>2000.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="alert alert-info mt-2">
+                                <small>
+                                    <strong>Note:</strong> Sizes and prices must be comma-separated and have matching counts.
+                                    Use the "View Sizes" button to see available size IDs.
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="uploadFile" class="form-label">Select File *</label>
+                            <input type="file" class="form-control" id="uploadFile" wire:model="uploadFile" accept=".xlsx,.xls,.csv" required>
+                            @error('uploadFile') <small class="text-danger">{{ $message }}</small> @enderror
+                            <small class="text-muted">Supported formats: Excel (.xlsx, .xls) or CSV. Maximum size: 10MB</small>
+                        </div>
+
+                        @if($uploadFile)
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle me-2"></i>
+                            File selected: <strong>{{ $uploadFile->getClientOriginalName() }}</strong>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                            <span wire:loading.remove><i class="fa fa-upload me-2"></i>Upload Foods</span>
+                            <span wire:loading><i class="fa fa-spinner fa-spin me-2"></i>Uploading...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sizes Modal -->
+    <div wire:ignore.self class="modal fade" id="sizesModal" tabindex="-1" aria-labelledby="sizesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="sizesModalLabel">
+                        <i class="fa fa-list me-2"></i>Available Sizes
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                    <p class="text-muted">Use these size IDs when uploading foods via Excel/CSV:</p>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Size Name</th>
+                                    <th>Image</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($availableSizes as $size)
+                                <tr>
+                                    <td><code>{{ $size->id }}</code></td>
+                                    <td>{{ $size->name }}</td>
+                                    <td>
+                                        @if($size->image)
+                                            <img src="{{ $size->image_url }}" alt="{{ $size->name }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
+                                        @else
+                                            <span class="text-muted">No image</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Available</span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>

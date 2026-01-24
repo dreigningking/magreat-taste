@@ -23,7 +23,8 @@ class CreateMeal extends Component
     public $image;
     public $video = '';
     public $is_active = true;
-    public $selectedFoods = [];
+    public $primaryFood = '';
+    public $additionalFoods = [];
 
     protected $rules = [
         'name' => 'required|string|max:255',
@@ -33,8 +34,9 @@ class CreateMeal extends Component
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'video' => 'nullable|url|max:255',
         'is_active' => 'boolean',
-        'selectedFoods' => 'required|array|min:1',
-        'selectedFoods.*' => 'exists:food,id',
+        'primaryFood' => 'required|exists:food,id',
+        'additionalFoods' => 'nullable|array',
+        'additionalFoods.*' => 'exists:food,id',
     ];
 
     protected $messages = [
@@ -47,9 +49,9 @@ class CreateMeal extends Component
         'image.mimes' => 'The image must be a file of type: jpeg, png, jpg, gif.',
         'image.max' => 'The image may not be greater than 2MB.',
         'video.url' => 'Please enter a valid video URL.',
-        'selectedFoods.required' => 'Please select at least one food.',
-        'selectedFoods.min' => 'Please select at least one food.',
-        'selectedFoods.*.exists' => 'One or more selected foods are invalid.',
+        'primaryFood.required' => 'Please select a primary food.',
+        'primaryFood.exists' => 'Selected primary food is invalid.',
+        'additionalFoods.*.exists' => 'One or more selected additional foods are invalid.',
     ];
 
     public function mount()
@@ -80,15 +82,30 @@ class CreateMeal extends Component
                 'is_active' => $this->is_active,
             ]);
 
-            // Attach selected foods to the meal
-            if (!empty($this->selectedFoods)) {
-                $meal->foods()->attach($this->selectedFoods);
+            // Attach primary food with required=true
+            $foodData = [];
+            if ($this->primaryFood) {
+                $foodData[$this->primaryFood] = ['required' => true];
+            }
+
+            // Attach additional foods with required=false
+            if (!empty($this->additionalFoods)) {
+                foreach ($this->additionalFoods as $foodId) {
+                    if ($foodId != $this->primaryFood) { // Avoid duplicate if primary is also in additional
+                        $foodData[$foodId] = ['required' => false];
+                    }
+                }
+            }
+
+            // Attach all foods to the meal
+            if (!empty($foodData)) {
+                $meal->foods()->attach($foodData);
             }
 
             // Reset form
             $this->reset([
                 'name', 'excerpt', 'description', 'category_id',
-                'image', 'video', 'is_active', 'selectedFoods'
+                'image', 'video', 'is_active', 'primaryFood', 'additionalFoods'
             ]);
 
             session()->flash('message', 'Meal created successfully!');

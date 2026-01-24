@@ -22,7 +22,7 @@
                         data-meal-id="{{ $meal->id }}">
                         <div class="position-relative">
                             <img src="{{ $meal->image_url }}"
-                                alt="{{ $meal->name }}" class="menu-card-img">
+                                alt="{{ $meal->name }}" class="menu-card-img" onerror="this.style.display='none'">
                             <div class="video-overlay">
                                 @if($meal->video_url)
                                 <div class="play-btn">
@@ -68,7 +68,7 @@
                         <div class="col-md-6">
                             @if($modalVideoUrl)
                             <div id="modalVideoThumbnail" class="video-thumbnail position-relative mt-3" data-bs-toggle="modal" data-bs-target="#videoModal">
-                                <img src="{{ $modalMealImage }}" alt="Video Thumbnail" class="img-fluid rounded w-100 h-100 object-fit-cover">
+                                <img src="{{ $modalMealImage }}" alt="Video Thumbnail" class="img-fluid rounded w-100 h-100 object-fit-cover" onerror="this.style.display='none'">
                                 <div class="play-btn position-absolute top-50 start-50 translate-middle">
                                     <i class="fas fa-play"></i>
                                 </div>
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                             @else
-                            <img id="modalMealImage" src="{{ $modalMealImage }}" alt="Meal Image" class="img-fluid rounded mb-3 w-100 h-100 object-fit-cover">
+                            <img id="modalMealImage" src="{{ $modalMealImage }}" alt="Meal Image" class="img-fluid rounded mb-3 w-100 h-100 object-fit-cover" onerror="this.style.display='none'">
                             @endif
                         </div>
                         <div class="col-md-6">
@@ -90,13 +90,39 @@
 
                     <div class="row mt-4">
                         <div class="col-12">
-                            <h5>Select Food Items & Sizes</h5>
+                            <h5>Select Food Items</h5>
                             <small class="text-muted">
                                 <i class="fas fa-info-circle me-1"></i>
-                                At least one size must be selected for each food item.
+                                Select at least one food item. Required items are pre-selected and cannot be deselected.
                             </small>
+
+                            <!-- Food Selection Checkboxes -->
+                            <div class="food-selection-list mb-4 p-3 bg-light rounded">
+                                <div class="row">
+                                    @foreach($modalFoodItems as $food)
+                                    <div class="col-md-6 col-lg-4 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="food_select_{{ $food['id'] }}"
+                                                   wire:model.live="selectedFoods.{{ $food['id'] }}"
+                                                   {{ ($food['required'] ?? false) ? 'disabled checked' : '' }}>
+                                            <label class="form-check-label" for="food_select_{{ $food['id'] }}">
+                                                {{ $food['name'] }}
+                                                @if($food['required'] ?? false)
+                                                    <span class="badge bg-danger ms-1">Required</span>
+                                                @endif
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Food Details - Only show for selected foods -->
+                            <h5>Customize Sizes & Quantities</h5>
                             <div id="modalFoodItems">
                                 @foreach($modalFoodItems as $food)
+                                @if(isset($selectedFoods[$food['id']]) && $selectedFoods[$food['id']])
                                 <div class="food-item mb-4 p-3 border rounded">
                                     <div class="row align-items-center">
                                         <div class="col-md-2">
@@ -133,8 +159,7 @@
                                                                         <input type="number" class="form-control form-control-sm text-center"
                                                                             value="{{ $this->getSizeQuantity($food['id'], $size['id']) }}"
                                                                             min="0"
-                                                                            wire:model.live="selectedSizes.{{ $food['id'] }}.{{ $size['id'] }}"
-                                                                            wire:change="updateFoodSizeQuantity({{ $food['id'] }}, {{ $size['id'] }}, $event.target.value)"
+                                                                            wire:input="updateFoodSizeQuantity({{ $food['id'] }}, {{ $size['id'] }}, $event.target.value)"
                                                                             data-food-id="{{ $food['id'] }}"
                                                                             data-size-id="{{ $size['id'] }}"
                                                                             data-meal-id="{{ $selectedMeal->id ?? '' }}">
@@ -167,6 +192,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
@@ -175,7 +201,7 @@
                     <!-- Submit Button -->
                     <div class="row mt-4">
                         <div class="col-md-12">
-                            <button class="btn btn-primary w-100 py-3" data-bs-dismiss="modal" id="addToCartBtn" wire:click="addToCart()">
+                            <button class="btn btn-primary w-100 py-3" id="addToCartBtn" wire:click="addToCart()" {{ $this->canAddToCart() ? '' : 'disabled' }}>
                                 <i class="fas fa-cart-plus me-2"></i>Add to Cart - <span id="modalTotalPrice">{{ $this->formatPrice($modalTotal) }}</span>
                             </button>
                         </div>
@@ -251,20 +277,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const modal = document.getElementById(data.modalId);
                 if (modal) {
                     console.log('Closing modal:', data.modalId);
-                    const modalInstance = bootstrap.Modal.getInstance(modal);
-                    if (modalInstance) {
-                        modalInstance.hide();
-                    }
+                    const modalInstance = bootstrap.Modal.getInstance(modal) || new bootstrap.Modal(modal);
+                    modalInstance.hide();
                 } else {
                     console.error('Modal not found:', data.modalId);
                 }
             } catch (error) {
                 console.error('Error closing modal:', error);
             }
-        });
-        
-        Livewire.on('updateCart', () => {
-            console.log('updateCart event received');
         });
     });
     
@@ -580,6 +600,19 @@ document.addEventListener('DOMContentLoaded', function() {
         background-color: #f8f9fa;
         border-color: #dee2e6;
         color: #6c757d;
+    }
+
+    .food-item.selected {
+        border-color: var(--primary) !important;
+        background-color: rgba(212, 167, 106, 0.05) !important;
+    }
+
+    .food-item.unselected {
+        opacity: 0.7;
+    }
+
+    .food-item.unselected .food-sizes-container {
+        pointer-events: none;
     }
 
     /* Responsive adjustments */
