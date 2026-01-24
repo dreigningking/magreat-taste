@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}">
-    <link rel="icon" href="{{ asset('images/logo.jpeg') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('img/logo.jpeg') }}" type="image/x-icon">
     @livewireStyles
     @stack('styles')
 </head>
@@ -17,7 +17,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
             <a class="navbar-brand py-0" href="#">
-                <img src="{{ asset('images/logo.jpeg') }}" style="width: 53px; height: 53px;" alt="Ma'Great Taste" class="logo">
+                <img src="{{ asset('img/logo.jpeg') }}" style="width: 53px; height: 53px;" alt="Ma'Great Taste" class="logo">
                 Ma<span>'</span>Great Taste
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">

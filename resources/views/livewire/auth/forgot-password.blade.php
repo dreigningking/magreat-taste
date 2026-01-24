@@ -14,7 +14,7 @@
                 <!-- Forgot Password Form -->
                 <div class="card shadow border-0" style="border-radius: 1rem;">
                     <div class="card-body p-4 p-md-5">
-                        <form wire:submit="sendPasswordResetLink">
+                        <form wire:submit.prevent="sendPasswordResetLink">
                             @csrf
                             
                             @if (session('status'))
@@ -51,14 +51,14 @@
                             </div>
                             
                             <!-- Send Reset Link Button -->
-                            <button type="submit" 
+                            <button id="forgotPasswordBtn" type="submit" 
                                     class="btn btn-primary w-100 py-3 fw-semibold mb-4"
-                                    wire:loading.attr="disabled">
-                                <span wire:loading.remove class="d-flex align-items-center justify-content-center">
+                                    wire:loading.attr="disabled" wire:target="sendPasswordResetLink">
+                                <span class="normal-text d-flex align-items-center justify-content-center" wire:loading.remove wire:target="sendPasswordResetLink">
                                     <i class="fas fa-paper-plane me-2"></i>
                                     Send Reset Link
                                 </span>
-                                <span wire:loading class="d-flex align-items-center justify-content-center">
+                                <span class="submitting-text d-flex align-items-center justify-content-center" wire:loading wire:target="sendPasswordResetLink" style="display:none">
                                     <div class="spinner-border spinner-border-sm me-2" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
@@ -123,5 +123,29 @@
 .min-vh-100 {
     animation: fadeInUp 0.6s ease-out;
 }
+
+/* Button submit JS-controlled state */
+#forgotPasswordBtn .submitting-text { display: none !important; }
+#forgotPasswordBtn.is-submitting .submitting-text { display: flex !important; }
+#forgotPasswordBtn.is-submitting .normal-text { display: none !important; }
 </style>
+@endpush
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btn = document.getElementById('forgotPasswordBtn');
+        if (!btn) return;
+
+        btn.addEventListener('click', function() {
+            btn.classList.add('is-submitting');
+        });
+
+        document.addEventListener('livewire:load', function() {
+            Livewire.hook('message.processed', function(message, component) {
+                btn.classList.remove('is-submitting');
+            });
+        });
+    });
+</script>
 @endpush
