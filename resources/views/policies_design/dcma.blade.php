@@ -1,4 +1,4 @@
-@extends('components.layouts.app')
+@extends('layouts.app')
 
 @section('title', 'DMCA Policy | Wonegig')
 @section('meta_title', 'DMCA Policy - Wonegig')

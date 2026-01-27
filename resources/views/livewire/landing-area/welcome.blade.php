@@ -12,10 +12,8 @@
     <section class="container" id="about">
         <div class="chef-profile">
             <div class="row">
-                <div class="col-md-5 p-0">
-                    <img src="{{ asset('images/chef.jpeg') }}" alt="Chef Margaret" class="chef-img">
-                </div>
-                <div class="col-md-7">
+                
+                <div class="col-md-6">
                     <div class="chef-info">
                         <h2 class="chef-name">Meet Chef Margaret</h2>
                         <p>With over 15 years of culinary experience, Chef Margaret brings passion and creativity to every dish. Trained in Nigeria and Asia, and having worked in home and abroads, she now focuses on creating bespoke dining experiences for clients.</p>
@@ -30,6 +28,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-6" style="background-image: url('{{ asset('images/chefta.jpeg') }}'); background-size: cover; background-position: center;">
+                    <!-- <img src="{{ asset('images/chefta.jpeg') }}" alt="Chef Margaret" class="chef-img"> -->
                 </div>
             </div>
         </div>
@@ -117,7 +118,7 @@
                             <div class="col-lg-4 col-md-6 mb-4">
                                 <div class="testimonial-card text-center">
                                     <div class="testimonial-img mb-4">
-                                        <img src="{{ asset('images/faces/face25.jpg') }}" alt="Pastor Lilian Nnogo" class="rounded-circle" width="80" height="80">
+                                        <img src="{{ asset('images/faces/lilian.jpg') }}" alt="Pastor Lilian Nnogo" class="rounded-circle" width="80" height="80">
                                     </div>
                                     <div class="testimonial-content">
                                         <p class="testimonial-text mb-4">"Chef Margaret's jollof rice is absolutely divine! She catered our anniversary party and everyone was raving about the authentic flavors and perfect execution."</p>

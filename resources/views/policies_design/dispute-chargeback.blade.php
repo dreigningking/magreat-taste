@@ -1,4 +1,4 @@
-@extends('components.layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dispute & Chargeback Protection Policy | Wonegig')
 @section('meta_title', 'Dispute & Chargeback Protection Policy - Wonegig')

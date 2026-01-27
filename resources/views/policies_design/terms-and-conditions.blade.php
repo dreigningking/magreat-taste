@@ -1,4 +1,4 @@
-@extends('components.layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Terms & Conditions | Wonegig')
 @section('meta_title', 'Terms & Conditions - Wonegig')
