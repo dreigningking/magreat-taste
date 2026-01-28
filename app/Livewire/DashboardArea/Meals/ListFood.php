@@ -157,7 +157,7 @@ class ListFood extends Component
         session()->flash('message', 'Food updated successfully!');
     }
 
-    public function upload()
+    public function uploadFood()
     {
         $this->validate([
             'uploadFile' => 'required|file|mimes:xlsx,xls,csv|max:10240', // 10MB max

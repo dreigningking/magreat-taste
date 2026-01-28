@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Cart;
+use Illuminate\Support\Str;
 use App\Livewire\DashboardArea\Staff;
 use App\Livewire\LandingArea\Welcome;
 use Illuminate\Support\Facades\Route;
@@ -110,26 +111,13 @@ require __DIR__.'/auth.php';
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('test',function(){
-    $cartItems = Cart::where('ip',request()->ip())->get()->load(['meal', 'food', 'size']);
-    $items = $cartItems->groupBy('meal_id');
-    
-    $subtotal = 0;
-        
-    if ($items && $items->count() > 0) {
-        foreach ($items as $mealGroup) {
-            foreach ($mealGroup as $item) {
-                $subtotal += $item->price * $item->quantity;
-            }
-        }
+Route::get('testa',function(){
+    $foods = \App\Models\Food::first();
+    dd($foods->sizes->min('pivot.price'));
+    foreach($foods as $food){
+        $food->image = 'foods/'.Str::slug($food->name).'.jpg';
+        $food->save();
     }
-    
-    // Calculate VAT
-    $vatAmount = $subtotal * (config('services.settings.vat_rate', 0) / 100);
-
-    // Calculate total
-    $total = $subtotal + $vatAmount;
-    
-    dd($total);
+    return 'done';
 
 });

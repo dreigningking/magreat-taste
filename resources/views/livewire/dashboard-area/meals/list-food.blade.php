@@ -89,8 +89,8 @@
                         <tr>
                             <td>{{ $foods->firstItem() + $index }}</td>
                             <td>
-                                @if($food->default_image)
-                                <img src="{{ Storage::url($food->default_image) }}" alt="{{ $food->name }}" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
+                                @if($food->image)
+                                <img src="{{ Storage::url($food->image) }}" alt="{{ $food->name }}" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
                                 @else
                                 <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
                                     <i class="fa fa-image text-white"></i>
@@ -350,7 +350,7 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form wire:submit.prevent="upload">
+                <form wire:submit.prevent="uploadFood">
                     <div class="modal-body">
                         <div class="mb-4">
                             <h6>Sample CSV/Excel Format:</h6>
@@ -415,9 +415,9 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                            <span wire:loading.remove><i class="fa fa-upload me-2"></i>Upload Foods</span>
-                            <span wire:loading><i class="fa fa-spinner fa-spin me-2"></i>Uploading...</span>
+                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="uploadFood">
+                            <span wire:loading.remove wire:target="uploadFood"><i class="fa fa-upload me-2"></i>Upload Foods</span>
+                            <span wire:loading wire:target="uploadFood"><i class="fa fa-spinner fa-spin me-2"></i>Uploading...</span>
                         </button>
                     </div>
                 </form>

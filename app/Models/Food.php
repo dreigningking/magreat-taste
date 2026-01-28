@@ -28,19 +28,18 @@ class Food extends Model
     // Accessors
     public function getMinPriceAttribute()
     {
-        return $this->sizes()->min('food_sizes.price') ?? 0;
+        return $this->sizes->min('pivot.price') ?? 0;
     }
 
     public function getMaxPriceAttribute()
     {
-        return $this->sizes()->max('food_sizes.price') ?? 0;
+        return $this->sizes->max('pivot.price') ?? 0;
     }
 
     public function getPriceRangeAttribute()
     {
         $min = $this->min_price;
         $max = $this->max_price;
-        
         if ($min == $max) {
             return '₦' . number_format($min, 2);
         }
