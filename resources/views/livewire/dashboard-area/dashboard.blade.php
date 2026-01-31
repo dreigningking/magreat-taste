@@ -131,49 +131,49 @@
             </div>
         </div>
         <div class="col-lg-6 col-12 mt-4 mt-lg-0">
-        <div class="card shadow h-100">
-            <div class="card-header pb-0 p-3">
-                <h6 class="mb-0">Blog Analytics</h6>
-            </div>
-            <div class="card-body pb-0 p-3">
-                @if($trendingPosts->count() > 0)
-                    <ul class="list-group">
-                        @foreach($trendingPosts as $post)
-                        <li class="list-group-item border-0 d-flex align-items-center px-0 mb-0 {{ !$loop->last ? 'mb-2' : '' }}">
-                            <div class="w-100">
-                                <div class="d-flex mb-2">
-                                    <span class="me-2 text-sm font-weight-bold text-dark">{{ Str::limit($post->title, 25) }}</span>
-                                    <span class="ms-auto text-sm font-weight-bold">{{ $post->total_views_count ?? 0 }}</span>
-                                </div>
-                                <div>
-                                    <div class="progress progress-md">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $trendingPosts->count() > 1 ? (($post->total_views_count ?? 0) / $trendingPosts->first()->total_views_count * 100) : 100 }}%" aria-valuenow="{{ $post->total_views_count ?? 0 }}" aria-valuemin="0" aria-valuemax="{{ $trendingPosts->first()->total_views_count ?? 1 }}"></div>
+            <div class="card shadow h-100">
+                <div class="card-header pb-0 p-3">
+                    <h6 class="mb-0">Blog Analytics</h6>
+                </div>
+                <div class="card-body pb-0 p-3">
+                    @if($trendingPosts->count() > 0)
+                        <ul class="list-group">
+                            @foreach($trendingPosts as $post)
+                            <li class="list-group-item border-0 d-flex align-items-center px-0 mb-0 {{ !$loop->last ? 'mb-2' : '' }}">
+                                <div class="w-100">
+                                    <div class="d-flex mb-2">
+                                        <span class="me-2 text-sm font-weight-bold text-dark">{{ Str::limit($post->title, 25) }}</span>
+                                        <span class="ms-auto text-sm font-weight-bold">{{ $post->total_views_count ?? 0 }}</span>
+                                    </div>
+                                    <div>
+                                        <div class="progress progress-md">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $trendingPosts->count() > 1 ? (($post->total_views_count ?? 0) / $trendingPosts->first()->total_views_count * 100) : 100 }}%" aria-valuenow="{{ $post->total_views_count ?? 0 }}" aria-valuemin="0" aria-valuemax="{{ $trendingPosts->first()->total_views_count ?? 1 }}"></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <div class="text-center py-4">
-                        <i class="fa fa-newspaper text-muted" style="font-size: 3rem;"></i>
-                        <h6 class="text-muted mt-3">No Blog Posts Yet</h6>
-                        <p class="text-sm text-muted">Start creating engaging content to see analytics here</p>
-                    </div>
-                @endif
-            </div>
-            <div class="card-footer pt-0 p-3 d-flex align-items-center">
-                <div class="w-60">
-                    <p class="text-sm">
-                        Total Posts: <b>{{ $stats['total_posts'] }}</b> Total Comments: <b>{{ $stats['total_comments'] }}</b>
-                    </p>
+                            </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <div class="text-center py-4">
+                            <i class="fa fa-newspaper text-muted" style="font-size: 3rem;"></i>
+                            <h6 class="text-muted mt-3">No Blog Posts Yet</h6>
+                            <p class="text-sm text-muted">Start creating engaging content to see analytics here</p>
+                        </div>
+                    @endif
                 </div>
-                <div class="w-40 text-end">
-                    <a class="btn btn-dark mb-0 text-end" href="{{ route('posts.index') }}">View all posts</a>
+                <div class="card-footer pt-0 p-3 d-flex align-items-center">
+                    <div class="w-60">
+                        <p class="text-sm">
+                            Total Posts: <b>{{ $stats['total_posts'] }}</b> Total Comments: <b>{{ $stats['total_comments'] }}</b>
+                        </p>
+                    </div>
+                    <div class="w-40 text-end">
+                        <a class="btn btn-dark mb-0 text-end" href="{{ route('posts.index') }}">View all posts</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
     <div class="row my-4">
         <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
